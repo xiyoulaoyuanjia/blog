@@ -90,7 +90,7 @@ class TheServer:
         self.channel[self.s].send(data)
 
 if __name__ == '__main__':
-        server = TheServer('127.0.0.1', 9090)
+        server = TheServer('127.0.0.1', 8080)
         try:
             server.main_loop()
         except KeyboardInterrupt:
