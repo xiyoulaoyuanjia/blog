@@ -61,8 +61,19 @@ MATE 是传统gnome2的一个分支。代码维护在github上
 
 
 
+**centos 常见的3个第三方源**
+
+EPEL RPMForge RPMFusion
+
+**linux ～用来表示 home目录**
+
+原因是80(1970s)年代 ,Lear-Siegler 生产的 ADM-3A 终端所用的键盘把～与home键在一起 
 
 
+![](http://en.wikipedia.org/wiki/File:KB_Terminal_ADM3A.svg)
+
+
+![](http://i.stack.imgur.com/L3esv.jpg)
 
 
 
