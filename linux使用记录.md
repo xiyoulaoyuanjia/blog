@@ -76,8 +76,9 @@ EPEL RPMForge RPMFusion
 ![](http://i.stack.imgur.com/L3esv.jpg)
 
 
+**shell脚本罗列出所有名称中含有中文的文件和目录，并统计一下总数**
 
-
+find . -type f | grep -P -r "[\x80-\xFF]" | cat | wc -l
 
 
 
