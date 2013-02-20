@@ -31,6 +31,19 @@ _通过dnscrypt 解决dns 污染..._
 
 _drop 掉上面的那些列表的方案_
 
+_dnsmasq 方案_
+
+_note dnsmasq 一般用作三种用途 1.提供dns服务 2. 优先使用本地自定义的dns 3.提供dhcp服务 关于其它使用参考 http://www.aslibra.com/blog/post/dnsmasq.php 文档
+
+
+
+
+
+
+
+
+
+
 
 
 
