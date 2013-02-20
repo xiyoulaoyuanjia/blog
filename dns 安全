@@ -6,3 +6,5 @@
 改成另外一个 IP 就行。
 
 运行dig @8.8.8.8 twitter.com 并使用wireshark 抓包 如图可得
+
+![dns污染](https://mail-attachment.googleusercontent.com/attachment/u/0/?ui=2&ik=429fe34bc2&view=att&th=13c5d593b7a78fb7&attid=0.1&disp=inline&realattid=f_hc7nowqc0&safe=1&zw&saduie=AG9B_P_yefQZTkL1e79QyVqUxjWo&sadet=1361360033407&sads=3q3QrYvd1A7D8v-RpoXm83rH7qs)
