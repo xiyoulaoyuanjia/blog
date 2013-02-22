@@ -80,6 +80,24 @@ EPEL RPMForge RPMFusion
 
 find . -type f | grep -P -r "[\x80-\xFF]" | cat | wc -l
 
+**Waiting for network configuration--ubuntu 11.10 解决方案**
+
+打开本机 进入11.04 系统(后升级到11.10) 
+
+首先是提示 waiting for the network configuration
+
+然后是 Waiting for 60 seconds more for network configuration
+
+最后是 booting system without full network configuration...
+
+很是郁闷 最后 sudo vim /etc/network/interface 进入 修改配置文件 为
+
+    auto lo
+    iface lo inet loopback
+    #auto eth0
+    #iface eth0 inet dhcp
+    
+也就是注释掉 eth0 的网卡配置  开机速度飞快。。
 
 
 
