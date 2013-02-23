@@ -107,10 +107,24 @@ find . -type f | grep -P -r "[\x80-\xFF]" | cat | wc -l
     rm -- ----
 
 
+**top里面可以只列出某个名字的进程**
 
+top  -p 后根需要列出得到pid的值
 
+top -p $(pgrep -d',' http)这个分为1.寻找含有http字符的进程名称的pid(注意pgrep的用法 -d表示结果用逗号区分)"$()"这种用法把结果直接拿来用需要学习
 
+下面还有一个小例子
 
+例：mysqld的信息
+
+(1)得到mysqld进程的pid
+
+    [root@6 ~]# pidof mysqld
+    21538
+    
+(2)top指定查看PID
+
+    [root@6 ~]# top -p 21538
 
 
 
