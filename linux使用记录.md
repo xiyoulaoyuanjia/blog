@@ -126,6 +126,26 @@ top -p $(pgrep -d',' http)这个分为1.寻找含有http字符的进程名称的
 
     [root@6 ~]# top -p 21538
 
+**ACPI: [Package] has zero elements**
+
+华硕k52d 本本 上装得 fedora 17  64位  每一次启动都会出现 
+ACPI: [Package] has zero elements 
+然后有时可以顺利的进入系统有时停在此处 不知怎么解决。。
+
+解决办法: 
+
+>*1.在 /etc/default/grub 修改如下
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="Fedora"
+GRUB_DEFAULT=saved
+GRUB_CMDLINE_LINUX=" nomodeset rd.md=0 rd.lvm=0 rd.dm=0 SYSFONT=True  KEYTABLE=us rd.luks=0 LANG=en_US.UTF-8 rhgb quiet acpi=off"
+>*2.grub2-mkconfig -o /boot/grub2/grub.cfg
+
+
+
+
+
+
 
 
 
