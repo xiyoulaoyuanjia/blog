@@ -139,10 +139,11 @@ GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="Fedora"
 GRUB_DEFAULT=saved
 GRUB_CMDLINE_LINUX=" nomodeset rd.md=0 rd.lvm=0 rd.dm=0 SYSFONT=True  KEYTABLE=us rd.luks=0 LANG=en_US.UTF-8 rhgb quiet acpi=off"
+
 >*2.grub2-mkconfig -o /boot/grub2/grub.cfg
 
 
-
+_这里需要注意acpi必须为小写。之前一直大写搞了半天。。_
 
 
 
