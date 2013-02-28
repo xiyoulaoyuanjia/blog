@@ -145,8 +145,13 @@ GRUB_CMDLINE_LINUX=" nomodeset rd.md=0 rd.lvm=0 rd.dm=0 SYSFONT=True  KEYTABLE=u
 
 _这里需要注意acpi必须为小写。之前一直大写搞了半天。。_
 
+**cannot open font file ture**
 
+fedora 17 上的错误修改如下
 
+    vi /etc/default/grub 
+    SYSFONT=True改掉就好 SYSFONT=latarcyrheb-sun16
+    grub2-mkconfig -o /boot/grub2/grub.cfg
 
 
 
