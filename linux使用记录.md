@@ -154,14 +154,21 @@ fedora 17 上的错误修改如下
     grub2-mkconfig -o /boot/grub2/grub.cfg
 
 
+*查看安装软件的信息 包括时间包、依赖的包等信息***
+
+    yum history list
+    yum history info 123
+    yum history undo 123
 
 
 
+**linux系统剪贴板**
 
+linux 系统存在两个剪贴板  一个叫做选择缓冲区(X11 selection buffer)   另一个叫做剪切板(clipboard)
 
+选择缓冲区是实时的，当使用鼠标选择内容时。即将内容复制到了选择缓冲区中。 剪贴板同 windows下的剪贴版。。
 
-
-
+另外需要xterm复制用的是**选择缓冲区** 当然现在还用这个的实在比较少了。。 鼠标中间的按钮一般是选择缓冲区
 
 
 
