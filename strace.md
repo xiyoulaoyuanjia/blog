@@ -17,13 +17,13 @@ strace 最简单的用法就是后接一个进程，进程执行完成之后stra
 
 我们可以通过一个strace的输出来看
 
-> set_thread_area({entry_number:-1 -> 6, base_addr:0xbf5ee740, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
-munmap(0xbf5ef000, 65900)               = 0
-fstat64(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...}) = 0
-mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xbf5ff000
-read(0, 0xbf5ff000, 1024)               = ? ERESTARTSYS (To be restarted)
---- SIGTERM (Terminated) @ 0 (0) ---
-+++ killed by SIGTERM +++
+     set_thread_area({entry_number:-1 -> 6, base_addr:0xbf5ee740, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
+    munmap(0xbf5ef000, 65900)               = 0
+    fstat64(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...}) = 0
+    mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xbf5ff000
+    read(0, 0xbf5ff000, 1024)               = ? ERESTARTSYS (To be restarted)
+    --- SIGTERM (Terminated) @ 0 (0) ---
+    +++ killed by SIGTERM +++
 
 当然 这只是strace输出的一部分了。在最后我们可以看到killed by SIGTER表示接受到了一个 SIGTERM 信号。
 
