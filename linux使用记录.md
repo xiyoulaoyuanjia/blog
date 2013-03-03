@@ -171,9 +171,13 @@ linux 系统存在两个剪贴板  一个叫做选择缓冲区(X11 selection buf
 另外需要xterm复制用的是**选择缓冲区** 当然现在还用这个的实在比较少了。。 鼠标中间的按钮一般是选择缓冲区
 
 
+**Fedora中的kmod与akmod**
 
+由于许可证或使用规模等原因，一些硬件的驱动无法进入kernel，只能通过内核模块的形式来加载使用。在Fedora中如果你启用了rpmfusion-nonfree源，你会看到大量kmod-打头的软件包，大多都是rpmfusion帮我们编译、打包好的各类私有驱动（比如nvidia、ati的显卡驱动，broadcom的网卡驱动等等） 
 
+**Fedora中的kmod与akmod区别**
 
+akmod**没有子包，而kmod**则有大量的子包akmod替代kmod是大势所趋
 
 
 
