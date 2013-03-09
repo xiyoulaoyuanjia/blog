@@ -179,5 +179,12 @@ linux 系统存在两个剪贴板  一个叫做选择缓冲区(X11 selection buf
 
 akmod**没有子包，而kmod**则有大量的子包akmod替代kmod是大势所趋
 
+**每次开机都会出现 Enter password for default keyring to unlock?    然后要求输入密码？甚是烦躁。。**
+
+解决办法。。 Right-click on the NetworkManager icon on your panel and select edit connections. Click the Wireless tab and select your network. Click Edit and tick the checkbox on the bottom that says "Available to all users". Click apply.   也就是链接的这个无限要求输入密码。。。
+
+**fedora 17 开机 都会出现  error: file '/boot/grub2/locale/en.mo.gz' not found**
+
+解决办法。   sudo cp /boot/grub2/locale/uk.mo /boot/grub2/locale/en.mo
 
 
