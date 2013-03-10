@@ -33,6 +33,12 @@ ZYS 向SINA 发出请求 获得YQ的信息,SINA询问YQ是否同意？ YQ返回�
 
 >* verifier
 
+
+URL 编码 参考[这里](http://www.ruanyifeng.com/blog/2010/02/url_encoding.html)
+
+
+
+
 >* access_secret, access_secret
 
 这个认证步骤可以看成
