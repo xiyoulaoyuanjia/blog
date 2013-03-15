@@ -188,3 +188,32 @@ akmod**没有子包，而kmod**则有大量的子包akmod替代kmod是大势所�
 解决办法。   sudo cp /boot/grub2/locale/uk.mo /boot/grub2/locale/en.mo
 
 
+**markdown 语法中 向这种<decoded_as> 的不能现实呀。？？？ 怎么办？**
+
+一般来说 markdown 对特殊语法 前加入"\"  即可转议，但是这个却不行，目前解决办法 是在 "<" 之后加入空格
+
+**如何保障 linux的临时文件目录  一般为/var/temp  或者 /temp **
+
+由于没有另外分区 导致其分区选项与/ 相同 这样 不能更小的粒度。最好 的是 另外一个分区 然后 修改挂在这个分区的选项
+
+**PS1 是用来设置命令提示符的环境变量 修改的是 yuanjia@yuanjia-K52Dr:~$ 的格式**
+
+**ls --color=auto 用来显示ls展示的目录 文本 具有的颜色**
+
+**可以在 terminal 上使用  control-v 粘帖的一段代码。。这个很好用奥。。**
+
+    # Make Control-v paste, if in X and if xclip available - Josh Triplett
+    if [ -n "$DISPLAY" ] && [ -x /usr/bin/xclip ] ; then
+        # Work around a bash bug: \C-@ does not work in a key binding
+        bind '"\C-x\C-m": set-mark'
+        # The '#' characters ensure that kill commands have text to work on; if
+        # not, this binding would malfunction at the start or end of a line.
+        bind 'Control-v: "#\C-b\C-k#\C-x\C-?\"$(xclip -o -selection c)\"\e\C-e\C-x\C-m\C-a\C-y\C-?\C-e\C-y\ey\C-x\C-x\C-d"'
+    fi
+
+**alias 命令使用**
+
+若仅输入alias，则可列出目前所有的别名设置。　alias的效力仅及于该次登入的操作。若要每次登入是即自动设好别名，可在/etc/profile或自己的~/.bashrc中设定指令的别名。
+ 例如  alias httpserver='python -m SimpleHTTPServer
+
+
