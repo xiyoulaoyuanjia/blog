@@ -216,4 +216,29 @@ akmod**没有子包，而kmod**则有大量的子包akmod替代kmod是大势所�
 若仅输入alias，则可列出目前所有的别名设置。　alias的效力仅及于该次登入的操作。若要每次登入是即自动设好别名，可在/etc/profile或自己的~/.bashrc中设定指令的别名。
  例如  alias httpserver='python -m SimpleHTTPServer
 
+**ubuntu 目录太深？ 向fedora 那样只显示当前目录？**
+
+打开 /etc/bash.rc  找到  PS1='${debian_ chroot:+($debian_ chroot)}\u@\h:\w\$ '  更改为  PS1='${debian _chroot:+($debian _chroot)}\u@\h:\__W__\$ '
+
+***What's the command to open a file in GUI?***
+
+    xdg-open filepath
+
+**关于环境变量。(以下来自larmbr zhan 网友)**
+
+LC_*形环境变量的优先级是：LC_ALL > LC_* > LANG.
+
+具体地说，
+1.就是如果定义了LC_ALL ，则它覆盖了所有LC_*变量的定义，所有规则都遵从LC_ALL的
+定义。 （注意，这个变量不要设定，它的存在价值可能仅在于定义了一个新locale后，作测试用)
+
+
+2. 如果LC_ALL没设定(合理的方法是应该一直这么做)。则由LC_*细粒度地定义了各个方面，
+如关于字符集LC_CTYPE. 关于货币符号LC_MONETARY，关于提示信息LC_MESSAGES等。
+
+  所以本例中，你应该设定这个变量. 对于GNU家族的工具集，
+  那么如果LC_MESSAGES， 则LANGUAGE值起到和它一样的作用，如你所设。
+
+
+3. 如果LC_ALL, 及LC_*都没设定，那么会读取 LANG 的设定。
 
