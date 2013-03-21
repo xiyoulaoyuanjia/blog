@@ -229,16 +229,34 @@ akmod**没有子包，而kmod**则有大量的子包akmod替代kmod是大势所�
 LC_*形环境变量的优先级是：LC_ALL > LC_* > LANG.
 
 具体地说，
-1.就是如果定义了LC_ALL ，则它覆盖了所有LC_*变量的定义，所有规则都遵从LC_ALL的
+>*1.就是如果定义了LC_ALL ，则它覆盖了所有LC_*变量的定义，所有规则都遵从LC_ALL的
 定义。 （注意，这个变量不要设定，它的存在价值可能仅在于定义了一个新locale后，作测试用)
 
 
-2. 如果LC_ALL没设定(合理的方法是应该一直这么做)。则由LC_*细粒度地定义了各个方面，
+>*2. 如果LC_ALL没设定(合理的方法是应该一直这么做)。则由LC_*细粒度地定义了各个方面，
 如关于字符集LC_CTYPE. 关于货币符号LC_MONETARY，关于提示信息LC_MESSAGES等。
 
   所以本例中，你应该设定这个变量. 对于GNU家族的工具集，
   那么如果LC_MESSAGES， 则LANGUAGE值起到和它一样的作用，如你所设。
 
 
-3. 如果LC_ALL, 及LC_*都没设定，那么会读取 LANG 的设定。
+>*3. 如果LC_ALL, 及LC_*都没设定，那么会读取 LANG 的设定。
+
+
+**about 缓冲区？**
+
+windows 的缓冲区只有一个 全局的缓冲区（Clipboard，剪贴板）
+
+*nix (The X server)里面貌似有 4个？(主（Primary）选择，一种是剪贴板（Clipboard）选择。其实还有一个副（Secondary）选择 貌似还有一个 剪切缓冲区 CUT_BUFFER0 在这四个缓冲区中  貌似其中的 副 选择 和  CUT_BUFFER0 已经不太用了。。)  但是 VNC 还是使用的 CUT_BUFFER0  这个缓冲区传递数据。所以这里牵扯了一些同步的问题。。。好多VNC 使用 autocutsel(http://www.nongnu.org/autocutsel/) 来同步 缓冲区。。。。
+
+
+
+
+
+
+
+
+
+
+
 
