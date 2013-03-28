@@ -1,6 +1,10 @@
 使用ajax上传文档
 ============
 
+__note:[E文](http://net.tutsplus.com/tutorials/javascript-ajax/uploading-files-with-ajax)__
+
+__[代码](http://nettuts.s3.amazonaws.com/1020_ajaxupload/demo.zip)__
+
 __为什么不在最后告诉你这个不好的消息呢?这个并不是在每一个浏览器中都适用的__
 
 我们项目用到的主要的3个组建
@@ -25,7 +29,7 @@ __为什么不在最后告诉你这个不好的消息呢?这个并不是在每�
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-  <title>HTML5 File API</title>
+	<title>HTML5 File API</title>
 	<link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -222,7 +226,7 @@ if (formdata) {
 
 上传结果
 
-!()[http://image.data.vdisk.me/55890007/8deea1016570cc1b446660c3bbb36d9acc6ae695?ip=1364454968,219.142.5.234&ssig=sdhbVbsqmG&Expires=1364453768&KID=sae,l30zoo1wmz&fn=ajax-finder.png]
+![](http://image.data.vdisk.me/55890007/8deea1016570cc1b446660c3bbb36d9acc6ae695?ip=1364454968,219.142.5.234&ssig=sdhbVbsqmG&Expires=1364453768&KID=sae,l30zoo1wmz&fn=ajax-finder.png)
 
 **总结**
 
