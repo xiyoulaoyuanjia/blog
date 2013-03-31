@@ -250,6 +250,44 @@ windows 的缓冲区只有一个 全局的缓冲区（Clipboard，剪贴板）
 *nix (The X server)里面貌似有 4个？(主（Primary）选择，一种是剪贴板（Clipboard）选择。其实还有一个副（Secondary）选择 貌似还有一个 剪切缓冲区 CUT_BUFFER0 在这四个缓冲区中  貌似其中的 副 选择 和  CUT_BUFFER0 已经不太用了。。)  但是 VNC 还是使用的 CUT_BUFFER0  这个缓冲区传递数据。所以这里牵扯了一些同步的问题。。。好多VNC 使用 autocutsel(http://www.nongnu.org/autocutsel/) 来同步 缓冲区。。。。
 
 
+**shell 脚本传递变量**
+
+#!/bin/shell
+#file test.sh
+if [ -z ${PARAM1} ]; then
+    PARAM1=test1
+fi
+echo ${PARAM1}
+
+PARAM1=hello sh test.sh
+
+**关于wget伪装成浏览器的行为 更改user-agent**
+
+今天在拔 http://mahua.jser.me/  网站的css时候遇到了一个问题.. 刚开始使用 wget 下载 js 还可以 然后就不行了..
+
+但是浏览器是可以打开的 这时候 使用
+
+wget --user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 (.NET CLR 3.5.30729)" http://mahua.jser.me/ace/keybinding-vim.js
+
+成功下载 看来对方使用验证 UA的小计量了......
+
+**关于github 项目的语言标签的问题**
+
+今天上传了 [flaskapp]() 项目时 发现github检测到的项目为javascript(应该为python 更贴切点吧) 于是查了些资料
+[问题看这里](http://stackoverflow.com/questions/5318580/how-does-github-figure-out-a-projects-language)
+
+检测算法项目[在这里](https://github.com/github/linguist)  有时间看看它的这个算法是怎么搞得..不过貌似没有读内容就是查看了后缀?
+
+**linux 下图像格式转换**
+
+>* convert xiyoulaoyuanjia.png  xiyoulaoyuanjia.gif 
+
+把 xiyoulaoyuanjia.png 格式转换为  xiyoulaoyuanjia.gif   注意此时 xiyoulaoyuanjia.png 图片格式不变
+
+>*   convert  -resize 16x16! xiyoulaoyuanjia.gif  flaskWeb.gif
+
+把  xiyoulaoyuanjia.gif  图片缩小为 16x16 像素的  注意后面的叹号(!)
+
 
 
 
