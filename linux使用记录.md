@@ -218,7 +218,7 @@ akmod**没有子包，而kmod**则有大量的子包akmod替代kmod是大势所�
 
 **ubuntu 目录太深？ 向fedora 那样只显示当前目录？**
 
-打开 /etc/bash.rc  找到  PS1='${debian_ chroot:+($debian_ chroot)}\u@\h:\w\$ '  更改为  PS1='${debian _chroot:+($debian _chroot)}\u@\h:\__W__\$ '
+打开 /etc/bash.rc  找到  PS1='${debian_ chroot:+($debian_ chroot)}\u@\h:\w\$ '  更改为  小写w改为大写W
 
 ***What's the command to open a file in GUI?***
 
