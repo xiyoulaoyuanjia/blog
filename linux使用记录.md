@@ -288,6 +288,59 @@ wget --user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) G
 
 把  xiyoulaoyuanjia.gif  图片缩小为 16x16 像素的  注意后面的叹号(!)
 
+**bash 脚本的几个问题**
+
+今天再看 ossec 中的 ossec-control 脚本时遇到的几个问题,这里记录下.
+
+>*  "sudo cat   /var/ossec/var/run/ossec-logcollect*.pid " 与 su && cat   /var/ossec/var/run/ossec-logcollect*.pid 的区别? 
+ 
+当然如果你想着一样那么就错了...至于原因who knows?
+
+>*  脚本中有一段 kill -0 process 干什么呢?
+
+(看这里)[http://stackoverflow.com/questions/11012527/what-does-kill-0-pid-in-a-shell-script-do]
+
+>>* 1. 查看进程十分running?
+>>* 2. 查看进程能否接受信号
+>>* 3 "." 在shell 中的应用 用来引入环境变量  例如  . 文件名 A  在 A中写 LIANX="fff"
+
+
+***********************************************************************************
+**gcc include 查找路径**
+
+这里忽略复杂的问题.. /var/include 与 /var/local/include
+***************************************************************************************
+**输入法的问题***
+
+>* 安装 google 输入法 
+
+>>* 添加源：
+sudo add-apt-repository ppa:fcitx-team/nightly
+sudo apt-get update
+
+>>* 安装Fcitx、Fcitx-googlepinyin
+
+sudo apt-get install fcitx fcitx-googlepinyin
+
+
+
+>* 安装 搜狗输入法
+
+sudo apt-get install  fcitx-sogoupinyin
+
+貌似在ubuntu的12.10 中有错误。。
+
+im-switch 转换输入法
+**********************************************************************************************blkid 有用的一个命令********
+
+/dev/sda1: LABEL="window 7" UUID="D058935E58934260" TYPE="ntfs" 
+/dev/sda10: LABEL="M-eM-(M-1M-dM-9M-^P" UUID="0006E42B000753BB" TYPE="ntfs" 
+/dev/sda5: LABEL="M-hM-=M-/M-dM-;M-6" UUID="0007165D000660F4" TYPE="ntfs" 
+/dev/sda7: LABEL="_Fedora-17-x86_6" UUID="3b9eea35-98aa-4c24-b255-4f40585079b7" TYPE="ext4" 
+/dev/sda8: LABEL="M-fM-^VM-^GM-fM-!M-#" UUID="000A0C6100003D53" TYPE="ntfs" 
+ 
+***安装 Ubuntu restricted extras软件包 包含常用的一些 受限软件 安装完系统之后第一时间可以安装这个**
+
 
 
 
