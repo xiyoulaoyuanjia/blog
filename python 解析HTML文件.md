@@ -6,7 +6,7 @@ HTMLParser采用的是一种事件驱动的模式(必须覆写如下列出的几
 
 主要的用户回调函数都是已 handler_ 开头的函数 这里列出以下常用的几种
 
->* handle_startendtag 处理开始标签和结束标签
+>* handle_startendtag 处理开始标签和结束标签 <tag.../>
 >* handle_starttag 处理开始标签，比如 `<xx>`
 >* handle_endtag 处理结束标签，比如 `</xx>`
 >* handle_comment 处理注释
