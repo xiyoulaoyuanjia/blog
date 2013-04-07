@@ -333,7 +333,7 @@ sudo apt-get install  fcitx-sogoupinyin
 im-switch 转换输入法
 **********************************************************************************************
 
-**blkid 有用的一个命令********
+**blkid 有用的一个命令**
 
 /dev/sda1: LABEL="window 7" UUID="D058935E58934260" TYPE="ntfs" 
 /dev/sda10: LABEL="M-eM-(M-1M-dM-9M-^P" UUID="0006E42B000753BB" TYPE="ntfs" 
@@ -341,7 +341,7 @@ im-switch 转换输入法
 /dev/sda7: LABEL="_Fedora-17-x86_6" UUID="3b9eea35-98aa-4c24-b255-4f40585079b7" TYPE="ext4" 
 /dev/sda8: LABEL="M-fM-^VM-^GM-fM-!M-#" UUID="000A0C6100003D53" TYPE="ntfs" 
  
-***安装 Ubuntu restricted extras软件包 包含常用的一些 受限软件 安装完系统之后第一时间可以安装这个**
+**安装 Ubuntu restricted extras软件包 包含常用的一些 受限软件 安装完系统之后第一时间可以安装这个**
 
 **删除除××之外的文件**
 
