@@ -274,7 +274,7 @@ wget --user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) G
 **关于github 项目的语言标签的问题**
 
 今天上传了 [flaskapp]() 项目时 发现github检测到的项目为javascript(应该为python 更贴切点吧) 于是查了些资料
-[问题看这里](http://stackoverflow.com/questions/5318580/how-does-github-figure-out-a-projects-language)
+(问题看这里)[http://stackoverflow.com/questions/5318580/how-does-github-figure-out-a-projects-language]
 
 检测算法项目[在这里](https://github.com/github/linguist)  有时间看看它的这个算法是怎么搞得..不过貌似没有读内容就是查看了后缀?
 
