@@ -298,7 +298,7 @@ wget --user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) G
 
 >*  脚本中有一段 kill -0 process 干什么呢?
 
-(看这里)[http://stackoverflow.com/questions/11012527/what-does-kill-0-pid-in-a-shell-script-do]
+[看这里](http://stackoverflow.com/questions/11012527/what-does-kill-0-pid-in-a-shell-script-do)
 
 >>* 1. 查看进程十分running?
 >>* 2. 查看进程能否接受信号
