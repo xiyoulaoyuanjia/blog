@@ -304,6 +304,17 @@ wget --user-agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) G
 >>* 2. 查看进程能否接受信号
 >>* 3 "." 在shell 中的应用 用来引入环境变量  例如  . 文件名 A  在 A中写 LIANX="fff"
 
+>>>* 看 ossec 如何使用？
+
+    . ./src/init/update.sh
+        # Is this an update?
+        if [ "`isUpdate`" = "${TRUE}" -a "x${USER_CLEANINSTALL}" = "x" ]; then
+            echo ""
+            ct="1"
+
+isUpdate 在 update.sh 中定义为 一个函数 . 或者 source 之后直接就 可以当作 
+命令使用了
+
 
 ***********************************************************************************
 **gcc include 查找路径**
