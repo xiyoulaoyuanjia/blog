@@ -203,6 +203,103 @@ session对象
 >>* 集成wsgi 中间件
 
 
+**教程**
+
+>* flask 介绍
+
+>* 创建文件夹
+
+>* 数据库模式
+
+数据库 结构保存为 schema.sql
+
+    drop table if exists entries;
+    create table entries (
+      id integer primary key autoincrement,
+      title string not null,
+      text string not null
+    );
+
+>* 应用构建代码
+
+    # create our little application :)
+    app = Flask(__name__)
+    app.config.from_object(__name__)
+    app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+
+from_object() 会查看给定的对象（如果该对象是一个字符串就会 直接导入它），
+搜索对象中所有变量名均为大字字母的变量
+
+from_envvar 是从一个配置文件中导入 FLASKR_SETTINGS 是配置文件名称
+
+
+>* 创建数据库
+
+>>* 命令行方式
+
+    sqlite3 /tmp/flaskr.db < schema.sql
+
+不太好 需要支持 sqlite3命令 我们可以考虑使用另一中方法
+
+>>* 程序里创建
+
+    def init_db():
+        with closing(connect_db()) as db:
+            with app.open_resource('schema.sql') as f:
+                db.cursor().executescript(f.read())
+            db.commit()
+
+>>>* with 语句的使用
+
+使用方法
+
+    class controlled_execution:
+            def __enter__(self):
+                set things up
+                return thing
+            def __exit__(self, type, value, traceback):
+                tear things down
+    
+    with controlled_execution() as thing:
+        some code
+
+Now, when the “with” statement is executed, Python evaluates the expression, 
+calls the __enter__ method on the resulting value (which is called a “context guard”)
+, and assigns whatever __enter__ returns to the variable given by as. 
+Python will then execute the code body, 
+and no matter what happens in that code, call the guard object’s __exit__ method.
+
+详细见[这里](http://effbot.org/zone/python-with-statement.htm)
+
+
+>>>* closing 的使用
+
+as to
+
+    from contextlib import contextmanager
+    
+    @contextmanager
+    def closing(thing):
+        try:
+            yield thing
+        finally:
+            thing.close()
+
+详见[这里](http://docs.python.org/dev/library/contextlib.html#contextlib.closing)
+
+
+
+>* 请求数据库连接
+
+>* 视图函数
+
+>* 模板
+
+>* 添加样式
+
+>* 测试应用
+
+
 
 
 
