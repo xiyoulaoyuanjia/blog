@@ -65,6 +65,20 @@ cur.commit
     cu.execute("insert into catalog values(0, 0, 'name1')")  
     cu.execute("insert into catalog values(1, 0, 'hello')")
 
+__注意:这样子插入需要自己做特殊字符的转义__
+
+sqlite3 中的处理方法
+
+      executeTemplate="insert into  blog_entries(href,title,text) values (?,?,?)" 
+      com.execute(executeTemplate,(globalName[key]['href'],globalName[key]['title'],globalName[key]['content']))
+
+mysql 中的处理方法
+
+      import MySQLdb
+      s = """test!42''354542"""
+      print MySQLdb.escape_string(s)
+
+
 这里需要注意需要使用连接对象提交 com.commit 才能生效
 
 >>*  查询
