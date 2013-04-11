@@ -6,7 +6,7 @@ oauth是一套认证标准 。最早出现在 [这里](http://oauth.net/) 当然
 
 oauth 是一套三方委托认证模式
 
-![](http://vdisk-thumb-4.wcdn.cn/frame.1024x768/data.vdisk.me/55890007/36501ad4e78f93b535e21f75b8e98bc03a5589a6?ip=1362932400,10.75.7.49&ssig=J0%2BZI6V8k7&Expires=1362931200&KID=sae,l30zoo1wmz)
+![](http://openapi.vdisk.me/?m=file&a=download_share_file&ss=3c88e8YvGlxZlSzVbXuW--2FHUw--2BHMmrugkTc68SkQ--2BacY22bGyS5OA5HfZV9azQr21LGRXwmgx--2BcGQRdLXLSFja3OM--2B3jz)
 
 ZYS 向SINA 发出请求 获得YQ的信息,SINA询问YQ是否同意？ YQ返回同意。然后SINA返回ZYS请求的信息 "here you are"
 
