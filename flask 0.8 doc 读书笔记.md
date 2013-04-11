@@ -3,7 +3,7 @@ flask 0.8 doc 读书笔记
 [原文](https://dormousehole.readthedocs.org/en/latest/index.html)
 
 ******
-**快速上手**
+**[快速上手](http://dormousehole.readthedocs.org/en/latest/quickstart.html)**
 
 >* 关于app = Flask(__name__)
 这句代码 这样子是为了区分一般模块调用与程序开始执行区别
@@ -44,7 +44,7 @@ flask 0.8 doc 读书笔记
 这里需要理解两点
 >>* url_for 的用法 与我之前的理解有差距 不多说 上代码
 
-![](http://vdisk-thumb-3.wcdn.cn/frame.1024x768/data.vdisk.me/55890007/4062a314dbc348a1942538b32451474db5731cb5?ip=1364746800,10.73.26.36&ssig=ldQFmzKD6e&Expires=1364745600&KID=sae,l30zoo1wmz)
+![](http://openapi.vdisk.me/?m=file&a=download_share_file&ss=23ab--2BphRrscINLwRtBjL0--2F0e3bA3iGkDImu--2BzyJC3eRxgXBDuN8tAbPbgoZPVEj9L--2BAngQxqc8ZuSfSu6CieB8v--2BWGBH)
 
 >>* 注意 
  test_request_context() 方法 的使用
@@ -203,7 +203,7 @@ session对象
 >>* 集成wsgi 中间件
 
 
-**教程**
+**[教程](http://dormousehole.readthedocs.org/en/latest/tutorial/index.html)**
 
 >* flask 介绍
 
