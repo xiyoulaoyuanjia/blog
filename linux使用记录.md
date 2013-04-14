@@ -361,6 +361,81 @@ rm 没有 exclude 选项 考虑使用 管道方式组合使用命令
 例如 sudo rm  -f `ls | grep -v partial`
 
 
+**history 命令 **
+
+之前一直没有使用过这个命令 最近在 [这里](http://cloudbbs.org/forum.php?mod=viewthread&tid=13726)
+看到了 感觉挺好用的 这里做一个小总结。。就当作备忘了。
+
+>*  history 可以显示 之前执行的命令 但是默认没有时间显示。。如果需要修改此格式可以 
+通过设置 HISTTIMEFORMAT 变量
+
+    export HISTTIMEFORMAT='%F %T '
+    # history | more
+    1 2008-08-05 19:02:39 service network restart
+    2 2008-08-05 19:02:39 exit
+    3 2008-08-05 19:02:39 id
+    4 2008-08-05 19:02:39 cat /etc/redhat-release
+
+>* ctrl+r 命令的使用
+
+这个命令是在consol 里面搜索 之前执行过的命令，找到之后可以直接按 回车键执行。修改 可以按
+左或者右方向键。。
+![](http://openapi.vdisk.me/?m=file&a=download_share_file&ss=e803E8HsauaVMaQlToyhWYrTrqMF6bEnkbs--2FdsDHgMPsC9el8v0x6XAL--2BGktC22--2BT7O--2Fs4a--2Fsi7Hx8rxCNfmrRvzleRe)
+
+>* 快速执行上一条命令
+
+这里列出了 4条方案
+
+>>* 使用上方向键，并回车执行。
+
+>>*  !! 并回车
+
+>>* !-1 并回车
+
+>>* 按 Ctrl+P 并回车执行
+
+>* 通过序号执行一个指定的命令
+
+    # !4
+
+>* 使用 HISTSIZE 控制历史命令记录的总行数
+
+默认是 500
+
+>* 更改默认历史命令记录文本
+
+默认情况下，命令历史存储在 ~/.bashhistory 文件中
+更改HISTFILE
+
+    # vi ~/.bash_profile
+    HISTFILE=/root/.lianxi
+
+>* 使用 HISTCONTROL 从命令历史中剔除连续重复的条目
+
+export HISTCONTROL=ignoredups
+
+>* 清除所有的命令历史
+
+    history -c
+
+>* 使用 HISTSIZE 禁用 history
+
+    export HISTSIZE=0
+
+>* 使用 HISTIGNORE 忽略历史中的特定命令
+
+     export HISTIGNORE="pwd:ls:ls -ltr:"
+
+
+
+
+
+
+
+
+
+
+
 
 
 
