@@ -252,14 +252,14 @@ windows 的缓冲区只有一个 全局的缓冲区（Clipboard，剪贴板）
 
 **shell 脚本传递变量**
 
-#!/bin/shell
-#file test.sh
-if [ -z ${PARAM1} ]; then
-    PARAM1=test1
-fi
-echo ${PARAM1}
-
-PARAM1=hello sh test.sh
+    #!/bin/shell
+    #file test.sh
+    if [ -z ${PARAM1} ]; then
+        PARAM1=test1
+    fi
+    echo ${PARAM1}
+    
+    PARAM1=hello sh test.sh
 
 **关于wget伪装成浏览器的行为 更改user-agent**
 
