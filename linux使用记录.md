@@ -428,6 +428,91 @@ export HISTCONTROL=ignoredups
 
 
 
+**关于浮点数的小理解**
+
+原因，简单的说是因为一些十进制有限小数在2进制中是无限小数。
+解决方法，搜索 decimal
+
+可以看看python 中的解释。
+http://docs.python.org/2/tutorial/floatingpoint.html
+
+**Apt-get GPG Error: Public Key Not Available**
+
+看到一篇十分好的[文章](http://www.rebelzero.com/fixes/apt-get-gpg-error-public-key-not-available/88)
+
+解决这种方法的思路 
+
+wget -q "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x4874D3686E80C6B7" -O- | sudo apt-key add -
+
+4874D3686E80C6B7 为 错误id
+
+**在shell 中如何判断 一个变量被赋值没有？ 看 ossec 如何实现的？**
+
+    # If user language is not set
+        if [ "X${USER_LANGUAGE}" = "X" ]; then 
+
+好吧。我承认这也是一种方法。。。
+
+
+**shell 中if 的逻辑表达式 **
+
+    >* 逻辑非 ! 
+        if [ ! 表达式 ]
+    >* 逻辑与 –a  
+        if [ 表达式1  –a  表达式2 ]
+    >* 逻辑或 -o
+        if [ 表达式1  –o 表达式2 ]
+
+可以看ossec中如何使用的
+
+    # Choosing the language.
+        while [ 1 ]; do
+        echo ""
+        for i in `ls ${TEMPLATE}`; do
+            # ignore CVS (should not be there anyways and config)
+            if [ "$i" = "CVS" -o "$i" = "config" ]; then continue; fi
+            cat "${TEMPLATE}/$i/language.txt"
+            if [ ! "$i" = "en" ]; then
+                LG="${LG}/$i"
+            fi
+        done
+
+**在终端下使用vim的命令  注意终端下只有 插入与命令模式**
+
+开启 默认是在插入模式下
+     set -o vim 
+切换到 命令模式 
+    ESc 键
+
+**bash 的 cmd  <(subcmd)特殊用法**
+
+这是bash的一个特殊构造： cmd  <(subcmd) 表示将subcmd输出的管道作为文件传递 给cmd作为参数
+
+例如
+diff <(echo {1..10})  <(echo {2..10})
+
+再比如
+ls -l <(echo {1..10})
+
+**443 端口是 https 默认采用的端口**
+
+**gcc -Wall   ssl-demo.c -lssl -o ssl-demo 与 gcc -Wall    -lssl ssl-demo.c  -o ssl-demo
+的 区别 **
+
+今天在测试一段 ssl的代码时发现 gcc -Wall   ssl-demo.c -lssl -o ssl-demo 会执行错误
+调整了 -lssl  的顺序之后 正常 。。很是诡异。。。
+测试代码如下：
+https://gist.github.com/xiyoulaoyuanjia/cd2bb25e394d06b92403
+
+这里顺便回忆下动态库的加载顺序 
+
+>* 编译目标代码时指定的动态库搜索路径；
+>* 环境变量LD_LIBRARY_PATH指定的动态库搜索路径；
+>* 配置文件/etc/ld.so.conf中指定的动态库搜索路径；
+>* 默认的动态库搜索路径/lib；
+>* 默认的动态库搜索路径/usr/lib。
+
+
 
 
 
