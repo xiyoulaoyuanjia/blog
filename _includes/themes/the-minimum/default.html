@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>{{ page.title }}</title>
+	<link rel="stylesheet" type="text/css" href="{{ ASSET_PATH }}/css/kube.min.css" />
+	<link href='http://fonts.googleapis.com/css?family=Rambla' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="{{ ASSET_PATH }}/css/style.css" />
+	<link href="http://feeds.feedburner.com/{{ site.author.feedbaname }}" rel="alternate" title="{{ page.title }}" type="application/atom+xml">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="threequarter centered">
+				<h1><a href="{{ HOME_PATH }}">{{ site.title }}</a></h1>
+				<h2>{{ site.tagline }}</h2>
+				<hr />
+				<div class="row container">
+					<div class="quarter">
+						<h3>About Me</h3>
+						<figure class="image">  
+							<img src="https://en.gravatar.com/userimage/13363990/4bd44ba6339e4525ad9f839f46244100.jpg?size=200" class="gravatar" alt="Looking snazzy" width="200" height="200" />
+							<figcaption>Looking snazzy...</figcaption>  
+						</figure>
+						<br />
+						<p><a href="http://golang.org">Go</a>, <a href="http://nodejs.org">Node</a> and <a href="http://php.net">PHP</a> hacker, E46 fanatic, badass and vagabond. Resides in Brisbane, Australia.</p>
+						
+						<div>
+							<p><a href="https://twitter.com/{{ site.author.twitter }}" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @{{ site.author.twitter }}</a></p>
+						<p><iframe src="http://ghbtns.com/github-btn.html?user={{ site.author.github }}&type=follow&count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="180" height="30"></iframe></p>
+						</div>
+					</div>
+					<div class="threequarter">
+						{{ content }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+{% include JB/analytics %}
+</body>
+</html>

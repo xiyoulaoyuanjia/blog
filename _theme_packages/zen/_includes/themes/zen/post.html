@@ -1,0 +1,8 @@
+<h3>{{ page.title }}</h3>
+<p class="small">{{ page.date | date: '%d %B, %Y' }}</p>
+<div class="posts">
+	{{ content }}
+</div>
+<div class="comments">
+	{% include JB/comments %}
+</div>

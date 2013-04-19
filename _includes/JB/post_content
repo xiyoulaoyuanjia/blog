@@ -1,0 +1,12 @@
+<article class="unit-article layout-post">
+    <div class="unit-inner unit-article-inner">
+        <div class="content">
+            <div class="bd">
+                <div class="entry-content">
+                	<h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+                    {{ post.content }}
+                </div><!-- entry-content -->
+            </div><!-- bd -->
+        </div><!-- content -->
+    </div><!-- unit-inner -->
+</article>

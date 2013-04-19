@@ -1,0 +1,23 @@
+---
+layout: post
+title: "My first tablet - a review of the iPad 1"
+description: "I happened to have an iPad 1 64GB 3G offered to me for a stupidly small amount of money - although I didn't really plan on buying one, I couldn't pass it up and thought I'll find out what all the fuss is about."
+category: review
+tags: [rants, personal, products, iPad, review, iOS]
+---
+{% include JB/setup %}
+
+I am a developer but I think although I have no real experience in graphic design or UX I have a good eye for product design and user experience. I've mainly used android phones and tablets, so this review comes with that in mind.
+
+I happened to have an iPad 1 64GB 3G offered to me for a stupidly small amount of money - although I didn't really plan on buying one, I couldn't pass it up and thought I'll find out what all the fuss is about. My main computers are a current generation MacBook Pro 15" and a fairly beefy Linux desktop. I take my MacBook with me places, so if I can replace some of it's duties with something a third of the weight and size that would be nice.
+
+### The iPad and iOS
+First impressions so far are that it is a really good idea but needs refining, it's not quite right in some respects. I use it for both consuming and creating content, so input is very important for me - I like to write blog posts, emails and reasonably long comments and responses on various websites (no coding, I save that for a proper keyboard). I find it just slightly too slow for regular browsing and app usage coming from a Galaxy Nexus phone, it's definitely less buggy and jerky in it's OS and software next to android 4.1. The best way i can describe what using the OS feels like coming from someone who has used pretty much exclusively android for the last few years is like using a manual typewriter versus an electric one - it is slow but still responsive and elegant. My android phone (and all the tablets out there I've used) feel much faster in terms of things loading, pages rendering etc but the actual experience on the iPad is much smoother (although slower) because the UI doesn't freeze or become buggy and erratic when  doing something intensive. It will rarely freeze and skip pages or any other unexpected behavior that Android users have come to expect. I am often pleasantly surprised by it's accuracy and intuitiveness when it comes to things like copypasting, selecting text and other really simple functionality that android struggles to make easy and obvious. I think the current generation iPad will be a Windows to Mac kind of feeling from my android phone experience, especially with the smart cover - being able to angle it on tables and my lap... 
+
+The things I use the most are Safari, Twitter, Mail.app, Facebook and iA writer (what I'm writing this blog post with right now). I would like to use Chrome and GMail but I find on he first gen iPad they are noticeably slow compared to apple's (more) native apps.
+
+### iA Writer
+iA Writer is a beautiful piece of software. Everything In it is so intuitive, well thought out and nicely implemented (even more impressively so than than the Mac app in my opinion). It looks and feels like it has been built by [a surgeon](http://en.wikipedia.org/wiki/The_Mythical_Man-Month#The_surgical_team). The iCloud and Dropbox integration is flawless and the extended keyboard is fantastic - The only things I would change are the addition of a 'delete' key, although I never used this in the past, the more time I spend in front of my desktop the more I see myself reaching for this on my MacBook (and now iPad) and the option to use the extended keyboard all over the OS as a replacement (I'm not sure how possible this is?)
+
+### Conclusions
+I can see that many of the things which bother me have been solved with the later generations of the device (smart cover to tilt it, faster processor, lighter etc) - my only issue which isn't solved is the actual screen size. I find that the touchscreen keyboard is surprisingly comfortable to use considering that it's a piece of glass, but it's about half an inch to an inch too small to fit my whole two hands over it (I have fairly large hands and fingers). If it were slightly larger and the processor were faster (a la current generation iPad) I can envisage myself touch typing effectively. Maybe I need to play with the Microsoft Surface and it's slightly larger screen? I will have to investigate and write a follow up in the future.
