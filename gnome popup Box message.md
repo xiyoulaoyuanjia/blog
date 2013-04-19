@@ -51,6 +51,8 @@ gnome popup Box message
     xmessage  "Are you sure you want to shutdown? " -buttons yes,no
     echo $?
 
+![](http://openapi.vdisk.me/?m=file&a=download_share_file&ss=b8a4QzDUEFUpVNIH7B328--2FGiSJcaTHjF--2FvosYrlkt2pjU--2F8DS2rNs--2Fa--2BQOOojpsXbMsledIcUzBfmtol--2BJVoHyq--2B--2BS0R)
+
 或者
 
     answer=$(xmessage  "Are you sure you want to shutdown? " -buttons yes,no -print)
