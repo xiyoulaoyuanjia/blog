@@ -41,6 +41,28 @@ __另外这里有一篇在hg-git 上设计的hook 可以方便的pull hd 与git 
 [Github and Bitbucket hooks](http://morgangoose.com/blog/2010/09/29/github-and-bitbucket-hooks/)
 
 
+**使用[git-hg](https://github.com/cosmin/git-hg)插件**
+
+这个项目与上面说的git-hg 正好相反。 这个是服务器是git 管理 客户端 是git-hg(依赖于hg) 当然客户端也可以
+是 git 管理代码
+
+
+     git-hg clone http://some/random/hg/repo [local-git-repo-name]
+     git-hg pull # same as git-hg-fetch && git merge hg/branch_name
+
+具体可以参考上面给的链接。 其中我在做ossec 的mirror时也就是使用了这种方法一次性把
+hg 的代码转换成了git的标签同时推送到github中的 在[这里](https://github.com/xiyoulaoyuanjia/sAoccec/tree/mirror)
+
+**在GitHub上建立一个SVN仓库的镜像**
+
+这个的目的主要是 同步google code(svn) 到github 中的
+
+这个可以参考 [这里](http://blog.yesmeck.com/archives/create-svn-mirror-on-github/)
+
+这里需要先安装git-svn 
+
+
+
 
 
 
