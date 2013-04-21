@@ -3,7 +3,7 @@ github 上建立其它仓库的镜像
 
 **github 上面建立Mercurial 仓库代码**
 
-**使用 hg-git 工具**
+**使用 [hg-git](https://github.com/schacon/hg-git) 工具**
 
 Hg-Git是Mercurial(Hg)的扩展插件,主要功能是 本地hg版本管理git代码pull(push) 到
 git 服务器管理代码
