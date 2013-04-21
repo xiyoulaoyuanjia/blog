@@ -36,9 +36,9 @@ git 服务器管理代码
 
 __这里需要特别注意 hg-git 的目的是 服务器是git 方式管理代码。客户端是hg 方式管理代码__
 
-__另外这里有一篇在hg-git 上设计的hook 可以方便的pull hd 与git 写的也相当有意思
+__另外这里有一篇在hg-git 上设计的hook 可以方便的pull hd 与git 写的也相当有意思__
 
-[Github and Bitbucket hooks](http://morgangoose.com/blog/2010/09/29/github-and-bitbucket-hooks/)__
+[Github and Bitbucket hooks](http://morgangoose.com/blog/2010/09/29/github-and-bitbucket-hooks/)
 
 
 
