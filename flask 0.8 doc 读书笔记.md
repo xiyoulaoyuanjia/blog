@@ -324,6 +324,81 @@ flask 使用 Jinja2 模板 并且默认开启 自动转义  对于一些特殊�
 
 
 
+*********
+**template**
+**默认使用**
+
+>* 使用 jinja2 模板 当然可以替换模板但是 flask默认还是会安装jinja2 的模板的
+>* 默认情况下 jinja2 模板会处理 .html .htm .xml .xhtml
+>* 过滤器
+>>* tojson()  默认会把对象 过滤为json格式
+
+javascript 中会很有用
+
+    <script type=text/javascript>
+        doSomethingWith({{ user.username|tojson|safe }});
+    </script>
+
+
+>>* safe  取消模板的转义
+
+用法与上面相同 
+
+**控制模板转义的3种方法**
+
+>*  在python中 做一个  Markup 的html对象 这个没用过。
+>*  使用 |safe 过滤器
+
+    {{ myvariable|safe }}
+
+>* 使用 {% autoescape %} 代码块
+
+    {% autoescape false %}
+        <p>autoescaping is disabled here
+        <p>{{ will_not_be_escaped }}
+    {% endautoescape %}
+
+**Context Processors**
+
+python 定义
+
+    @app.context_processor
+    def utility_processor():
+        def format_price(amount, currency=u'€'):
+            return u'{0:.2f}{1}.format(amount, currency)
+        return dict(format_price=format_price)
+
+template 中使用
+
+    {{ format_price(0.33) }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
