@@ -3,7 +3,7 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
    
-   <title>CentOS 6 minimal install CD - You may not want to bother with it</title>
+   <title>CentOS1111 6 minimal install CD - You may not want to bother with it</title>
    
    <meta name="author" content="Julian Yap" />
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -12,12 +12,19 @@
    <link rel="shortcut icon" href="/favicon.ico" />
 
    <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
 
    <!-- Homepage CSS -->
+   <!--
    <link rel="stylesheet" type="text/css" href="/css/base.css">
    <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
    <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   <link rel="stylesheet" href="css/syntax.css" type="text/css" />  -->
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="css/base.css">
+   <link rel="stylesheet" type="text/css" href="css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="css/layout.css">
+
 
 </head>
 <body>
@@ -29,7 +36,7 @@
   
   <div class="eleven columns">
   
-<h1><a href="http://lists.centos.org/pipermail/centos-announce/2011-July/017660.html" title="External link">CentOS 6 minimal install CD - You may not want to bother with it</a></h1>
+<h1><a href="http://lists.centos.org/pipermail/centos-announce/2011-July/017660.html" title="External link">CentOS1111 6 minimal install CD - You may not want to bother with it</a></h1>
 
 <div id="post">
 <p><strong>视图与url配置</strong></p>
@@ -49,46 +56,6 @@
 </blockquote>
 
 <p><strong>urlconf</strong></p>
-
-<pre><code>    # url(r&#39;^$&#39;, &#39;mysite.views.home&#39;, name=&#39;home&#39;),
-    # url(r&#39;^mysite/&#39;, include(&#39;mysite.foo.urls&#39;)),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r&#39;^admin/doc/&#39;, include(&#39;django.contrib.admindocs.urls&#39;)),
-
-    # Uncomment the next line to enable the admin:
-    # url(r&#39;^admin/&#39;, include(admin.site.urls)),
-)</code></pre>
-
-<p><em>note</em> python 的搜索路径</p>
-
-<pre><code>import sys
-print sys.path
-[&#39;&#39;, &#39;/usr/lib/python2.6/site-packages/setuptools-0.6c11-py2.6.egg&#39;, &#39;/usr/lib/python2.6/site-packages/pexpect-2.4-py2.6.egg&#39;, &#39;/usr/lib64/python26.zip&#39;, &#39;/usr/lib64/python2.6&#39;, &#39;/usr/lib64/python2.6/plat-linux2&#39;, &#39;/usr/lib64/python2.6/lib-tk&#39;, &#39;/usr/lib64/python2.6/lib-old&#39;, &#39;/usr/lib64/python2.6/lib-dynload&#39;, &#39;/usr/lib64/python2.6/site-packages&#39;, &#39;/usr/lib64/python2.6/site-packages/PIL&#39;, &#39;/usr/lib64/python2.6/site-packages/gst-0.10&#39;, &#39;/usr/lib64/python2.6/site-packages/gtk-2.0&#39;, &#39;/usr/lib64/python2.6/site-packages/webkit-1.0&#39;, &#39;/usr/lib/python2.6/site-packages&#39;, &#39;/usr/lib/python2.6/site-packages/setuptools-0.6c11-py2.6.egg-info&#39;]
-
-注意第一个空字符串表示在当前路径下寻找</code></pre>
-
-<p><strong>URLpattern</strong></p>
-
-<blockquote>
-<p>任何在匹配URLpattern的请求之前需要去掉之前的&#8221;/&#8221; 字符.这意味着我们为/hello/写URL模式不用包含斜杠(/) 关于这点的好处此刻还不是很清楚 例如内嵌等后续补充</p>
-</blockquote>
-
-<blockquote>
-<p>关于尾部/ 的处理 默认地，任何不匹配或尾部没有斜杠(/)的申请URL，将被重定向至尾部包含斜杠的相同字眼的URL 注意这是受到setting中APPEND_SLASH项控制</p>
-</blockquote>
-
-<p><em>如果你让它一直运行也可以，开发服务器会自动监测代码改动并自动重新载入，所以不需要手工重启</em></p>
-
-<p><em>关于网站根目录:默认情况下输入http://127.0.0.1:8000/ 将获得一个404 错误 因为Djingo默认不会把根目录当做特殊处理 ，需要特殊处理必须使用 URLpattern 匹配它,例如 (&#8216;^$&#8217;, myhomepath)</em></p>
-
-<p><em>Django 处理请求过程</em></p>
-
-<p><em>note</em> 关注settings.py 文件 这个文件包含了所有有关这个Django项目的配置信息,均大写： TEMPLATE_DIRS , DATABASE_NAME , 等. 最重要的设置时ROOT_URLCONF，它将作为URLconf告诉Django在这个站点中那些Python的模块将被用到</p>
-
-<p><em>Django的时区 在setting文件中 且默认为America/Chicago</em></p>
-
-<p><em>当然在urlconf中可以考虑正则捕获,捕获的值依次(从第二个参数开始第一个参数是httprequest的实例)传入视图</em></p>
 </div>
 
 <div>

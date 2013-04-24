@@ -1,8 +1,9 @@
 ---
 layout: post
-title: CentOS 6 minimal install CD - You may not want to bother with it
+title: CentOS1111 6 minimal install CD - You may not want to bother with it
 date: 2011-08-10 22:40
 post-link: http://lists.centos.org/pipermail/centos-announce/2011-July/017660.html
+baseurl: blog
 ---
 
 **视图与url配置**
