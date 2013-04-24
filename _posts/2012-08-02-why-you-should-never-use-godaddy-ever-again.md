@@ -5,8 +5,6 @@ description: ""
 category: ramblings
 tags: [ramblings, startups]
 ---
-Django
-=====
 **视图与url配置**
 
 一个视图就是一个python的函数,并且必须满足两个条件
