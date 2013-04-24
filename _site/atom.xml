@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Julian Yap</title>
+ <link href="http://julianyap.com/atom.xml" rel="self"/>
+ <link href="http://julianyap.com"/>
+ <updated>2013-04-24T14:53:34+08:00</updated>
+ <id>http://julianyap.com/</id>
+ <author>
+   <name>Julian Yap</name>
+ </author>
+
+ 
+ <entry>
+   <title>CentOS 6 minimal install CD - You may not want to bother with it</title>
+   <link href="http://julianyap.com/2011/08/10/centos-6-minimal-install-cd-you-may-not-want-to-bother-with-it.html"/>
+   <updated>2011-08-10T22:40:00+08:00</updated>
+   <id>http://julianyap.com/2011/08/10/centos-6-minimal-install-cd-you-may-not-want-to-bother-with-it</id>
+   <content type="html">&lt;p&gt;&lt;strong&gt;视图与url配置&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;一个视图就是一个python的函数,并且必须满足两个条件&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;函数的第一个类型必须是HttpRequest&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;它返回一个HttpResponse实例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;urlconf&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    # url(r&amp;#39;^$&amp;#39;, &amp;#39;mysite.views.home&amp;#39;, name=&amp;#39;home&amp;#39;),
+    # url(r&amp;#39;^mysite/&amp;#39;, include(&amp;#39;mysite.foo.urls&amp;#39;)),
+
+    # Uncomment the admin/doc line below to enable admin documentation:
+    # url(r&amp;#39;^admin/doc/&amp;#39;, include(&amp;#39;django.contrib.admindocs.urls&amp;#39;)),
+
+    # Uncomment the next line to enable the admin:
+    # url(r&amp;#39;^admin/&amp;#39;, include(admin.site.urls)),
+)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;note&lt;/em&gt; python 的搜索路径&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import sys
+print sys.path
+[&amp;#39;&amp;#39;, &amp;#39;/usr/lib/python2.6/site-packages/setuptools-0.6c11-py2.6.egg&amp;#39;, &amp;#39;/usr/lib/python2.6/site-packages/pexpect-2.4-py2.6.egg&amp;#39;, &amp;#39;/usr/lib64/python26.zip&amp;#39;, &amp;#39;/usr/lib64/python2.6&amp;#39;, &amp;#39;/usr/lib64/python2.6/plat-linux2&amp;#39;, &amp;#39;/usr/lib64/python2.6/lib-tk&amp;#39;, &amp;#39;/usr/lib64/python2.6/lib-old&amp;#39;, &amp;#39;/usr/lib64/python2.6/lib-dynload&amp;#39;, &amp;#39;/usr/lib64/python2.6/site-packages&amp;#39;, &amp;#39;/usr/lib64/python2.6/site-packages/PIL&amp;#39;, &amp;#39;/usr/lib64/python2.6/site-packages/gst-0.10&amp;#39;, &amp;#39;/usr/lib64/python2.6/site-packages/gtk-2.0&amp;#39;, &amp;#39;/usr/lib64/python2.6/site-packages/webkit-1.0&amp;#39;, &amp;#39;/usr/lib/python2.6/site-packages&amp;#39;, &amp;#39;/usr/lib/python2.6/site-packages/setuptools-0.6c11-py2.6.egg-info&amp;#39;]
+
+注意第一个空字符串表示在当前路径下寻找&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;URLpattern&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;任何在匹配URLpattern的请求之前需要去掉之前的&amp;#8221;/&amp;#8221; 字符.这意味着我们为/hello/写URL模式不用包含斜杠(/) 关于这点的好处此刻还不是很清楚 例如内嵌等后续补充&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;关于尾部/ 的处理 默认地，任何不匹配或尾部没有斜杠(/)的申请URL，将被重定向至尾部包含斜杠的相同字眼的URL 注意这是受到setting中APPEND_SLASH项控制&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;em&gt;如果你让它一直运行也可以，开发服务器会自动监测代码改动并自动重新载入，所以不需要手工重启&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;关于网站根目录:默认情况下输入http://127.0.0.1:8000/ 将获得一个404 错误 因为Djingo默认不会把根目录当做特殊处理 ，需要特殊处理必须使用 URLpattern 匹配它,例如 (&amp;#8216;^$&amp;#8217;, myhomepath)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Django 处理请求过程&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;note&lt;/em&gt; 关注settings.py 文件 这个文件包含了所有有关这个Django项目的配置信息,均大写： TEMPLATE_DIRS , DATABASE_NAME , 等. 最重要的设置时ROOT_URLCONF，它将作为URLconf告诉Django在这个站点中那些Python的模块将被用到&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Django的时区 在setting文件中 且默认为America/Chicago&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;当然在urlconf中可以考虑正则捕获,捕获的值依次(从第二个参数开始第一个参数是httprequest的实例)传入视图&lt;/em&gt;&lt;/p&gt;</content>
+ </entry>
+ 
+ 
+</feed>

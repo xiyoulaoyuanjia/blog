@@ -1,0 +1,220 @@
+/*
+* Copyright 2013, Julian Yap
+* This file contains all the base layout overrides that differ from Skeleton (www.getskeleton.com).
+* Feel free to use the HTML and CSS as you please but I would greatly appreciate if you put a little bit of effort into changing the colors and look of your site.
+* Please do not use the diamond glyph since I want to keep that unique in my design. 
+* 
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+*/
+
+/* Table of Content
+==================================================
+	#Site Styles
+	#Page Styles
+	#Media Queries
+	#Font-Face */
+
+/* #Typography
+================================================== */
+
+p { margin: 15px 0 5px 0; }
+
+/* #Site Styles
+================================================== */
+
+body {
+  color: #000000;
+  font: 15px/22px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.container {
+  margin-top: 35px;
+}
+
+.container .footer {
+  font-size: 80%;
+  color: #666;
+  border-top: 4px solid #eee;
+  margin-top: 2em;
+  overflow: hidden;
+}
+
+.container .footer .contact {
+  float: right;
+  margin-right: 1em;
+}
+
+.container .footer .contact a {
+  color: #8085C1;
+}
+
+.container .footer .rss {
+  margin-left: 1em;
+  margin-top: 0em;
+  float: left;
+}
+
+.container .footer .rss img {
+  border: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #0000a9;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+a, a:visited { 
+  color: #0000a9; 
+  text-decoration: non; 
+  outline: 0; 
+}
+
+.title {
+  color: #aa0000;
+  font-weight: bold;
+  text-shadow: 1px 1px rgb(204, 204, 204);
+  line-height: 4em;
+}
+
+.title a {
+  font-size: 30pt;
+  color: #aa0000;
+  text-decoration: none;
+}
+
+.title a:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.title a.extra {
+  color: #aaa;
+  text-decoration: none;
+  margin-left: 1em;
+}
+
+.title a.extra:hover {
+  color: black;
+}
+
+.title .twitter-follow-button {
+  float: right;
+  font-size: 15px;
+}
+
+blockquote {
+  /* margin: 1em 3em; */
+  margin: 0 2em 20px 1em;
+  border-left: 2px solid #999;
+  padding: 0pt 0pt 0pt 19px;
+}
+
+blockquote, blockquote p { 
+  font-size: 15px; 
+}
+
+h1 {
+  font-size: 18px;
+  font-family: "HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  line-height: normal;
+}
+
+ul.posts span.post_date {
+  color: #aaa;
+  font-family: Monaco, "Courier New", monospace;
+  font-size: 80%;
+}
+
+hr.front {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  width: 50%;
+  position: relative;
+  margin: 15px auto;
+}
+
+a.glyph-permalink {
+  text-decoration: none;
+  color: #808080;
+  font-size: 110%;
+  margin-left: .5em;
+  border: 0;
+  padding: 3px;
+  font-family: "Hiragino Kaku Gothic Pro", "Osaka", "Zapf Dingbats";
+}
+
+a.glyph-permalink:hover {
+  color: #aa0000;
+}
+
+code {
+  background-color: #eef;
+  font-size: 85%;
+  padding: 0 .2em;
+  display: block;
+  padding: 0.5em 1em;
+  border: 1px solid #bebab0;
+}
+
+/* terminal */
+
+pre.terminal {
+  border: 1px solid black;
+  background-color: #333;
+  color: white;
+}
+
+pre.terminal code {
+  background-color: #333;
+}
+
+/* #Page Styles
+================================================== */
+
+/* #Media Queries
+================================================== */
+
+	/* Smaller than standard 960 (devices and browsers) */
+	@media only screen and (max-width: 959px) {}
+
+	/* Tablet Portrait size to standard 960 (devices and browsers) */
+	@media only screen and (min-width: 768px) and (max-width: 959px) {}
+
+	/* All Mobile Sizes (devices and browser) */
+	@media only screen and (max-width: 767px) {}
+
+	/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+	@media only screen and (min-width: 480px) and (max-width: 767px) {}
+
+	/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+	@media only screen and (max-width: 479px) {}
+
+
+/* #Font-Face
+================================================== */
+/* 	This is the proper syntax for an @font-face file
+		Just create a "fonts" folder at the root,
+		copy your FontName into code below and remove
+		comment brackets */
+
+/*	@font-face {
+	    font-family: 'FontName';
+	    src: url('../fonts/FontName.eot');
+	    src: url('../fonts/FontName.eot?iefix') format('eot'),
+	         url('../fonts/FontName.woff') format('woff'),
+	         url('../fonts/FontName.ttf') format('truetype'),
+	         url('../fonts/FontName.svg#webfontZam02nTh') format('svg');
+	    font-weight: normal;
+	    font-style: normal; }
+*/

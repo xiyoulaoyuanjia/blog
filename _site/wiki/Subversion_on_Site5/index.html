@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   
+   <title>Subversion on Site5</title>
+   
+   <meta name="author" content="Julian Yap" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" />
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="Julian Yap: Home">Julian Yap</a>
+  </div>
+  
+  <div class="eleven columns">
+  <div id="post">
+<h1>Subversion on Site5</h1>
+<p><a href="http://www.site5.com/in.php?id=7872">Site5</a> provides Subversion access via <span class="caps">SSH</span>. These are my notes on getting it working and basic usage.</p>
+<p><a href="http://www.site5.com/in.php?id=7872">Site5</a> is my current Web hosting provider. I highly recommend them.</p>
+<p>If you would like to consider joining <a href="http://www.site5.com/in.php?id=7872">Site5</a>, please click on my affiliate link <a href="http://www.site5.com/in.php?id=7872">here</a>.</p>
+<h1>Create your Repository</h1>
+<div class="highlight"><pre><code class="bash">svnadmin create /home/<span class="o">[</span>username<span class="o">]</span>/repos
+</code></pre></div><h1>Creating the Layout, and Importing Initial Data</h1>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>mkdir tmpdir
+<span class="nv">$ </span><span class="nb">cd </span>tmpdir
+<span class="nv">$ </span>mkdir projectA
+<span class="nv">$ </span>mkdir projectA/trunk
+<span class="nv">$ </span>mkdir projectA/branches
+<span class="nv">$ </span>mkdir projectA/tags
+<span class="nv">$ </span>mkdir projectB
+<span class="nv">$ </span>mkdir projectB/trunk
+<span class="nv">$ </span>mkdir projectB/branches
+<span class="nv">$ </span>mkdir projectB/tags
+…
+<span class="nv">$ </span>svn import . file:///path/to/repos --message <span class="s1">&#39;Initial repository layout&#39;</span>
+Adding         projectA
+Adding         projectA/trunk
+Adding         projectA/branches
+Adding         projectA/tags
+Adding         projectB
+Adding         projectB/trunk
+Adding         projectB/branches
+Adding         projectB/tags
+…
+Committed revision 1.
+<span class="nv">$ </span><span class="nb">cd</span> ..
+<span class="nv">$ </span>rm -rf tmpdir
+</code></pre></div><p>You can verify the results of the import by running the svn list command:</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>svn list --verbose file:///path/to/repos
+      1 harry               May 08 21:48 projectA/
+      1 harry               May 08 21:48 projectB/
+…
+</code></pre></div><h1>Site5 specific issues</h1>
+<p>Request to <a href="http://www.site5.com/in.php?id=7872">Site5</a> support that they change your shell to Bash. Specify your username and the reason (&#8220;for Subversion access&#8221;).</p>
+<p><a href="http://forums.site5.com/showthread.php?p=37388#post37388">Explanation</a>: We offer different shells for different levels of users and different purposes. This is a large part of the reason why when you ask for shell to be enabled, a technicians will typically ask &#8220;what for?&#8221;. If you are using <span class="caps">SVN</span> and would like to get rid of the entry banner, simply submit a support request, include your main account and the username you are using to connect and request to have you shell switched to &#8220;bash&#8221;. Simple as that! :D</p>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © Julian Yap now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

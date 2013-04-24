@@ -1,0 +1,19 @@
+---
+layout: page
+title: Projects
+---
+
+h1. {{ page.title }}
+
+My iOS projects.
+
+<ul class="posts">
+  <li><a href="http://itunes.apple.com/us/app/nikon-lens-buddy-lenses-for/id459052975?mt=8&partnerId=30&siteID=XHwTgHE3bXg">Nikon Lens Buddy:</a> Over 175 Nikon, Sigma, Tamron and Tokina lenses for Nikon cameras. Over 680 lens reviews. For iPhone, iPod touch, and iPad.</li>
+  <li><a href="http://itunes.apple.com/us/app/canon-lens-buddy-lenses-for/id450111426?mt=8&partnerId=30&siteID=XHwTgHE3bXg">Canon Lens Buddy:</a> Over 170 Canon, Sigma, Tamron, Carl Zeiss and Tokina lenses for Canon DSLR's. Over 820 lens reviews. For iPhone, iPod touch, and iPad.</li>
+  <li><a href="http://itunes.apple.com/us/app/mirrorless-lenses/id428755110?mt=8&partnerId=30&siteID=XHwTgHE3bXg">Mirrorless Lenses:</a> Over 90 Micro Four Thirds, Nikon CX, Sony E, Samsung NX, Pentax Q and Four Thirds Mount lenses. Over 300 reviews. For iPhone, iPod touch, and iPad.</li>
+  <li><a href="http://itunes.apple.com/us/app/olympus-lens-buddy/id492533928?mt=8&partnerId=30&siteID=XHwTgHE3bXg">Olympus Lens Buddy:</a> Over 60 Olympus, Panasonic, Samyang, Noktor, Sigma and Voigtländer lenses for Olympus cameras. Over 265 reviews. For iPhone, iPod touch, and iPad.</li>
+  <li><a href="http://itunes.apple.com/us/app/panasonic-lens-buddy/id497328941?mt=8&partnerId=30&siteID=XHwTgHE3bXg">Panasonic Lens Buddy:</a> Over 60 Panasonic, Olympus, Samyang, Noktor, Sigma and Voigtländer lenses for Panasonic cameras. Over 265 reviews. For iPhone, iPod touch, and iPad.</li>
+  <li><a href="http://itunes.apple.com/us/app/quick-signature/id525393558?mt=8&partnerId=30&siteID=XHwTgHE3bXg">Quick Signature:</a> Quick Signature is the quickest and easiest way to add multiple email signature support to your iPhone and iPad!</a>
+  <li><a href="http://itunes.apple.com/us/app/quick-text-message/id583729997?mt=8&partnerId=30&siteID=XHwTgHE3bXg">Quick Text Message:</a> Quick Text Message is the quickest and easiest way to send frequently used text messages on your iPhone!</a>
+</ul>
+
