@@ -59,7 +59,7 @@ _关于网站根目录:默认情况下输入http://127.0.0.1:8000/ 将获得一�
 
 _Django 处理请求过程_ 
 
-_note_ 关注settings.py 文件 这个文件包含了所有有关这个Django项目的配置信息,均大写： TEMPLATE_DIRS , DATABASE_NAME , 等. 最重要的设置时ROOT_URLCONF，它将作为URLconf告诉Django在这个站点中那些Python的模块将被用到
+_note_ `关注settings.py 文件 这个文件包含了所有有关这个Django项目的配置信息,均大写： TEMPLATE_DIRS , DATABASE_NAME , 等. 最重要的设置时ROOT_URLCONF，它将作为URLconf告诉Django在这个站点中那些Python的模块将被用到`
     
 _Django的时区 在setting文件中 且默认为America/Chicago_
 
