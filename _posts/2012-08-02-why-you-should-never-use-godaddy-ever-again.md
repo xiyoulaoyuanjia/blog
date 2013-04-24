@@ -1,3 +1,10 @@
+---
+layout: post
+title: "Django 学习手册"
+description: ""
+category: ramblings
+tags: [ramblings, startups]
+---
 Django
 =====
 **视图与url配置**
