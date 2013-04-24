@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>git 初步使用</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>git 初步使用</h1>
+
+<div id="post">
+<h1>git 使用</h1>
+
+<p><a href="http://rogerdudler.github.com/git-guide/index.zh.html">参考这里</a></p>
+
+<hr />
+
+<p><strong>安装</strong></p>
+
+<p><a href="http://code.google.com/p/git-osx-installer/downloads/list?can=3"><em>git osx 版本</em></a></p>
+
+<p><a href="http://code.google.com/p/msysgit/downloads/list?can=3">git windows 版本</a></p>
+
+<p><a href="http://book.git-scm.com/2_installing_git.html">git linux版本</a></p>
+
+<hr />
+
+<p><strong>创建新仓库</strong></p>
+
+<pre><code>1.创建新文件夹
+2.进入执行 git init
+</code></pre>
+
+<hr />
+
+<p><strong>复制仓库</strong></p>
+
+<blockquote><ul>
+<li>复制本地仓库</li>
+</ul>
+
+
+<blockquote><pre><code> git clone /path/to/repository
+</code></pre>
+
+<p> /path/to/repository 是本地的仓库地址</p></blockquote>
+
+<ul>
+<li>复制网络上的仓库</li>
+</ul>
+
+
+<blockquote><pre><code> git clone username@host:/path/to/repository
+</code></pre>
+
+<p> username@host:/path/to/repository 在github上面  是https://github.com/xiyoulaoyuanjia/AboutWeb.git 表示其走http协议 如果是git@github.com:xiyoulaoyuanjia/AboutWeb.git 表示走 ssh协议  git://github.com/xiyoulaoyuanjia/AboutWeb.git  则表示走的时git协议</p></blockquote></blockquote>
+
+<hr />
+
+<p><strong>工作流</strong></p>
+
+<p>git在本地维护着3棵树 。分别是工作目录(实际的文件)、缓冲区(保存最近的更改)、最后是HEAD(指向最近提交的内容)</p>
+
+<p><img src="http://rogerdudler.github.com/git-guide/img/trees.png" alt="" /></p>
+
+<hr />
+
+<p><strong>添加与提交</strong></p>
+
+<p>把修改的东西添加到缓冲区</p>
+
+<pre><code>git add file
+</code></pre>
+
+<p>实际提交使用如下命令提交到 HEAD 处</p>
+
+<pre><code>git commit -m "代码提交信息"
+</code></pre>
+
+<p>但是这样没有提交到远程服务器中</p>
+
+<hr />
+
+<p><strong>推送改动</strong></p>
+
+<p>将本地的改动推送到远程的仓库上的命令</p>
+
+<pre><code>git push origin master
+</code></pre>
+
+<p>master 表示远程的分支(主分支与其它的分支)</p>
+
+<p>如果没有克隆远程的仓库。只是向将现有的仓库增加到远程的仓库里可以使用如下命令</p>
+
+<pre><code>git remote add origin server(例如git@github.com:xiyoulaoyuanjia/AboutWeb.git)
+</code></pre>
+
+<hr />
+
+<p><strong>分支</strong></p>
+
+<p>分支是用来将特性开发绝缘的。新建仓库的时候 master是默认的主仓库、可以在其它仓库上面开发、待开发完成之后再将它们合并到主分区上面去。</p>
+
+<p><img src="http://rogerdudler.github.com/git-guide/img/branches.png" alt="" /></p>
+
+<p>创建分支可以使用 git checkout 命令  例如 创建一个feature_x分支并切换过去</p>
+
+<pre><code>git checkout -b feature_x
+</code></pre>
+
+<p>切换回主分区</p>
+
+<pre><code>git checkout master
+</code></pre>
+
+<p>删除新建的分支</p>
+
+<pre><code>git branch -d feature_x
+</code></pre>
+
+<p><strong>更新与合并</strong></p>
+
+<blockquote><p>更新本地仓库</p>
+
+<blockquote><p>1.更新远程仓库到本地仓库</p>
+
+<pre><code> git pull
+</code></pre>
+
+<p>2.更新其它分支到主分支(例如master)</p>
+
+<pre><code> git merge &lt;branch&gt;
+</code></pre></blockquote>
+
+<p>合并冲突</p>
+
+<p>这个对于复杂的问题需要手动合并冲去。当然 少不了一些常用的工具 git diff A B</p></blockquote>
+
+<p><strong>标签</strong></p>
+
+<p>在软件发布的时候创建标签是被推荐的。。</p>
+
+<pre><code>git tag 1.0.0 1b2e1d63ff
+</code></pre>
+
+<p>1b2e1d63ff 是commit的提交ID 当然可以少 只要是唯一的就行。。 查看ID 使用</p>
+
+<pre><code>git log
+</code></pre>
+
+<p><strong>替换本地改动</strong></p>
+
+<p>回到之前的改动。。</p>
+
+<pre><code>git checkout -- &lt;filename&gt;
+</code></pre>
+
+<p>此命令会使用 HEAD 中的最新内容替换掉你的工作目录中的文件。已添加到缓存区的改动，以及新文件，都不受影响</p>
+
+<p>另外如果想修改本地的所有改动。去服务器下载最新版本 然后把本地主分区指向它就行 相应的命令为</p>
+
+<pre><code>git fetch origin
+git reset --hard origin/master
+</code></pre>
+
+<p><strong>有用的东西</strong></p>
+
+<p>内建的图形化 git</p>
+
+<pre><code>gitk
+</code></pre>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container">16 APRIL 2012 @ 04:29AM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">21 Apr 2013</span> &raquo; <a href="/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html">使用ajax上传文档</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html">python 中 sqlite3 的使用</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

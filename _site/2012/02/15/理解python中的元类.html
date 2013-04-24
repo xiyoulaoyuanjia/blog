@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>理解python中的元类</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>理解python中的元类</h1>
+
+<div id="post">
+<h1>理解python中的元类</h1>
+
+<p><a href="http://blog.jobbole.com/21351/">note:参考这里</a></p>
+
+<p><strong>类也是对象</strong></p>
+
+<p>一般而言类是描述如何生成对象的代码断。但是python中的类还远不止此,只有使用new关键字。python就生成了对象</p>
+
+<pre><code>&gt;&gt;&gt; class ObjectCreator(object):
+…       pass
+…
+</code></pre>
+
+<p>则此时在内存中创建了一个对象.这个对象的名称为ObjectCreator。也就是说它拥有对象的特征。</p>
+
+<ol>
+<li>可以将它赋值给变量</li>
+<li>可以拷贝它</li>
+<li>可以增加属性</li>
+<li>可以作为参数传递</li>
+</ol>
+
+
+<p><strong>动态地创建类</strong></p>
+
+<p>这里注意因为类是对象,所以可以在运行的时候动态的创建</p>
+
+<pre><code>&gt;&gt;&gt; def choose_class(name):
+…       if name == 'foo':
+…           class Foo(object):
+…               pass
+…           return Foo     # 返回的是类，不是类的实例
+…       else:
+…           class Bar(object):
+…               pass
+…           return Bar
+…
+</code></pre>
+
+<p>type 在动态生成对象的使用。可以接受一个类的描述返回一个类。使用格式为</p>
+
+<p>type(类名, 父类的元组（针对继承的情况，可以为空），包含属性的字典（名称和值）)</p>
+
+<pre><code>&gt;&gt;&gt; MyShinyClass = type('MyShinyClass', (), {})  # 返回一个类对象
+&gt;&gt;&gt; print MyShinyClass
+&lt;class '__main__.MyShinyClass'&gt;
+&gt;&gt;&gt; print MyShinyClass()  #  创建一个该类的实例
+&lt;__main__.MyShinyClass object at 0x8997cec&gt;
+</code></pre>
+
+<p>这里需要重点知道动态的为类增加方法</p>
+
+<pre><code>&gt;&gt;&gt; def echo_bar(self):
+…       print self.bar
+…
+&gt;&gt;&gt; FooChild = type('FooChild', (Foo,), {'echo_bar': echo_bar})
+&gt;&gt;&gt; hasattr(Foo, 'echo_bar')
+False
+&gt;&gt;&gt; hasattr(FooChild, 'echo_bar')
+True
+&gt;&gt;&gt; my_foo = FooChild()
+&gt;&gt;&gt; my_foo.echo_bar()
+True
+</code></pre>
+
+<p>从上面可以看出可以动态的创建类.当然上面其实是new关键字幕后所作的事情</p>
+
+<p><strong><em>什么是元类</em></strong></p>
+
+<p>元类是用来创建类的东西。元类就是类的类</p>
+
+<p>注意 所有东西（整型，字符串、函数、类）都是对象</p>
+
+<pre><code>&gt;&gt;&gt; age = 35
+&gt;&gt;&gt; age.__class__
+&lt;type 'int'&gt;
+&gt;&gt;&gt; name = 'bob'
+&gt;&gt;&gt; name.__class__
+&lt;type 'str'&gt;
+&gt;&gt;&gt; def foo(): pass
+&gt;&gt;&gt;foo.__class__
+&lt;type 'function'&gt;
+&gt;&gt;&gt; class Bar(object): pass
+&gt;&gt;&gt; b = Bar()
+&gt;&gt;&gt; b.__class__
+&lt;class '__main__.Bar'&gt;
+</code></pre>
+
+<p>当然这里有一个很有意思的问题<strong>class</strong>的<strong>class</strong>是什么呢？</p>
+
+<pre><code>&gt;&gt;&gt; a.__class__.__class__
+&lt;type 'type'&gt;
+&gt;&gt;&gt; age.__class__.__class__
+&lt;type 'type'&gt;
+&gt;&gt;&gt; foo.__class__.__class__
+&lt;type 'type'&gt;
+&gt;&gt;&gt; b.__class__.__class__
+&lt;type 'type'&gt;
+</code></pre>
+
+<p>所以元类就是用来创建类这种东西的类了</p>
+
+<pre><code>class Foo(Bar):
+    pass
+</code></pre>
+
+<p>python分析的步骤为</p>
+
+<ol>
+<li>Foo中有<strong>metaclass</strong>这个属性吗？如果是，Python会在内存中通过<strong>metaclass</strong>创建一个名字为Foo的类对象（我说的是类对象，请紧跟我的思路）。如果Python没有找到<strong>metaclass</strong>，它会继续在Bar（父类）中寻找<strong>metaclass</strong>属性，并尝试做和前面同样的操作。如果Python在任何父类中都找不到<strong>metaclass</strong>，它就会在模块层次中去寻找<strong>metaclass</strong>，并尝试做同样的操作。</li>
+<li>如果还是找不到<strong>metaclass</strong>,Python就会用内置的type来创建这个类对象。</li>
+</ol>
+
+
+<p><strong><em>自定义元类</em></strong></p>
+
+<pre><code> 元类会自动将你通常传给‘type’的参数作为自己的参数传入
+def upper_attr(future_class_name, future_class_parents, future_class_attr):
+    '''返回一个类对象，将属性都转为大写形式'''
+    #  选择所有不以'__'开头的属性
+    attrs = ((name, value) for name, value in future_class_attr.items() if not name.startswith('__'))
+ # 将它们转为大写形式
+    uppercase_attr = dict((name.upper(), value) for name, value in attrs)
+
+    # 通过'type'来做类对象的创建
+    return type(future_class_name, future_class_parents, uppercase_attr)
+
+__metaclass__ = upper_attr  #  这会作用到这个模块中的所有类
+
+class Foo(object):
+    # 我们也可以只在这里定义__metaclass__，这样就只会作用于这个类中
+    bar = 'bip'
+</code></pre>
+
+<p>上面很重要的一点是<em>作用范围</em></p>
+
+<p><strong><em>结语</em></strong></p>
+
+<p>python中一切都是实例。要么是类的实例。要么是元类的实例.当然除了type。当然一般修改类还是使用以下两种方法</p>
+
+<blockquote><ul>
+<li>Monkey patching</li>
+<li>class decorators</li>
+</ul>
+</blockquote>
+
+<p>ps <a href="http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python">参考这里</a></p>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container">15 FEBRUARY 2012 @ 11:24PM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">21 Apr 2013</span> &raquo; <a href="/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html">使用ajax上传文档</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html">python 中 sqlite3 的使用</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>使用ajax上传文档</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>使用ajax上传文档</h1>
+
+<div id="post">
+<h1>使用ajax上传文档</h1>
+
+<p><strong>note:<a href="http://net.tutsplus.com/tutorials/javascript-ajax/uploading-files-with-ajax">E文</a></strong></p>
+
+<p><strong><a href="http://nettuts.s3.amazonaws.com/1020_ajaxupload/demo.zip">代码</a></strong></p>
+
+<p><strong>为什么不在最后告诉你这个不好的消息呢?这个并不是在每一个浏览器中都适用的</strong></p>
+
+<p>我们项目用到的主要的3个组建</p>
+
+<blockquote><ul>
+<li>"&lt;"input> 中的  multiple 属性(这个支持多个文件)</li>
+<li>文件操作的API 中的 FileReader 对象</li>
+<li>在 XMLHttpRequest2 中的  FormData 对象</li>
+</ul>
+</blockquote>
+
+<p>我们使用 multiple 属性允许我们读取多个文件内容(即使 FileReader 对象不可用.这个依然可以正常使用) 当然,FileReader对象可以使用们在上传的时候看到图片的缩略图.</p>
+
+<p>上述3个特性均不能在IE9中正常的工作.所以 IE用户可能不能正常使用.在最新的 Safari (5.1)版本中没有FileReader 对象 所以用户不能得到正常的图片缩略图 但是可以使用AJAX正常上传图片并获得上传成功的消息.,Opera 10.50 版本支持FileReader 对象 对象但是不支持 FormData 对象所以可以获得缩略图但是不能正确的上传图片.</p>
+
+<p>先抛开那些问题,开始看代码吧.</p>
+
+<p><strong>标签与样式</strong></p>
+
+<p>让我们从基本的标签与样式开始吧..当然这些不是本文档的主要部分..就向我不会把你们当成初学者一样..</p>
+
+<p><strong>html部分</strong></p>
+
+<p>&lt;!DOCTYPE html>
+<html lang="en">
+<head></p>
+
+<pre><code>&lt;meta charset="UTF-8" /&gt;
+&lt;title&gt;HTML5 File API&lt;/title&gt;
+&lt;link rel="stylesheet" href="style.css" /&gt;
+</code></pre>
+
+<p></head>
+<body></p>
+
+<pre><code>&lt;div id="main"&gt;
+    &lt;h1&gt;Upload Your Images&lt;/h1&gt;
+    &lt;form method="post" enctype="multipart/form-data"  action="upload.php"&gt;
+        &lt;input type="file" name="images" id="images" multiple /&gt;
+        &lt;button type="submit" id="btn"&gt;Upload Files!&lt;/button&gt;
+    &lt;/form&gt;
+
+    &lt;div id="response"&gt;&lt;/div&gt;
+    &lt;ul id="image-list"&gt;
+
+    &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="upload.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p></body>
+</html></p>
+
+<p>上面的代码很基本吧..有一个form表格.并且post到 upload.php (这个文件等会会看到),然后还有一个input组建允许我们选择多个需要上传的文件,当然这个是 multiple 属性 起作用的.</p>
+
+<p>继续吧..</p>
+
+<p>body {</p>
+
+<pre><code>font: 14px/1.5 helvetica-neue, helvetica, arial, san-serif;
+padding:10px;
+</code></pre>
+
+<p>}</p>
+
+<p>h1 {</p>
+
+<pre><code>margin-top:0;
+</code></pre>
+
+<p>}</p>
+
+<h1>main {</h1>
+
+<pre><code>width: 300px;
+margin:auto;
+background: #ececec;
+padding: 20px;
+border: 1px solid #ccc;
+</code></pre>
+
+<p>}</p>
+
+<h1>image-list {</h1>
+
+<pre><code>list-style:none;
+margin:0;
+padding:0;
+</code></pre>
+
+<p>}</p>
+
+<h1>image-list li {</h1>
+
+<pre><code>background: #fff;
+border: 1px solid #ccc;
+text-align:center;
+padding:20px;
+margin-bottom:19px;
+</code></pre>
+
+<p>}</p>
+
+<h1>image-list li img {</h1>
+
+<pre><code>width: 258px;
+vertical-align: middle;
+border:1px solid #474747;
+</code></pre>
+
+<p>}</p>
+
+<p>完全的css文件没有什么要说的...</p>
+
+<p><strong>php文档</strong></p>
+
+<p>对于前台提出的请求是在这里进行处理的.可以在下面的代码中看出来</p>
+
+<p>&lt;?php</p>
+
+<p>foreach ($_FILES["images"]["error"] as $key => $error) {</p>
+
+<pre><code>if ($error == UPLOAD_ERR_OK) {
+    $name = $_FILES["images"]["name"][$key];
+    move_uploaded_file( $_FILES["images"]["tmp_name"][$key], "uploads/" . $_FILES['images']['name'][$key]);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>echo "<h2>Successfully Uploaded Images</h2>";</p>
+
+<p>请记住这个是我进一年来首次使用php语言.(我是一个rubyer),当然你需要确保安全性..这些可以使用内置的move_uploaded_file 移动到需要上传的文件夹内.不要忘记文件夹是可写的..</p>
+
+<p>现在我们有一个前台的form表单.后台的php文件.可以开始做了,选择需要上传的图片并且点击上传按钮..然后你会看到”Successfully Uploaded Images “ 的消息</p>
+
+<p>我们的mini的项目看起来是如下的样子的</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/61a076160605e23f51aec89840c3994c296f6007?ip=1364455236,219.142.5.234&amp;ssig=km%2FAauDVmp&amp;Expires=1364454036&amp;KID=sae,l30zoo1wmz&amp;fn=form.png" alt="" /></p>
+
+<p>但是请记住.现在是2011,我们想做的肯定不止这些..聪明的人已经看到我们引入了 upload.js 和 jQuery 文件  那我们就开始吧</p>
+
+<p><strong>javascript 文件</strong></p>
+
+<p>不要浪费时间了直接开始吧..</p>
+
+<p>(function () {</p>
+
+<pre><code>var input = document.getElementById("images"),
+    formdata = false;
+
+if (window.FormData) {
+    formdata = new FormData();
+    document.getElementById("btn").style.display = "none";
+}
+</code></pre>
+
+<p>}();</p>
+
+<p>从上面代码开始吧..这里我们创造了两个变量.input是我们的 id为 images的 <input>对象.
+formadata用来从前台向后台传递数据的对象当然这个需要浏览器的支持.当然如果浏览器支持这个我们也不需要 “Upload image ” 按钮了(选择需要上传的图片之后自动上传)..所以在后面我们隐藏了它..</p>
+
+<p>剩下的代码会在 匿名的  self-invoking 函数内 (<a href="http://stackoverflow.com/questions/3259496/jquery-document-ready-vs-self-calling-anonymous-function">关于self-invoking 与document.ready的区别 见里</a>) 下面我先写了一个当选择文件确定是在界面的需要展示..</p>
+
+<p>function showUploadedItem (source) {</p>
+
+<pre><code>var list = document.getElementById("image-list"),
+    li   = document.createElement("li"),
+    img  = document.createElement("img");
+img.src = source;
+li.appendChild(img);
+list.appendChild(li);
+</code></pre>
+
+<p>}
+该函数只有一个参数 图像的源地址.(底下我们可以知道这个是如何得到的) 我们创建了图片项,添加了图像的来源,并把它添加到list(dom结构中去)中去.</p>
+
+<p>下来我们选择需要上传的文档.并且由于onchange函数触发.把它显示到Dom结构中去.并且上传图片数据给后端服务器.</p>
+
+<p>if (input.addEventListener) {</p>
+
+<pre><code>input.addEventListener("change", function (evt) {
+    var i = 0, len = this.files.length, img, reader, file;
+
+    document.getElementById("response").innerHTML = "Uploading . . ."
+
+    for ( ; i &lt; len; i++ ) {
+        file = this.files[i];
+
+        if (!!file.type.match(/image.*/)) {
+
+        }   
+    }
+
+}, false);
+</code></pre>
+
+<p>}</p>
+
+<p>并且 我们不需要担心其它的问题 因为 iE 9 也支持 addEventListener 监听函数.
+那么当用户选择时我们最关心什么 ?第一我们创建了几个变量..下来 对于 LEN = this.files.length 这句话也很重要.因为我们需要通过LEN 的长度来循环获得所选的每一个文件.. 下来所要做的就是在循环的里面了..这需要对于每一个文件复制给变量这样有助于简化处理.. 下来使用了正则表达式来确定上传的是图像文件 ...</p>
+
+<p>好吧.如果我们已经有一个图像文件在手上.那么我们下一步该怎么做呢?</p>
+
+<p>if ( window.FileReader ) {</p>
+
+<pre><code>reader = new FileReader();
+reader.onloadend = function (e) { 
+    showUploadedItem(e.target.result);
+};
+reader.readAsDataURL(file);
+</code></pre>
+
+<p>}
+if (formdata) {</p>
+
+<pre><code>formdata.append("images[]", file);
+</code></pre>
+
+<p>}</p>
+
+<p>首先我们检查 浏览器是否支持 创建一个 FileReader 对象.如果支持我们就创建一个这样的对象..</p>
+
+<p>下来当然是如何使用 FileReader 对象的问题了..通过把 file 传递给 文件对象reader.readAsDataURL 方法.. 当然这个方法可能并不想你想象的那样工作.它的url并没有通过函数返回,想法它是它是一url data 的方式读数据并变成对象的一部分...关于这部分参考<a href="http://m.csdn.net/article/2012-12-17/2812911"></a></p>
+
+<p>考虑到 这一点我们需要在 FileReader 对象上面注册一个 onload 事件 在 成功通过 readAsDataURL 读取图片的 内容时可以通过 e.target.result 读取到的数据内容传递给之前建立的 showUploadedItem 函数去显示..</p>
+
+<p>接下来 检查 formdata 对象 如果 浏览器支持 formdata对象 则 formdata 就是一个对象的值 反之则为空.所以当有一个 formdata 对象时可以去 使用  append 方法添加 一个key 与 values 当然 对于多个文件,相同的key值要保证不会覆盖.</p>
+
+<p>在我们的多个文件循环里面 我们把每一个图片对象添加到 list中展示给用户并且都添加到了formdata 对象里面.在循环外面我们使用了 ajax去 做post请求.</p>
+
+<p>if (formdata) {</p>
+
+<pre><code>$.ajax({
+    url: "upload.php",
+    type: "POST",
+    data: formdata,
+    processData: false,
+    contentType: false,
+    success: function (res) {
+        document.getElementById("response").innerHTML = res; 
+    }
+});
+</code></pre>
+
+<p>}</p>
+
+<p>当然在这里我们还是检查了浏览器是否支持  formdata 格式 如果不支持可以考虑点击上传按钮来完成一般的文件上传.当然如果浏览器支持 那我们通过ajax 的post方法完成上传的效果..</p>
+
+<p>你应该已经对jquery的 $.ajax 方法很熟悉了吧...通过给它传递一个包含一系列选项的对象.包括.url,type success 函数(执行成功是调用的函数)  数据属性是 formdata 并且 特别需要注意 processData 与  contentType , 在一般的Jqury文档里面都可以看到 processData 默认为 true 依次来保证传递的在字串传里面(?A=afa&amp;b=??),但是这里当然不需要这样子的.所所以把它设置为false . 我们仍然把 contentType 设置为false 以保证数据正确从客户端到服务器传送</p>
+
+<p>至此我们看看前面的效果....当你开始打开网页时效果如下:</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/795a51fddb2a97f8581dc20949a16eda30657a9a?ip=1364454872,219.142.5.234&amp;ssig=EADiu8C0vE&amp;Expires=1364453672&amp;KID=sae,l30zoo1wmz&amp;fn=ajax-start.png" alt="" /></p>
+
+<p>当用户选择上传图片之后 如下图</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/14d9c86e85ccdcdd923c6bb057e1565789b6b61b?ip=1364454948,219.142.5.234&amp;ssig=BVqZ3J058p&amp;Expires=1364453748&amp;KID=sae,l30zoo1wmz&amp;fn=ajax-upload.png" alt="" /></p>
+
+<p>上传结果</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/8deea1016570cc1b446660c3bbb36d9acc6ae695?ip=1364454968,219.142.5.234&amp;ssig=sdhbVbsqmG&amp;Expires=1364453768&amp;KID=sae,l30zoo1wmz&amp;fn=ajax-finder.png" alt="" /></p>
+
+<p><strong>总结</strong></p>
+
+<p>通过ajax上传图片这是意见很cool的事情..掌握它只需要一些常用的新支持而不需要很复杂的hack 很高兴你可以阅读它...再见.~~</p>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container">21 APRIL 2013 @ 04:29AM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html">python 中 sqlite3 的使用</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/cookies-and-%E7%BC%93%E5%AD%98.html">cookies and 缓存</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

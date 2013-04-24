@@ -4,13 +4,13 @@ layout: nil
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
  
- <title>Julian Yap</title>
- <link href="http://julianyap.com/atom.xml" rel="self"/>
- <link href="http://julianyap.com"/>
+ <title>xiyoulaoyuanjia</title>
+ <!-- <link href="http://julianyap.com/atom.xml" rel="self"/> -->
+ <!-- <link href="http://julianyap.com"/> -->
  <updated>{{ site.time | date_to_xmlschema }}</updated>
  <id>http://julianyap.com/</id>
  <author>
-   <name>Julian Yap</name>
+   <name>xiyoulaoyuanjia</name>
  </author>
 
  {% for post in site.posts limit: 20 %}

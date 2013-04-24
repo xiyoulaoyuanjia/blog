@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>dns 安全 for GFW</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>dns 安全 for GFW</h1>
+
+<div id="post">
+<p>2012 春节期间 github 受到dns污染的干扰 访问github的网站 都会返回一个59.24.3.173的ip地址。</p>
+
+<p><strong>dns 污染</strong></p>
+
+<p>一般而言 dns使用udp协议。在dns服务器查询期间发现你访问的是基于某一个网站则在，然后造一个假的回应包并在真正的包返回之前给你就行了，然后假的包里面只要把实际的 IP
+改成另外一个 IP 就行。</p>
+
+<p>运行dig @8.8.8.8 twitter.com 并使用wireshark 抓包 如图可得</p>
+
+<p><img src="https://mail-attachment.googleusercontent.com/attachment/u/0/?ui=2&amp;ik=429fe34bc2&amp;view=att&amp;th=13c5d593b7a78fb7&amp;attid=0.1&amp;disp=inline&amp;realattid=f_hc7nowqc0&amp;safe=1&amp;zw&amp;saduie=AG9B_P_yefQZTkL1e79QyVqUxjWo&amp;sadet=1361360033407&amp;sads=3q3QrYvd1A7D8v-RpoXm83rH7qs" alt="dns污染" /></p>
+
+<p>一般而言有一个伪造ip列表
+8.7.198.45
+37.61.54.158
+46.82.174.68
+59.24.3.173
+78.16.49.15
+93.46.8.89
+159.106.121.75
+203.98.7.65
+243.185.187.39
+或者没有answer。</p>
+
+<p><strong>几种解决方案</strong></p>
+
+<p><em>把本机的53端口的包重定向要vps的非知名端口，然后在vps的非知名端口上开一个dns server,然后解析完了扔回来</em></p>
+
+<p><em>通过dnscrypt 解决dns 污染...</em></p>
+
+<p><em>drop 掉上面的那些列表的方案</em></p>
+
+<p><em>dnsmasq 方案</em></p>
+
+<p>_note dnsmasq 一般用作三种用途 1.提供dns服务 2. 优先使用本地自定义的dns 3.提供dhcp服务 关于其它使用参考 http://www.aslibra.com/blog/post/dnsmasq.php 文档</p>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container">11 APRIL 2013 @ 10:29AM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">21 Apr 2013</span> &raquo; <a href="/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html">使用ajax上传文档</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html">python 中 sqlite3 的使用</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

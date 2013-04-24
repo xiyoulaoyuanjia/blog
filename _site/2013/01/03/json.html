@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>JSON 学习</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>JSON 学习</h1>
+
+<div id="post">
+<h1>JSON</h1>
+
+<p><strong>note</strong>:参考<a href="http://json.org/json-zh.html">json官网</a></p>
+
+<p><strong>json常用的两种结构:</strong></p>
+
+<blockquote><ul>
+<li><p>名称/值”对的集合（A collection of name/value pairs）。不同的语言中，它被理解为对象（object），纪录（record），结构（struct），字典（dictionary），哈希表（hash table），有键列表（keyed list），或者关联数组 （associative array）。</p></li>
+<li><p>值的有序列表（An ordered list of values）。在大部分语言中，它被理解为数组（array）。</p></li>
+</ul>
+</blockquote>
+
+<hr />
+
+<p><strong>json常用数据格式</strong></p>
+
+<blockquote><ul>
+<li>对象:</li>
+</ul>
+
+
+<p>对象是一个无序的“‘名称/值’对”集合。一个对象以“{”（左括号）开始，“}”（右括号）结束。每个“名称”后跟一个“:”（冒号）；“‘名称/值’ 对”之间使用“,”（逗号）分隔。</p></blockquote>
+
+<p><img src="http://json.org/object.gif" alt="object" /></p>
+
+<blockquote><ul>
+<li>数组:</li>
+</ul>
+
+
+<p>数组是值（value）的有序集合。一个数组以“[”（左中括号）开始，“]”（右中括号）结束。值之间使用“,”（逗号）分隔。</p></blockquote>
+
+<p><img src="http://json.org/array.gif" alt="array" /></p>
+
+<blockquote><ul>
+<li>值:
+值（value）可以是双引号括起来的字符串（string）、数值(number)、true、false、 null、对象（object）或者数组（array）。这些结构可以嵌套。</li>
+</ul>
+</blockquote>
+
+<p><img src="http://json.org/value.gif" alt="value" /></p>
+
+<blockquote><ul>
+<li>字符串:</li>
+</ul>
+
+
+<p>字符串（string）是由双引号包围的任意数量Unicode字符的集合，使用反斜线转义。一个字符（character）即一个单独的字符串（character string）。</p></blockquote>
+
+<p><img src="http://json.org/string.gif" alt="string" /></p>
+
+<hr />
+
+<p><strong>python对json的处理</strong></p>
+
+<blockquote><ul>
+<li>对简单数据类型的encoding 和 decoding：使用json的dumps方法对python的数据进行编码.也就是把python的数据类型转换成json的数据类型</li>
+</ul>
+</blockquote>
+
+<pre><code>import json
+obj = [[1,2,3],123,123.123,'abc',{'key1':(1,2,3),'key2':(4,5,6)}]
+encodedjson = json.dumps(obj)
+print repr(obj)
+print encodedjson
+</code></pre>
+
+<p><em>note</em>  repr函数与str的区别</p>
+
+<p>以上的输出结果为</p>
+
+<pre><code>[[1, 2, 3], 123, 123.123, 'abc', {'key2': (4, 5, 6), 'key1': (1, 2, 3)}] 
+[[1, 2, 3], 123, 123.123, "abc", {"key2": [4, 5, 6], "key1": [1, 2, 3]}]
+</code></pre>
+
+<p>在python的编码过程中会从原始结构向json的结构转化
+<img src="http://images.cnblogs.com/cnblogs_com/coser/201112/201112141621136287.png" alt="" /></p>
+
+<p>相反的处理过程使用json.loads()函数</p>
+
+<p><img src="http://images.cnblogs.com/cnblogs_com/coser/201112/201112141621146178.png" alt="" /></p>
+
+<p><strong>json对自定义对象的操作</strong></p>
+
+<blockquote><p>python 数据结构到JSON的转换可以看出 必须把把python的对象转化成可以转化到python的数据格式.当然这里有两种方法可以考虑 一种继承，一种自己定义转化函数
+<a href="http://huacnlee.com/blog/convert-python-object-to-jason/">参考这里</a></p></blockquote>
+
+<pre><code>def obj2dict(obj):
+"""
+summary:
+    将object转换成dict类型
+"""
+memberlist = [m for m in dir(obj)]
+_dict = {}
+for m in memberlist:
+    if m[0] != "_" and not callable(m):
+        _dict[m] = getattr(obj,m)
+
+return _dict
+return simplejson.encode(str(obj2dict(self)))
+</code></pre>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container"> 3 JANUARY 2013 @ 07:15AM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">21 Apr 2013</span> &raquo; <a href="/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html">使用ajax上传文档</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html">python 中 sqlite3 的使用</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

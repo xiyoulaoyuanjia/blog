@@ -1,38 +1,2567 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
  
- <title>Julian Yap</title>
- <link href="http://julianyap.com/atom.xml" rel="self"/>
- <link href="http://julianyap.com"/>
- <updated>2013-04-24T15:44:05+08:00</updated>
+ <title>xiyoulaoyuanjia</title>
+ <!-- <link href="http://julianyap.com/atom.xml" rel="self"/> -->
+ <!-- <link href="http://julianyap.com"/> -->
+ <updated>2013-04-24T18:16:33+08:00</updated>
  <id>http://julianyap.com/</id>
  <author>
-   <name>Julian Yap</name>
+   <name>xiyoulaoyuanjia</name>
  </author>
 
  
  <entry>
-   <title>CentOS1111 6 minimal install CD - You may not want to bother with it</title>
-   <link href="http://julianyap.com/2011/08/10/centos-6-minimal-install-cd-you-may-not-want-to-bother-with-it.html"/>
-   <updated>2011-08-10T22:40:00+08:00</updated>
-   <id>http://julianyap.com/2011/08/10/centos-6-minimal-install-cd-you-may-not-want-to-bother-with-it</id>
-   <content type="html">&lt;p&gt;&lt;strong&gt;视图与url配置&lt;/strong&gt;&lt;/p&gt;
+   <title>使用ajax上传文档</title>
+   <link href="http://julianyap.com/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html"/>
+   <updated>2013-04-21T04:29:56+08:00</updated>
+   <id>http://julianyap.com/2013/04/21/使用ajax上传文档</id>
+   <content type="html">&lt;h1&gt;使用ajax上传文档&lt;/h1&gt;
 
-&lt;p&gt;一个视图就是一个python的函数,并且必须满足两个条件&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;note:&lt;a href=&quot;http://net.tutsplus.com/tutorials/javascript-ajax/uploading-files-with-ajax&quot;&gt;E文&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;函数的第一个类型必须是HttpRequest&lt;/li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://nettuts.s3.amazonaws.com/1020_ajaxupload/demo.zip&quot;&gt;代码&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;为什么不在最后告诉你这个不好的消息呢?这个并不是在每一个浏览器中都适用的&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;我们项目用到的主要的3个组建&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&quot;&amp;lt;&quot;input&gt; 中的  multiple 属性(这个支持多个文件)&lt;/li&gt;
+&lt;li&gt;文件操作的API 中的 FileReader 对象&lt;/li&gt;
+&lt;li&gt;在 XMLHttpRequest2 中的  FormData 对象&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;它返回一个HttpResponse实例&lt;/li&gt;
+&lt;p&gt;我们使用 multiple 属性允许我们读取多个文件内容(即使 FileReader 对象不可用.这个依然可以正常使用) 当然,FileReader对象可以使用们在上传的时候看到图片的缩略图.&lt;/p&gt;
+
+&lt;p&gt;上述3个特性均不能在IE9中正常的工作.所以 IE用户可能不能正常使用.在最新的 Safari (5.1)版本中没有FileReader 对象 所以用户不能得到正常的图片缩略图 但是可以使用AJAX正常上传图片并获得上传成功的消息.,Opera 10.50 版本支持FileReader 对象 对象但是不支持 FormData 对象所以可以获得缩略图但是不能正确的上传图片.&lt;/p&gt;
+
+&lt;p&gt;先抛开那些问题,开始看代码吧.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;标签与样式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;让我们从基本的标签与样式开始吧..当然这些不是本文档的主要部分..就向我不会把你们当成初学者一样..&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;html部分&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;meta charset=&quot;UTF-8&quot; /&amp;gt;
+&amp;lt;title&amp;gt;HTML5 File API&amp;lt;/title&amp;gt;
+&amp;lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/head&gt;
+&lt;body&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div id=&quot;main&quot;&amp;gt;
+    &amp;lt;h1&amp;gt;Upload Your Images&amp;lt;/h1&amp;gt;
+    &amp;lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;  action=&quot;upload.php&quot;&amp;gt;
+        &amp;lt;input type=&quot;file&quot; name=&quot;images&quot; id=&quot;images&quot; multiple /&amp;gt;
+        &amp;lt;button type=&quot;submit&quot; id=&quot;btn&quot;&amp;gt;Upload Files!&amp;lt;/button&amp;gt;
+    &amp;lt;/form&amp;gt;
+
+    &amp;lt;div id=&quot;response&quot;&amp;gt;&amp;lt;/div&amp;gt;
+    &amp;lt;ul id=&quot;image-list&quot;&amp;gt;
+
+    &amp;lt;/ul&amp;gt;
+&amp;lt;/div&amp;gt;
+
+&amp;lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&quot;upload.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;/body&gt;
+&lt;/html&gt;&lt;/p&gt;
+
+&lt;p&gt;上面的代码很基本吧..有一个form表格.并且post到 upload.php (这个文件等会会看到),然后还有一个input组建允许我们选择多个需要上传的文件,当然这个是 multiple 属性 起作用的.&lt;/p&gt;
+
+&lt;p&gt;继续吧..&lt;/p&gt;
+
+&lt;p&gt;body {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;font: 14px/1.5 helvetica-neue, helvetica, arial, san-serif;
+padding:10px;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;h1 {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;margin-top:0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;h1&gt;main {&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;width: 300px;
+margin:auto;
+background: #ececec;
+padding: 20px;
+border: 1px solid #ccc;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;h1&gt;image-list {&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;list-style:none;
+margin:0;
+padding:0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;h1&gt;image-list li {&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;background: #fff;
+border: 1px solid #ccc;
+text-align:center;
+padding:20px;
+margin-bottom:19px;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;h1&gt;image-list li img {&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;width: 258px;
+vertical-align: middle;
+border:1px solid #474747;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;完全的css文件没有什么要说的...&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;php文档&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;对于前台提出的请求是在这里进行处理的.可以在下面的代码中看出来&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;?php&lt;/p&gt;
+
+&lt;p&gt;foreach ($_FILES[&quot;images&quot;][&quot;error&quot;] as $key =&gt; $error) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if ($error == UPLOAD_ERR_OK) {
+    $name = $_FILES[&quot;images&quot;][&quot;name&quot;][$key];
+    move_uploaded_file( $_FILES[&quot;images&quot;][&quot;tmp_name&quot;][$key], &quot;uploads/&quot; . $_FILES['images']['name'][$key]);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;echo &quot;&lt;h2&gt;Successfully Uploaded Images&lt;/h2&gt;&quot;;&lt;/p&gt;
+
+&lt;p&gt;请记住这个是我进一年来首次使用php语言.(我是一个rubyer),当然你需要确保安全性..这些可以使用内置的move_uploaded_file 移动到需要上传的文件夹内.不要忘记文件夹是可写的..&lt;/p&gt;
+
+&lt;p&gt;现在我们有一个前台的form表单.后台的php文件.可以开始做了,选择需要上传的图片并且点击上传按钮..然后你会看到”Successfully Uploaded Images “ 的消息&lt;/p&gt;
+
+&lt;p&gt;我们的mini的项目看起来是如下的样子的&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://image.data.vdisk.me/55890007/61a076160605e23f51aec89840c3994c296f6007?ip=1364455236,219.142.5.234&amp;amp;ssig=km%2FAauDVmp&amp;amp;Expires=1364454036&amp;amp;KID=sae,l30zoo1wmz&amp;amp;fn=form.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;但是请记住.现在是2011,我们想做的肯定不止这些..聪明的人已经看到我们引入了 upload.js 和 jQuery 文件  那我们就开始吧&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;javascript 文件&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;不要浪费时间了直接开始吧..&lt;/p&gt;
+
+&lt;p&gt;(function () {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var input = document.getElementById(&quot;images&quot;),
+    formdata = false;
+
+if (window.FormData) {
+    formdata = new FormData();
+    document.getElementById(&quot;btn&quot;).style.display = &quot;none&quot;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}();&lt;/p&gt;
+
+&lt;p&gt;从上面代码开始吧..这里我们创造了两个变量.input是我们的 id为 images的 &lt;input&gt;对象.
+formadata用来从前台向后台传递数据的对象当然这个需要浏览器的支持.当然如果浏览器支持这个我们也不需要 “Upload image ” 按钮了(选择需要上传的图片之后自动上传)..所以在后面我们隐藏了它..&lt;/p&gt;
+
+&lt;p&gt;剩下的代码会在 匿名的  self-invoking 函数内 (&lt;a href=&quot;http://stackoverflow.com/questions/3259496/jquery-document-ready-vs-self-calling-anonymous-function&quot;&gt;关于self-invoking 与document.ready的区别 见里&lt;/a&gt;) 下面我先写了一个当选择文件确定是在界面的需要展示..&lt;/p&gt;
+
+&lt;p&gt;function showUploadedItem (source) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var list = document.getElementById(&quot;image-list&quot;),
+    li   = document.createElement(&quot;li&quot;),
+    img  = document.createElement(&quot;img&quot;);
+img.src = source;
+li.appendChild(img);
+list.appendChild(li);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+该函数只有一个参数 图像的源地址.(底下我们可以知道这个是如何得到的) 我们创建了图片项,添加了图像的来源,并把它添加到list(dom结构中去)中去.&lt;/p&gt;
+
+&lt;p&gt;下来我们选择需要上传的文档.并且由于onchange函数触发.把它显示到Dom结构中去.并且上传图片数据给后端服务器.&lt;/p&gt;
+
+&lt;p&gt;if (input.addEventListener) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;input.addEventListener(&quot;change&quot;, function (evt) {
+    var i = 0, len = this.files.length, img, reader, file;
+
+    document.getElementById(&quot;response&quot;).innerHTML = &quot;Uploading . . .&quot;
+
+    for ( ; i &amp;lt; len; i++ ) {
+        file = this.files[i];
+
+        if (!!file.type.match(/image.*/)) {
+
+        }   
+    }
+
+}, false);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;并且 我们不需要担心其它的问题 因为 iE 9 也支持 addEventListener 监听函数.
+那么当用户选择时我们最关心什么 ?第一我们创建了几个变量..下来 对于 LEN = this.files.length 这句话也很重要.因为我们需要通过LEN 的长度来循环获得所选的每一个文件.. 下来所要做的就是在循环的里面了..这需要对于每一个文件复制给变量这样有助于简化处理.. 下来使用了正则表达式来确定上传的是图像文件 ...&lt;/p&gt;
+
+&lt;p&gt;好吧.如果我们已经有一个图像文件在手上.那么我们下一步该怎么做呢?&lt;/p&gt;
+
+&lt;p&gt;if ( window.FileReader ) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;reader = new FileReader();
+reader.onloadend = function (e) { 
+    showUploadedItem(e.target.result);
+};
+reader.readAsDataURL(file);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}
+if (formdata) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;formdata.append(&quot;images[]&quot;, file);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;首先我们检查 浏览器是否支持 创建一个 FileReader 对象.如果支持我们就创建一个这样的对象..&lt;/p&gt;
+
+&lt;p&gt;下来当然是如何使用 FileReader 对象的问题了..通过把 file 传递给 文件对象reader.readAsDataURL 方法.. 当然这个方法可能并不想你想象的那样工作.它的url并没有通过函数返回,想法它是它是一url data 的方式读数据并变成对象的一部分...关于这部分参考&lt;a href=&quot;http://m.csdn.net/article/2012-12-17/2812911&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;考虑到 这一点我们需要在 FileReader 对象上面注册一个 onload 事件 在 成功通过 readAsDataURL 读取图片的 内容时可以通过 e.target.result 读取到的数据内容传递给之前建立的 showUploadedItem 函数去显示..&lt;/p&gt;
+
+&lt;p&gt;接下来 检查 formdata 对象 如果 浏览器支持 formdata对象 则 formdata 就是一个对象的值 反之则为空.所以当有一个 formdata 对象时可以去 使用  append 方法添加 一个key 与 values 当然 对于多个文件,相同的key值要保证不会覆盖.&lt;/p&gt;
+
+&lt;p&gt;在我们的多个文件循环里面 我们把每一个图片对象添加到 list中展示给用户并且都添加到了formdata 对象里面.在循环外面我们使用了 ajax去 做post请求.&lt;/p&gt;
+
+&lt;p&gt;if (formdata) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$.ajax({
+    url: &quot;upload.php&quot;,
+    type: &quot;POST&quot;,
+    data: formdata,
+    processData: false,
+    contentType: false,
+    success: function (res) {
+        document.getElementById(&quot;response&quot;).innerHTML = res; 
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;当然在这里我们还是检查了浏览器是否支持  formdata 格式 如果不支持可以考虑点击上传按钮来完成一般的文件上传.当然如果浏览器支持 那我们通过ajax 的post方法完成上传的效果..&lt;/p&gt;
+
+&lt;p&gt;你应该已经对jquery的 $.ajax 方法很熟悉了吧...通过给它传递一个包含一系列选项的对象.包括.url,type success 函数(执行成功是调用的函数)  数据属性是 formdata 并且 特别需要注意 processData 与  contentType , 在一般的Jqury文档里面都可以看到 processData 默认为 true 依次来保证传递的在字串传里面(?A=afa&amp;amp;b=??),但是这里当然不需要这样子的.所所以把它设置为false . 我们仍然把 contentType 设置为false 以保证数据正确从客户端到服务器传送&lt;/p&gt;
+
+&lt;p&gt;至此我们看看前面的效果....当你开始打开网页时效果如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://image.data.vdisk.me/55890007/795a51fddb2a97f8581dc20949a16eda30657a9a?ip=1364454872,219.142.5.234&amp;amp;ssig=EADiu8C0vE&amp;amp;Expires=1364453672&amp;amp;KID=sae,l30zoo1wmz&amp;amp;fn=ajax-start.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;当用户选择上传图片之后 如下图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://image.data.vdisk.me/55890007/14d9c86e85ccdcdd923c6bb057e1565789b6b61b?ip=1364454948,219.142.5.234&amp;amp;ssig=BVqZ3J058p&amp;amp;Expires=1364453748&amp;amp;KID=sae,l30zoo1wmz&amp;amp;fn=ajax-upload.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上传结果&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://image.data.vdisk.me/55890007/8deea1016570cc1b446660c3bbb36d9acc6ae695?ip=1364454968,219.142.5.234&amp;amp;ssig=sdhbVbsqmG&amp;amp;Expires=1364453768&amp;amp;KID=sae,l30zoo1wmz&amp;amp;fn=ajax-finder.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;总结&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;通过ajax上传图片这是意见很cool的事情..掌握它只需要一些常用的新支持而不需要很复杂的hack 很高兴你可以阅读它...再见.~~&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>python 编码问题</title>
+   <link href="http://julianyap.com/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html"/>
+   <updated>2013-04-16T04:29:56+08:00</updated>
+   <id>http://julianyap.com/2013/04/16/python-编码问题</id>
+   <content type="html">&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;python 安装时默认的编码方式 为 ascii方式&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;strong&gt;urlconf&lt;/strong&gt;&lt;/p&gt;</content>
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; print sys.getdefaultencoding()
+ascii
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;修改默认编码方式
+  reload(sys)
+  sys.setdefaultencoding('utf8')&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;注意这里的 reload(sys) 的问题  详细见&lt;a href=&quot;https://groups.google.com/forum/?fromgroups=#!topic/comp.lang.python/hUsco3ZvR2s&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;常见的两种编码方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; &quot;汉字&quot;.__class__
+&amp;lt;type 'str'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; 
+&amp;gt;&amp;gt;&amp;gt; u&quot;汉字&quot;.__class__
+&amp;lt;type 'unicode'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;str 与 unicode 有什么区别呢？?&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&quot;你好&quot;.encode(&quot;utf8&quot;) 错误的分析&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;&quot;你好&quot;.encode(&quot;utf8&quot;)&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Traceback (most recent call last):
+File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe4 in position 0: ordinal not in range(128)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更完整的关于这个的错误解释见&lt;a href=&quot;http://stackoverflow.com/questions/9644099/python-ascii-codec-cant-decode-byte&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;关于 decode 方法 的使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; &quot;汉字&quot;.decode()
+Traceback (most recent call last):
+  File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe6 in position 0: ordinal not in range(128)
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;decode 默认会把 &quot;汉字&quot; 转化为 系统编码(因为默认为ascii所以上述会出错)，验证可以更改系统
+编码之后在测试上面的&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import sys
+&amp;gt;&amp;gt;&amp;gt; sys.getdefaultencoding()
+'ascii'
+&amp;gt;&amp;gt;&amp;gt; 
+&amp;gt;&amp;gt;&amp;gt; reload(sys)
+&amp;lt;module 'sys' (built-in)&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; sys.setdefaultencoding('utf8') 
+&amp;gt;&amp;gt;&amp;gt; &quot;汉字&quot;.decode()
+u'\u6c49\u5b57'
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果不想这样子可以直接 &quot;汉字&quot;.decode(&quot;utf8&quot;) 这样子编码&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;关于编码转换&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;一般转换思路为 A编码--》系统编码(Asci或者unicode)--》B编码&lt;/p&gt;
+
+&lt;p&gt;因为系统默认编码方式一般是 Ascii所以 对于A编码能不能转化为 ASCII 为关键。而我们知道
+编码问题的大多数错误都是在这里出粗了&lt;/p&gt;
+
+&lt;p&gt;例如  &quot;你好&quot;.encode(&quot;utf8&quot;)&lt;/p&gt;
+
+&lt;p&gt;按上述转换思路可以看出 &quot;你好&quot;.decode().encode(&quot;utf8&quot;)&lt;/p&gt;
+
+&lt;p&gt;&quot;你好&quot; 的编码有外部文本环境决定 例如 # -&lt;em&gt;- coding: utf-8 -&lt;/em&gt;-  则 编码为 utf8
+而此时系统编码为 默认的ASCii  所以第一步 utf8--》 ASii 编码 肯定会错误的。。&lt;/p&gt;
+
+&lt;p&gt;这里写了一个通用的转换代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/env python 
+#coding=utf-8 
+s=&quot;中文&quot; 
+if isinstance(s, unicode):  
+print s.encode('gb2312') 
+else: 
+print s.decode('utf-8').encode('gb2312')
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里编码已gb2321 为例子&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>python 中 sqlite3 的使用</title>
+   <link href="http://julianyap.com/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html"/>
+   <updated>2013-04-16T04:29:56+08:00</updated>
+   <id>http://julianyap.com/2013/04/16/python-中-sqlite3-的使用</id>
+   <content type="html">&lt;h1&gt;python 中 sqlite3 的使用&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;优点使用方便但是功能相比较其它大型数据库有所差距&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;python的数据库模块有统一的接口，操作基本有统一的模式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;假设数据库模块名称为 sqlite3&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;创建数据库连接 sqlite3.connect,返回连接对象为com&lt;/li&gt;
+&lt;li&gt;如果不需要返回结果可以直接com.execute 查询。有时需要使用 com.commit 提交事务&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果需要查询返回结果。则需要使用游标 com.cursor 创建游标对象 cur.. 通过cur.execute 查询数据库
+用 cur.fetchall/cur.fetchone/cur.fetchmany 获取查询结果. 这里根据事物级别不同有时需要
+cur.commit&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;关闭 cur 与 com&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;python 实例&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;导入模块&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;import sqlite3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;创建打开数据库 (存在则打开不存在则创建)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;com=sqlite3.connect(&quot;sql.db&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;返回的 com 是一个数据库连接对象 它有如下的操作&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;commit()   提交事务&lt;/li&gt;
+&lt;li&gt;rollback()  事务回滚&lt;/li&gt;
+&lt;li&gt;close()    关闭数据库连接&lt;/li&gt;
+&lt;li&gt;cursor()    创建游标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;python  sqlite3 游标的使用&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;游标提供了一种从表中检索数据的简单方法&lt;/li&gt;
+&lt;li&gt;游标本质上是一种可以从多个结果集中取出一条记录的机制&lt;/li&gt;
+&lt;li&gt;游标是由&lt;strong&gt;结果集&lt;/strong&gt;以及指定特定位置的&lt;strong&gt;游标位置&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;可以把游标比喻为文件句柄&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建游标对象&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;cur=com.cursor
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;游标对象 cur 常用操作&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;execute()  执行sql 语句&lt;/li&gt;
+&lt;li&gt;executemany  执行多条sql语句&lt;/li&gt;
+&lt;li&gt;close()    关闭游标&lt;/li&gt;
+&lt;li&gt;fetchone()  从结果中取出一条记录 并把游标指向下一个&lt;/li&gt;
+&lt;li&gt;fetchmany()  从结果中取出多条记录。并移动游标&lt;/li&gt;
+&lt;li&gt;fetchall()   从结果中取出所有记录&lt;/li&gt;
+&lt;li&gt;scroll()  滚动游标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;建表&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;cu.execute('create table catalog (id integer primary key,pid integer,name varchar(10) UNIQUE）') 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;建立 表 catalog  主键为 id&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;插入数据库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;cu.execute(&quot;insert into catalog values(0, 0, 'name1')&quot;)  
+cu.execute(&quot;insert into catalog values(1, 0, 'hello')&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注意:这样子插入需要自己做特殊字符的转义&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;sqlite3 中的处理方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  executeTemplate=&quot;insert into  blog_entries(href,title,text) values (?,?,?)&quot; 
+  com.execute(executeTemplate,(globalName[key]['href'],globalName[key]['title'],globalName[key]['content']))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;mysql 中的处理方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  import MySQLdb
+  s = &quot;&quot;&quot;test!42''354542&quot;&quot;&quot;
+  print MySQLdb.escape_string(s)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里需要注意需要使用连接对象提交 com.commit 才能生效&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;查询&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;cu.execute(&quot;select * from catalog&quot;)
+print cu.fetchall()  打印所有结果
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;修改&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;cu.execute(&quot;update catalog set name='name2' where id = 0&quot;) 
+cx.commit() 注意,修改数据以后提交
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;删除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;cu.execute(&quot;delete from catalog where id = 1&quot;)  
+cx.commit()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;note:可以通过修改 conn.isolation_level = None 避免每次都需要commit的麻烦&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gist.github.com/xiyoulaoyuanjia/31bb4783c900123cc7e3&quot;&gt;完整示例&lt;/a&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>cookies and 缓存</title>
+   <link href="http://julianyap.com/2013/04/16/cookies-and-%E7%BC%93%E5%AD%98.html"/>
+   <updated>2013-04-16T04:29:56+08:00</updated>
+   <id>http://julianyap.com/2013/04/16/cookies-and-缓存</id>
+   <content type="html">&lt;p&gt;&lt;strong&gt;cookie 的分类&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;会话cookies&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;是一种临时cookies。记录用户登录网站的设置与偏好信息。。关闭浏览器就清除了&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;持久cookies&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;持久icookies 存在硬盘中。。有过期时间&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;为什么需要cookies&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这是因为http协议是无状态的。。对于一个浏览器发出的多次请求，WEB服务器无法区分 是不是来源于同一个浏览器
+所以浏览器需要额外的信息维持会话。。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;cookies 的限制&lt;/strong&gt;
+一些浏览器支持最大 4096字节的cookies。另一些支持最多20个cookies 超过的旧的就会陪删除&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;cookie 存放&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;不同的浏览器会存放在不同的地方&lt;/li&gt;
+&lt;li&gt;不同的网站会有不同的cookie文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;windows 下的ie 是 存放在临时文件夹下面的
+&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=b8d8XgiPVdBwl--2FE1cDVwvaVmWbbRE4XCNtT--2FlY1xJjdPDtpaWU6suLNJo37weV1zBE7cBBfg8R--2BmMF3BS67BH0ciHlhz&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;linux 下的 chrome 是存放在 sqllite3 数据库中的
+&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=6c17G8HyRRw8uUSDMtgmnCv6jYSnXXMsZICNspz5lUjWr735mfcbR4qBay5Sv9c6BiUoE8L4PYSiY8BSE8OyCQd--2BDKBb&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;cookies 在 http中的使用&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;浏览器把 cookies 在 http 的 Request 中 Cookie: header 发送&lt;/p&gt;
+
+&lt;p&gt;Web服务器通过HTTP Response中的&quot;Set-Cookie: header&quot;把cookie发送给浏览器&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;cookies 与文件缓存的区别&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这两个是不一样的东西。。。在ie中可能存放在同一个文件夹下。。但一般在设置浏览器时
+都可以选择分别设置cookies 与 缓存的&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;http协议之缓存&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;http 中具有浏览器缓存。缓存代理服务器&lt;/li&gt;
+&lt;li&gt;http 缓存是指当web 请求到达缓存时可以考虑从本地提取缓存而不用在次从服务器发请求&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;缓存的好处&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;减少了服务器的压力&lt;/li&gt;
+&lt;li&gt;加快了浏览器的加载速度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;与缓存有关的header&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;Request&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Cache-Control: max-age=0    以秒为单位
+If-Modified-Since: Mon, 19 Nov 2012 08:38:01 GMT  缓存文件的最后修改时间。
+If-None-Match: &quot;0693f67a67cc1:0&quot;    缓存文件的Etag值
+Cache-Control: no-cache            不使用缓存
+Pragma: no-cache               不使用缓存
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;Response&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;Cache-Control: public    响应被缓存，并且在多用户间共享，  （公有缓存和私有缓存的区别，请看另一节）
+Cache-Control: private  响应只能作为私有缓存，不能在用户之间共享
+Cache-Control:no-cache  提醒浏览器要从服务器提取文档进行验证
+Cache-Control:no-store  绝对禁止缓存（用于机密，敏感文件）
+Cache-Control: max-age=60   60秒之后缓存过期（相对时间）
+Date: Mon, 19 Nov 2012 08:39:00 GMT 当前response发送的时间
+Expires: Mon, 19 Nov 2012 08:40:01 GMT  缓存过期的时间（绝对时间）
+Last-Modified: Mon, 19 Nov 2012 08:38:01 GMT    服务器端文件的最后修改时间
+ETag: &quot;20b1add7ec1cd1:0&quot;    服务器端文件的Etag值
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;如何判断缓存的新鲜度
+这里的新鲜度指文件是否修改。提出了两种方法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;文件的最后修改时间  在head 中通过  &quot;If-Modified-Since&quot; 字段标识&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;服务器发送状态吗 304 来标识没有修改&lt;/li&gt;
+&lt;li&gt;如图&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;文件没有修改
+&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=bf087nR3bMs2UgOEyuNZuISV4xmw--2FkKe--2FmShGj5LGoXwDVPJq9A03u1fRJ6tni1T44fP3fvUkSUZBbP1Wr4v8EnN--2F8TH&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;文件已经修改
+&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=dff4kSeiBh2mSmlqcoMfJaPVtIydvVU8QQKxTys3yv1v0Px--2BS0DzkwiN1z3Ie--2BDG0ogkpYiskEKNkbNWYQ9MvyBPompQ&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;文件的hash 签名 Etag 在head 中通过  &quot;If-None-Match&quot; 字段来标识  Etag 是可以看成是对 最后修改时间的一种补充
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;有些服务器没有办法获得文件的最后修改时间&lt;/li&gt;
+&lt;li&gt;If-Modified-Since 是精确到秒的 对于 秒以下的文件修改则没有办法&lt;/li&gt;
+&lt;li&gt;一些文件最后修改时间变了。内容却没有改变&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;直接使用缓存不去服务器验证
+这里 说一个例子
+按F5刷新浏览器和在地址栏里输入网址然后回车。 这两个行为是不一样的。&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;在浏览器里输入网址 然后按回车 会直接使用缓存 不去服务器验证的。。。&lt;/li&gt;
+&lt;li&gt;F5刷新 需要验证&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>linux 下的几种IO 分析</title>
+   <link href="http://julianyap.com/2013/04/15/linux%E4%B8%8B%E7%9A%84%E5%90%8C%E6%AD%A5-%E5%BC%82%E6%AD%A5-%E9%98%BB%E5%A1%9E-%E9%9D%9E%E9%98%BB%E5%A1%9E.html"/>
+   <updated>2013-04-15T04:19:02+08:00</updated>
+   <id>http://julianyap.com/2013/04/15/linux下的同步-异步-阻塞-非阻塞</id>
+   <content type="html">&lt;p&gt;&lt;strong&gt;linux 下io&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于IO的同步,异步,阻塞,非阻塞&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;一般典型的I/O(同步阻塞I/O)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=31c1hG--2BjT5ElCtDaALqfKn9qSG--2BqBjwn04OpwtcpHXw0DfOftJ3aCSIzIRjtOMHZZMlDdbF1we93BIiocvrux--2Fc1MMDF&quot; alt=&quot;&quot; /&gt;
+从应用程序的角度来说，read 调用可能会延续很长时间。实际上，在内核执行读操作和其他工作时，
+应用程序的确会被阻塞，也就是说应用程序不能做其它事情了。&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;同步 非阻塞I/O&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=ebeaxXjA1nZEFKwGAs37VvtBC--2FGhezl6s--2FR0rvGQyo148Zon--2FC72obcuzkmmxIAu59WfYW8TQzFE71Ggvkg3sf01zc3y&quot; alt=&quot;&quot; /&gt;
+实际上，该方式需要应用程序以一种轮询的方式来实现数据读取，多次无谓的系统调用会加大系统开销，影响应整个系统的吞吐量。
+这种需要多次的用户进程与内核进程切换。。&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;select poll epoll 方式。。。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=5058fbW0GZLrCrSYaNzUD3WskgKhdXdp--2BvE--2Fnz0we3yMhADI0g9vbkpgZskP48--2BJJ1BhhhJFvRMKvuQlRPRy6--2BZ5b6--2FO&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;该方式中，select(或poll)的调用仍然会阻塞进程，与一般典型的I/O不一样的它是等待事件通知。但是它引入了超时机制，可以让应用程序有权力避免过长时间等待；
+另一方面，如果应用程序需要读写多个文件，该方式可以一显身手。&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;异步I/O&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=4e24TKQcgbivcZpbg9ps1chscTB6UsW--2F2kHR4oJd2Svw--2BLqjE3h1JqgU83sx0Ealw3f4LLKPYt1RnodFeiIhCD4u69Em&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;IO 常见的几种模型&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;阻塞型 IO(blocking I/O)&lt;/li&gt;
+&lt;li&gt;非阻塞性IO(nonblocking I/O)&lt;/li&gt;
+&lt;li&gt;IO多路复用(I/O multiplexing)&lt;/li&gt;
+&lt;li&gt;信号驱动IO(signal driven I/O)&lt;/li&gt;
+&lt;li&gt;异步IO(asynchronous I/O)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;IO 操作可以分为两个阶段&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;等待数据准备好&lt;/li&gt;
+&lt;li&gt;将数据从内核缓冲区复制到用户进程缓冲区&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;同步与异步的区别&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;同步IO，需要用户进程主动将存放在内核缓冲区中的数据拷贝到用户进程中。&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;异步IO，内核会自动将数据从内核缓冲区拷贝到用户缓冲区，然后再通知用户。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;io 多路复用&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;当对多路复用IO进行调用时，比如使用poll。需注意的是，poll是系统调用，当调用poll的时候，其实已经是陷入了内核，是内核线程在跑了。因此对于调用poll的用户进程来讲，此时是阻塞的。
+因为poll的底层实现，是去扫描每个文件描述符(fd)，而如果要对感兴趣的fd进行扫描，那么只能将每个描述符设置成非阻塞的形式(对于用户进程来讲，设置fd是阻塞还是非阻塞，可以使用系统调用fcntl)，这样才有可能进行扫描。如果扫描当中，发现有可读(如果可读是用户感兴趣的)的fd，那么select就在用户进程层面就会返回，并且告知用户进程哪些fd是可读的。
+这时候，用户进程仍然需要使用read的系统调用，将fd的数据，从内核缓冲区拷贝到用户进程缓冲区(这也是poll为同步IO的原因)。
+那么此时的read是阻塞还是非阻塞呢？这就要看fd的状态了，如果fd被设置成了非阻塞，那么此时的read就是非阻塞的；如果fd被设置成了阻塞，那么此时的read就是阻塞的。
+不过程序已经执行到了这时候，不管fd是阻塞还是非阻塞，都没有任何区别，因为之前的poll，就是知道有数据准备好了才返回的，也就是说内核缓冲区已经有了数据，此时进行read，是肯定能够将数据拷贝到用户进程缓冲区的。&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>oauth 解释 以及新浪微薄OAuth python实现</title>
+   <link href="http://julianyap.com/2013/04/11/oauth-%E8%A7%A3%E9%87%8A-%E4%BB%A5%E5%8F%8A%E6%96%B0%E6%B5%AA%E5%BE%AE%E8%96%84OAuth+python%E5%AE%9E%E7%8E%B0.html"/>
+   <updated>2013-04-11T10:38:05+08:00</updated>
+   <id>http://julianyap.com/2013/04/11/oauth-解释-以及新浪微薄OAuth python实现</id>
+   <content type="html">&lt;h1&gt;oauth 解释 以及新浪微薄OAuth python实现&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;什么是oauth？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;oauth是一套认证标准 。最早出现在 &lt;a href=&quot;http://oauth.net/&quot;&gt;这里&lt;/a&gt; 当然这样的标准分为 oauth1 与 oauth2&lt;/p&gt;
+
+&lt;p&gt;oauth 是一套三方委托认证模式&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=3c88e8YvGlxZlSzVbXuW--2FHUw--2BHMmrugkTc68SkQ--2BacY22bGyS5OA5HfZV9azQr21LGRXwmgx--2BcGQRdLXLSFja3OM--2B3jz&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ZYS 向SINA 发出请求 获得YQ的信息,SINA询问YQ是否同意？ YQ返回同意。然后SINA返回ZYS请求的信息 &quot;here you are&quot;&lt;/p&gt;
+
+&lt;p&gt;可以概括起来就是&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;request&lt;/li&gt;
+&lt;li&gt;argee?&lt;/li&gt;
+&lt;li&gt;Yes&lt;/li&gt;
+&lt;li&gt;Here you are&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;上面的3个对应于新浪的3个认证URL 最后一个 &quot;Here you are&quot; 可以看成具体的应用API调用&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;http://api.t.sina.com.cn/oauth/request_token&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;http://api.t.sina.com.cn/oauth/authorize&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;http://api.t.sina.com.cn/oauth/access_token&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这其中牵扯的一些参数&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;APP_KEY, APP_SECRET&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;request_token, request_secret&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;verifier&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;URL 编码 参考&lt;a href=&quot;http://www.ruanyifeng.com/blog/2010/02/url_encoding.html&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;access_secret, access_secret&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个认证步骤可以看成&lt;/p&gt;
+
+&lt;p&gt;ZYS YQ SINA&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;ZYS 找到SINA 说等会 YQ过来我要拿YQ的粉丝数据。然后通过参数的传递 从SINA处获得&lt;strong&gt;request_token&lt;/strong&gt; 和 &lt;strong&gt;request_secret&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;YQ 找到SNA说是否ZYS要我的粉丝数据?并且把ZYS私下给YQ的&lt;strong&gt;request_token&lt;/strong&gt;和 &lt;strong&gt;request_secret&lt;/strong&gt; 给SINA看，并同意ZYS拿它的数据。这时SNA把&lt;strong&gt;verifier&lt;/strong&gt;给 YQ。YQ把&lt;strong&gt;verifier&lt;/strong&gt; 给了
+ZYS&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;ZYS 拿着 request_token ， request_secret ， verifier 这三样东西，找到 SINA，说明他已经取得了 YQ 的授权。此时， SINA 给了 ZYS 一对 access_token 和 access_secret 。之后，凭着这对东西， ZYS 就可以从 SINA 那里取得 YQ 的粉丝数据了。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;em&gt;以后ZYS就可以使用access_token从SINA处直接获得数据了(对外API)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;实战参考&lt;a href=&quot;http://zouyesheng.com/oauth-sina.html#toc1&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>dns 安全 for GFW</title>
+   <link href="http://julianyap.com/2013/04/11/dns-%E5%AE%89%E5%85%A8.html"/>
+   <updated>2013-04-11T10:29:00+08:00</updated>
+   <id>http://julianyap.com/2013/04/11/dns-安全</id>
+   <content type="html">&lt;p&gt;2012 春节期间 github 受到dns污染的干扰 访问github的网站 都会返回一个59.24.3.173的ip地址。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;dns 污染&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;一般而言 dns使用udp协议。在dns服务器查询期间发现你访问的是基于某一个网站则在，然后造一个假的回应包并在真正的包返回之前给你就行了，然后假的包里面只要把实际的 IP
+改成另外一个 IP 就行。&lt;/p&gt;
+
+&lt;p&gt;运行dig @8.8.8.8 twitter.com 并使用wireshark 抓包 如图可得&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://mail-attachment.googleusercontent.com/attachment/u/0/?ui=2&amp;amp;ik=429fe34bc2&amp;amp;view=att&amp;amp;th=13c5d593b7a78fb7&amp;amp;attid=0.1&amp;amp;disp=inline&amp;amp;realattid=f_hc7nowqc0&amp;amp;safe=1&amp;amp;zw&amp;amp;saduie=AG9B_P_yefQZTkL1e79QyVqUxjWo&amp;amp;sadet=1361360033407&amp;amp;sads=3q3QrYvd1A7D8v-RpoXm83rH7qs&quot; alt=&quot;dns污染&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;一般而言有一个伪造ip列表
+8.7.198.45
+37.61.54.158
+46.82.174.68
+59.24.3.173
+78.16.49.15
+93.46.8.89
+159.106.121.75
+203.98.7.65
+243.185.187.39
+或者没有answer。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;几种解决方案&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;把本机的53端口的包重定向要vps的非知名端口，然后在vps的非知名端口上开一个dns server,然后解析完了扔回来&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;通过dnscrypt 解决dns 污染...&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;drop 掉上面的那些列表的方案&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;dnsmasq 方案&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;_note dnsmasq 一般用作三种用途 1.提供dns服务 2. 优先使用本地自定义的dns 3.提供dhcp服务 关于其它使用参考 http://www.aslibra.com/blog/post/dnsmasq.php 文档&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>关于北邮校园网登录程序</title>
+   <link href="http://julianyap.com/2013/04/10/%E5%85%B3%E4%BA%8E%E5%8C%97%E9%82%AE%E6%A0%A1%E5%9B%AD%E7%BD%91%E7%99%BB%E5%BD%95%E7%A8%8B%E5%BA%8F.html"/>
+   <updated>2013-04-10T04:10:55+08:00</updated>
+   <id>http://julianyap.com/2013/04/10/关于北邮校园网登录程序</id>
+   <content type="html">&lt;p&gt;&lt;strong&gt;关于北邮校园网登录程序&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;这个不是破解认证。仅仅是自动认证。。&lt;/li&gt;
+&lt;li&gt;目前支持的热点。。 学十宿舍网  bupt2校内网&lt;/li&gt;
+&lt;li&gt;环境为 ubuntu 12.10&lt;/li&gt;
+&lt;li&gt;程序在&lt;a href=&quot;https://gist.github.com/xiyoulaoyuanjia/2d63e1b41ec711f8d5e1&quot;&gt;这里&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;关于 自动登录&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个使用了 request 相对而言比较简单。。仅仅是把密码 进行了 md5 的加密转换成16进制输出&lt;/p&gt;
+
+&lt;p&gt;例如如果想计算自己密码的 加密之后的密文可以按如下操作&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import hashlib
+&amp;gt;&amp;gt;&amp;gt; hashlib.md5(&quot;124&quot;).hexdigest()
+'c8ffe9a587b126f152ed3d89a146b445'
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;如何做到每次热点接入后自动认证呢？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;之前考虑 直接调用 NetworkManager Api &lt;a href=&quot;http://projects.gnome.org/NetworkManager/&quot;&gt;这里&lt;/a&gt;  操作
+当然这样可以做的事情就比较多了。。而且还看了 python 的&lt;a href=&quot;http://cgit.freedesktop.org/NetworkManager/NetworkManager/tree/examples/python&quot;&gt;demo&lt;/a&gt;
+感激非常的棒&lt;/p&gt;
+
+&lt;p&gt;后来 在网上看到 这个&lt;a href=&quot;http://t.du9l.com/post/40&quot;&gt;资料&lt;/a&gt; 觉得不错。。 这里感谢这个作者
+后来就直接拿过来用了。。至少现在可以满足我的要求。&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;下载下来放到 /etc/NetworkManager/dispatcher.d/ 中&lt;/li&gt;
+&lt;li&gt;注意修改可执行文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;关于登录成功的窗口通知&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;本想着这个可能十分简单的事情。。谁知道 确实花费时间最多的。。&lt;/p&gt;
+
+&lt;p&gt;“问题是我需要执行的脚本会执行 。。但是里面的 zenity弹出框怎么也不出来。。
+为了排除是python的脚本问题。。我直接把命令放在了shell里面。也还是没有结果。。。。
+我已经查看了 networking 的日志&lt;/p&gt;
+
+&lt;p&gt;nm-dispatcher.action: Script  exited with error status 1”`&lt;/p&gt;
+
+&lt;p&gt;后来在以为邮件列表中的网友的帮助下。。&lt;/p&gt;
+
+&lt;p&gt;修改了之前的程序。。
+方法如下:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;增加环境变量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;export DISPLAY=:0 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;增加 对 x的访问权限&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;xhost local: 1&amp;gt;/dev/null
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里参考了一些资料&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.leidinger.net/X/xhost.html&quot;&gt;xhost&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://promberger.info/linux/2009/01/02/running-x-apps-like-zenity-from-crontab-solving-cannot-open-display-problem/&quot;&gt;cannot-open-display-problem&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;算是解决了吧。。如下图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=b3d344--2FxLktIPmUVQn6KtbjbBClvLBx2AMZ3tC--2Blw2c--2Fhq2bVDo7GgYdp7fLKwJNg7K2wEOGfPqP9dHVWL0WzujDdvEZ&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;对于 第二个有一个小问题。。现在是把上述命令放在了 startup application(ubuntu) 中 每次开机都需要运行上述命令。。
+这个不能记录更改操作吗？  好吧。。这个先留着。。。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于bupt2校内网&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个是最简单的。但也是花费我时间最长的一个。。&lt;/p&gt;
+
+&lt;p&gt;之前一直是用 python的requests 库做的。。&lt;/p&gt;
+
+&lt;p&gt;测试requests 如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; requests.post(url,data={&quot;PtUser&quot;:111,&quot;PtPwd&quot;:33})
+Traceback (most recent call last):
+  File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+  File &quot;/usr/local/lib/python2.7/dist-packages/requests/api.py&quot;, line 88, in post
+    return request('post', url, data=data, **kwargs)
+  File &quot;/usr/local/lib/python2.7/dist-packages/requests/api.py&quot;, line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File &quot;/usr/local/lib/python2.7/dist-packages/requests/sessions.py&quot;, line 354, in request
+    resp = self.send(prep, **send_kwargs)
+  File &quot;/usr/local/lib/python2.7/dist-packages/requests/sessions.py&quot;, line 460, in send
+    r = adapter.send(request, **kwargs)
+  File &quot;/usr/local/lib/python2.7/dist-packages/requests/adapters.py&quot;, line 246, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='10.8.128.1', port=80): Max retries exceeded with url: /portal/logon.cgi (Caused by &amp;lt;class 'httplib.BadStatusLine'&amp;gt;: '')
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;于是顺着 Caused by &lt;class 'httplib.BadStatusLine'&gt;: 错误&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;exception httplib.BadStatusLine
+A subclass of HTTPException. Raised if a server responds with a HTTP status code that we don’t understand.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以为是服务器发送了不认识的状态吗 的思路考虑 以为是服务器block 爬虫..后来各种header 各种 UA 尝试均不成功&lt;/p&gt;
+
+&lt;p&gt;不行，后来用 wget测试如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wget --post-data &quot;PtUser=111&amp;amp;PtPwd=33&quot; --header=&quot;User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31&quot; --header=&quot;Referer: http://10.8.128.1/portal/logon.cgi?userip=10.8.160.134&amp;amp;userurl=687474703a2f2f31302e332e382e323131&quot; --header=&quot;Cookie: LPTSRVID=1202120206; lang=0&quot; --header=&quot;Origin: http://10.8.128.1&quot; --header=&quot;Host: 10.8.128.1&quot;   http://10.8.128.1/portal/logon.cgi 
+
+
+Connecting to 10.8.128.1:80... connected. 
+HTTP request sent, awaiting response... No data received. 
+Retrying. 
+
+--2013-04-19 10:21:44--  (try: 2)  http://10.8.128.1/portal/logon.cgi 
+Connecting to 10.8.128.1:80... connected. 
+HTTP request sent, awaiting response... No data received. 
+Retrying. 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;才发现是服务器端没有回应。。。&lt;/p&gt;
+
+&lt;p&gt;于是从新从chrome 看post 数据。。终于。。发现 post 少传了一个参数 PtButton 导致。。。唉。。。&lt;/p&gt;
+
+&lt;p&gt;修改之后终于完美got it&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>python 装饰器</title>
+   <link href="http://julianyap.com/2013/03/24/python_%E8%A3%85%E9%A5%B0%E5%99%A8.html"/>
+   <updated>2013-03-24T16:27:10+08:00</updated>
+   <id>http://julianyap.com/2013/03/24/python_装饰器</id>
+   <content type="html">&lt;h1&gt;python 装饰器&lt;/h1&gt;
+
+&lt;p&gt;概括来讲..装饰器就是为已经存在的对象添加额外的一些功能&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;装饰器入门&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;需求是怎么来的?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;def foo():
+    print 'in foo()'     
+foo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在需要计算机foo 函数用的时间. 一般来说这可能想到了使用 如下代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import time
+def foo():
+    start = time.clock()
+    print 'in foo()'
+    end = time.clock()
+    print 'used:', end - start
+
+foo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果其他函数也有这个需求呢? 复制? 很可笑....&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;以不变应万变&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;import time
+ 
+def foo():
+    print 'in foo()'
+ 
+def timeit(func):
+    start = time.clock()
+    func()
+    end =time.clock()
+    print 'used:', end - start
+ 
+timeit(foo)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样子的一个问题是更改了调用接口.本来是  timeit 方法调用.现在换成了 timeit(foo) 调用方法
+如果其它地方也有这个就需要修改其它地方了...&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;最大限度地少改动！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;#-*- coding: UTF-8 -*-
+import time
+ 
+def foo():
+    print 'in foo()'
+ 
+# 定义一个计时器，传入一个，并返回另一个附加了计时功能的方法
+def timeit(func):
+     
+    # 定义一个内嵌的包装函数，给传入的函数加上计时功能的包装
+    def wrapper():
+        start = time.clock()
+        func()
+        end =time.clock()
+        print 'used:', end - start
+     
+    # 将包装后的函数返回
+    return wrapper
+ 
+foo = timeit(foo)
+foo()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的最后两行代码也就是体现了装饰器的思想&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;python 的 额外支持&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;语法 @&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;@timeit
+def foo():
+    print 'in foo()'
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;内置的装饰器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;内置的装饰器有三个，分别是staticmethod、classmethod和property，作用分别是把类中定义的实例方法变成静态方法、类方法和类属性。&lt;/p&gt;
+
+&lt;p&gt;这里，静态方法，虽然是一个方法，但是a.static_foo只是一个没有绑定任何参数的完好的函数。static_foo需要1个参数，同样a.static_foo也只需要一个参数。&lt;/p&gt;
+
+&lt;p&gt;这里有一个很好的链接的关于上面的....
+http://www.zeuux.com/blog/content/3030/&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>sso</title>
+   <link href="http://julianyap.com/2013/03/16/sso.html"/>
+   <updated>2013-03-16T05:29:56+08:00</updated>
+   <id>http://julianyap.com/2013/03/16/sso</id>
+   <content type="html">&lt;p&gt;&lt;strong&gt;http://fm.qq.com如何检测到本地qq登陆的？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个问题分为两个部分&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;如何检测到本地客户端qq登陆的?&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如何检测到webqq登陆的?&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个问题也就是&lt;strong&gt;&lt;em&gt;sso&lt;/em&gt;&lt;/strong&gt;技术Single Sign On&lt;/p&gt;
+
+&lt;p&gt;sso技术是在多个应用系统中用户只需一次登录就可以登陆多个信任的系统中。&lt;/p&gt;
+
+&lt;p&gt;webqq是共用一个sso的domain做session验证啦。。。都有一个qq.com域名含有相同的session所有的cookie都有一个范围，叫domain，如“.sun.com”。这个范围规定了只有在访问相同domain的时候，浏览器才会将此cookie带上&lt;/p&gt;
+
+&lt;p&gt;所以对于webqq检测比较简单。。&lt;/p&gt;
+
+&lt;hr /&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>gcc 使用总结</title>
+   <link href="http://julianyap.com/2013/03/03/gcc.html"/>
+   <updated>2013-03-03T05:20:57+08:00</updated>
+   <id>http://julianyap.com/2013/03/03/gcc</id>
+   <content type="html">&lt;p&gt;gcc 4.6 加了两个warning&lt;/p&gt;
+
+&lt;p&gt;当程序中出现已经赋值的但并未使用过的变量时，GCC会触发 -Wunused-but-set-variable 的警告；当程序中某个函数参数没有在函数中使用过时，GCC会触发 -Wunused-but-set-parameter 警告。这两个警告可以用 -Wall 和 -Wextra 触发。&lt;/p&gt;
+
+&lt;p&gt;有时候开发者需要在调试过程中定义一些虽已赋值，但并不使用的变量，或者定义一些在后续版本中要使用到的函数参数。可又不能不用 -Wall -Wextra 这两个选项来编译&lt;/p&gt;
+
+&lt;p&gt;使用 &lt;strong&gt;attribute&lt;/strong&gt; ((unused)) 避免上述&lt;strong&gt;attribute&lt;/strong&gt; ((unused)) a&lt;/p&gt;
+
+&lt;p&gt;例如   &lt;strong&gt;attribute&lt;/strong&gt; ((unused)) a  则a 可以定义但是不使用 或者 参数但是不使用&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>python 描述符</title>
+   <link href="http://julianyap.com/2013/01/23/python-%E6%8F%8F%E8%BF%B0%E7%AC%A6.html"/>
+   <updated>2013-01-23T16:39:01+08:00</updated>
+   <id>http://julianyap.com/2013/01/23/python-描述符</id>
+   <content type="html">&lt;h1&gt;python 描述符&lt;/h1&gt;
+
+&lt;p&gt;访问一个属性的优先级顺序&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;类属性&lt;/li&gt;
+&lt;li&gt;数据描述符&lt;/li&gt;
+&lt;li&gt;实例属性&lt;/li&gt;
+&lt;li&gt;非数据描述符&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;getattr&lt;/strong&gt;方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;关于数据描述符的定义&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;实现了 _&lt;em&gt;get__  _&lt;/em&gt;set&lt;strong&gt;  __del&lt;/strong&gt;  方法的类属性&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于非数据描述符的定义&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;所有的类数据函数都是非数据描述符&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;__get__(self,obj,type=None)
+__set__(self,obj,val)
+__del__(self,obj)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其中 self 是调用它的实例,访问属性的方法。&lt;/p&gt;
+
+&lt;p&gt;对于给定的类X和实例x&lt;/p&gt;
+
+&lt;p&gt;X.foo 等价于&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type(x).__dict__[&quot;foo&quot;].__get__(None,type(x))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;x.foo 等价于&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type(x).__dict__[&quot;foo&quot;].__get__(x,type(x))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;先看类属性&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; class A(object):
+...     foo=1.2
+... 
+&amp;gt;&amp;gt;&amp;gt; A.__dict__
+dict_proxy({'__dict__': &amp;lt;attribute '__dict__' of 'A' objects&amp;gt;, '__module__': '__main__', 'foo': 1.2, '__weakref__': &amp;lt;attribute '__weakref__' of 'A' objects&amp;gt;, '__doc__': None})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到在类的dict属性里&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;实例属性&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;数据描述符&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class simpleDescriptor(object):
+   def __get__(self,obj,type=None) :
+       pass;
+   def __set__(self,obj,val):
+       pass;
+   def __del__(self,obj):
+       pass
+class A(object):
+    foo=simpleDescriptor();
+
+&amp;gt;&amp;gt;&amp;gt; a=A();
+&amp;gt;&amp;gt;&amp;gt; print a.foo;
+None
+&amp;gt;&amp;gt;&amp;gt; a.foo=13;
+&amp;gt;&amp;gt;&amp;gt; print a.foo;
+None
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原因在于 get 与set 方法都没有实体方法&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;note:Python在实在找不到方法的时候，就会求助于__getattr__方法&lt;/strong&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>在线markdown编辑器的说明文档</title>
+   <link href="http://julianyap.com/2013/01/11/%E5%9C%A8%E7%BA%BFmarkdown%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.html"/>
+   <updated>2013-01-11T01:19:53+08:00</updated>
+   <id>http://julianyap.com/2013/01/11/在线markdown编辑器的说明文档</id>
+   <content type="html">&lt;h1&gt;在线markdown编辑器的说明文档&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;关于布局&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;分为左右两个div 左边是一个ace的编辑器的类型 右边是一个idiv 里面有一个iframe 结构&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于ace&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;详细见 &lt;a href=&quot;http://ace.ajax.org/&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于左边的样式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;向  var editor = ace.edit(&quot;editor&quot;); 这样id为editor的div 就变成一个ace的对象了..修改主题与提取values就变得
+十分的简单了&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于右边的iframe 结构&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这里之所以选择iframe结构的原因是右边的内容是一个动态变化的过程(局部刷新),通过更改 iframe 的 src 的值就可以
+使右边从新加载内容&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如何捕获左边div的变化(内容更改与复制动作)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这里还是使用了 ace 对象的 getSession().on('change', function(e) 方法 刚开始使用onchange 监听事件后来发现
+onchange 只能监听写的动作对于复制动作不能捕获到&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;获得了内容之后如何把markdown转化为html?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这里使用了js 库 它的家在&lt;a href=&quot;https://github.com/evilstreak/markdown-js&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;获得html源码之后如何显示到右边呢?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;因为需要更改ifram的src 路径&lt;/p&gt;
+
+&lt;p&gt;这里想了几个方案..&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;反映到文本中 加载之后在删除?&lt;/li&gt;
+&lt;li&gt;src 请求ajax请求并把html 源码传递到 后台.后台返回来? 这样子倒是可以但是服务器交互太多.&lt;/li&gt;
+&lt;li&gt;不经过 修改src 路径的方案直接修改DOM的内容..尝试了几中方案都不行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;难道src不能直接加载html 源码吗?&lt;/p&gt;
+
+&lt;p&gt;最后终于在&lt;a href=&quot;http://stackoverflow.com/questions/8240101/set-content-of-iframe&quot;&gt;这里&lt;/a&gt;找到了答案&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var locals = &quot;content&quot;;
+
+document.getElementById('output_iframe1').src = &quot;data:text/html;charset=utf-8,&quot; + escape(LocalS);
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>JSON 学习</title>
+   <link href="http://julianyap.com/2013/01/03/json.html"/>
+   <updated>2013-01-03T07:15:01+08:00</updated>
+   <id>http://julianyap.com/2013/01/03/json</id>
+   <content type="html">&lt;h1&gt;JSON&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;note&lt;/strong&gt;:参考&lt;a href=&quot;http://json.org/json-zh.html&quot;&gt;json官网&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;json常用的两种结构:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;名称/值”对的集合（A collection of name/value pairs）。不同的语言中，它被理解为对象（object），纪录（record），结构（struct），字典（dictionary），哈希表（hash table），有键列表（keyed list），或者关联数组 （associative array）。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;值的有序列表（An ordered list of values）。在大部分语言中，它被理解为数组（array）。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;json常用数据格式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;对象:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;对象是一个无序的“‘名称/值’对”集合。一个对象以“{”（左括号）开始，“}”（右括号）结束。每个“名称”后跟一个“:”（冒号）；“‘名称/值’ 对”之间使用“,”（逗号）分隔。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://json.org/object.gif&quot; alt=&quot;object&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;数组:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;数组是值（value）的有序集合。一个数组以“[”（左中括号）开始，“]”（右中括号）结束。值之间使用“,”（逗号）分隔。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://json.org/array.gif&quot; alt=&quot;array&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;值:
+值（value）可以是双引号括起来的字符串（string）、数值(number)、true、false、 null、对象（object）或者数组（array）。这些结构可以嵌套。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://json.org/value.gif&quot; alt=&quot;value&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;字符串:&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;字符串（string）是由双引号包围的任意数量Unicode字符的集合，使用反斜线转义。一个字符（character）即一个单独的字符串（character string）。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://json.org/string.gif&quot; alt=&quot;string&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;python对json的处理&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;对简单数据类型的encoding 和 decoding：使用json的dumps方法对python的数据进行编码.也就是把python的数据类型转换成json的数据类型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;import json
+obj = [[1,2,3],123,123.123,'abc',{'key1':(1,2,3),'key2':(4,5,6)}]
+encodedjson = json.dumps(obj)
+print repr(obj)
+print encodedjson
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;note&lt;/em&gt;  repr函数与str的区别&lt;/p&gt;
+
+&lt;p&gt;以上的输出结果为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[[1, 2, 3], 123, 123.123, 'abc', {'key2': (4, 5, 6), 'key1': (1, 2, 3)}] 
+[[1, 2, 3], 123, 123.123, &quot;abc&quot;, {&quot;key2&quot;: [4, 5, 6], &quot;key1&quot;: [1, 2, 3]}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在python的编码过程中会从原始结构向json的结构转化
+&lt;img src=&quot;http://images.cnblogs.com/cnblogs_com/coser/201112/201112141621136287.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;相反的处理过程使用json.loads()函数&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://images.cnblogs.com/cnblogs_com/coser/201112/201112141621146178.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;json对自定义对象的操作&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;python 数据结构到JSON的转换可以看出 必须把把python的对象转化成可以转化到python的数据格式.当然这里有两种方法可以考虑 一种继承，一种自己定义转化函数
+&lt;a href=&quot;http://huacnlee.com/blog/convert-python-object-to-jason/&quot;&gt;参考这里&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;def obj2dict(obj):
+&quot;&quot;&quot;
+summary:
+    将object转换成dict类型
+&quot;&quot;&quot;
+memberlist = [m for m in dir(obj)]
+_dict = {}
+for m in memberlist:
+    if m[0] != &quot;_&quot; and not callable(m):
+        _dict[m] = getattr(obj,m)
+
+return _dict
+return simplejson.encode(str(obj2dict(self)))
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>HTMLParser解析HTML文件</title>
+   <link href="http://julianyap.com/2012/11/16/python-%E8%A7%A3%E6%9E%90HTML%E6%96%87%E4%BB%B6.html"/>
+   <updated>2012-11-16T07:29:56+08:00</updated>
+   <id>http://julianyap.com/2012/11/16/python-解析HTML文件</id>
+   <content type="html">&lt;h1&gt; HTMLParser解析HTML文件&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://docs.python.org/2/library/htmlparser.html&quot;&gt;python doc 文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;HTMLParser采用的是一种事件驱动的模式(必须覆写如下列出的几种函数)，当HTMLParser找到一个特定的标记时，它会去调用一个用户定义的函数，以此来通知程序处理&lt;/p&gt;
+
+&lt;p&gt;主要的用户回调函数都是已 handler_ 开头的函数 这里列出以下常用的几种&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;handle_startendtag 处理开始标签和结束标签 &amp;lt;tag.../&gt;&lt;/li&gt;
+&lt;li&gt;handle_starttag 处理开始标签，比如 &lt;code&gt;&amp;lt;xx&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;handle_endtag 处理结束标签，比如 &lt;code&gt;&amp;lt;/xx&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;handle_comment 处理注释
+详细的可以查看 文档&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>github 上建立其它仓库的镜像</title>
+   <link href="http://julianyap.com/2012/10/16/github-%E4%B8%8A%E5%BB%BA%E7%AB%8B%E5%85%B6%E5%AE%83%E4%BB%93%E5%BA%93%E7%9A%84%E9%95%9C%E5%83%8F.html"/>
+   <updated>2012-10-16T04:29:56+08:00</updated>
+   <id>http://julianyap.com/2012/10/16/github-上建立其它仓库的镜像</id>
+   <content type="html">&lt;h1&gt;github 上建立其它仓库的镜像&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;github 上面建立Mercurial 仓库代码&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;使用 &lt;a href=&quot;https://github.com/schacon/hg-git&quot;&gt;hg-git&lt;/a&gt; 工具&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Hg-Git是Mercurial(Hg)的扩展插件,主要功能是 本地hg版本管理git代码pull(push) 到
+git 服务器管理代码&lt;/p&gt;
+
+&lt;p&gt;上面已经说了hg-git 是hg的一个扩展插件(其实就是一些python脚本)。。那安装hg-git的方式
+就与安装hg其它的插件一样。。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[extensions]
+hggit = /path/to/hg-git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;/path/to/hg-git 一定要指示到下载的 hg-git 的python脚本目录 例如我的脚本目录为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[extensions]
+hggit = ～/Destop/hg-git/hggit/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;另外关于 hg-git 可以参考&lt;a href=&quot;http://hgtip.com/tips/advanced/2009-11-09-create-a-git-mirror/&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;建立一个github 的新的项目&lt;/li&gt;
+&lt;li&gt;从mercurial 仓库中下载需要同步到github上的仓库的代码&lt;/li&gt;
+&lt;li&gt;hg pull 到github中项目地址&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;具体代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd hg-git # (a Mercurial repository)
+$ hg bookmark -r default master # make a bookmark of master for default, so a ref gets created
+$ hg push git+ssh://git@github.com/schacon/hg-git.git
+$ hg push
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=6ecaUlt--2FuR4BMUMZlGcJ4zu84PNwbqOZrYPn3cthLlMxb--2B--2FSxWlfiS84Iq2dGUVbg--2B83nlX--2BHmhe--2B2w4cCtDjr581EOH&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;这里需要特别注意 hg-git 的目的是 服务器是git 方式管理代码。客户端是hg 方式管理代码&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;另外这里有一篇在hg-git 上设计的hook 可以方便的pull hd 与git 写的也相当有意思&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://morgangoose.com/blog/2010/09/29/github-and-bitbucket-hooks/&quot;&gt;Github and Bitbucket hooks&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;使用&lt;a href=&quot;https://github.com/cosmin/git-hg&quot;&gt;git-hg&lt;/a&gt;插件&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个项目与上面说的git-hg 正好相反。 这个是服务器是git 管理 客户端 是git-hg(依赖于hg) 当然客户端也可以
+是 git 管理代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; git-hg clone http://some/random/hg/repo [local-git-repo-name]
+ git-hg pull # same as git-hg-fetch &amp;amp;&amp;amp; git merge hg/branch_name
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;具体可以参考上面给的链接。 其中我在做ossec 的mirror时也就是使用了这种方法一次性把
+hg 的代码转换成了git的标签同时推送到github中的 在&lt;a href=&quot;https://github.com/xiyoulaoyuanjia/sAoccec/tree/mirror&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;在GitHub上建立一个SVN仓库的镜像&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个的目的主要是 同步google code(svn) 到github 中的&lt;/p&gt;
+
+&lt;p&gt;这个可以参考 &lt;a href=&quot;http://blog.yesmeck.com/archives/create-svn-mirror-on-github/&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;这里需要先安装git-svn&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>gnome 下的几种 Box message</title>
+   <link href="http://julianyap.com/2012/08/16/gnome-popup+Box-message.html"/>
+   <updated>2012-08-16T04:29:56+08:00</updated>
+   <id>http://julianyap.com/2012/08/16/gnome-popup Box-message</id>
+   <content type="html">&lt;h1&gt;gnome popup Box message &lt;/h1&gt;
+
+&lt;p&gt;之前写一些要用的脚本的时候.苦于没有找到方便的可视化消息通知方法
+之前的做法是是使用pyqt 写一些简单的message box 可以见&lt;a href=&quot;https://github.com/xiyoulaoyuanjia/GetVdiskLink&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;后来在&lt;a href=&quot;http://smashingweb.info/send-messages-over-network-gnome-popup-box-message/&quot;&gt;这里&lt;/a&gt;
+发现了gnome下的一些常用的Box message  方法。感觉用着很舒服。。这里推荐给大家&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;zenity:It will display a default ok box on the screen&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;display  GTK+ dialogs&lt;/li&gt;
+&lt;li&gt;输出 ”message here“ 信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;zenity --info --text &quot;message here&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=db92UKpsF8HUcwp1UHTtfeyhW4kyX9gebYU8Z6gBVkTRHTr5FmY1xPoZZzZ--2F--2BMl3xWWiO--2Bg5cTo8--2FZ82RvckEBeOIbMc&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;输出gtk标准日历&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;zenity  --calendar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=8da6YLsDYCnzz97bD0p--2BVWTJipB7Jap6KF26CUT1YajYJzjhxdnrOfZBWffhFyqMKbf5ifKL0yS1O946ClbAobf--2Fw7FD&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;更详细的用法参见 man zenity&lt;/p&gt;
+
+&lt;p&gt;这里有一篇&lt;a href=&quot;http://en.wikipedia.org/wiki/Zenity&quot;&gt;wikipedia 的介绍&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;notify-send:系统提示托盘&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;notify-send [&quot;title&quot;] &quot;message&quot;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;notify-send [&quot;title&quot;] &quot;message&quot; -t 500&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这里 -t 表示显示时间&lt;/p&gt;
+
+&lt;p&gt;我在我的连接校园网的程序中也应用了这个。。。感觉比自己写好看多了&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/xiyoulaoyuanjia/blog/blob/master/%E5%85%B3%E4%BA%8E%E5%8C%97%E9%82%AE%E6%A0%A1%E5%9B%AD%E7%BD%91%E7%99%BB%E5%BD%95%E7%A8%8B%E5%BA%8F.md&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=b3d344--2FxLktIPmUVQn6KtbjbBClvLBx2AMZ3tC--2Blw2c--2Fhq2bVDo7GgYdp7fLKwJNg7K2wEOGfPqP9dHVWL0WzujDdvEZ&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;xmessage&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这个程序主要依赖 x libary 产生消息框的程序&lt;/p&gt;
+
+&lt;p&gt;这个可以用来做一些shell层的选在框&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xmessage  &quot;Are you sure you want to shutdown? &quot; -buttons yes,no
+echo $?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=b8a4QzDUEFUpVNIH7B328--2FGiSJcaTHjF--2FvosYrlkt2pjU--2F8DS2rNs--2Fa--2BQOOojpsXbMsledIcUzBfmtol--2BJVoHyq--2B--2BS0R&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;answer=$(xmessage  &quot;Are you sure you want to shutdown? &quot; -buttons yes,no -print)
+echo $answer
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;常用的一些选项&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-center – the message at center   
+-nearmouse – the message near mouse
+-timeout secs – will close after some seconds.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;更多的可以 man xmessage 查看&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Over SSH&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;DISPLAY=:0; XAUTHORITY=~owner_of:0/.Xauthority; export DISPLAY XAUTHORITY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个没有实践不多说....&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>git 初步使用</title>
+   <link href="http://julianyap.com/2012/04/16/git%E5%88%9D%E6%AD%A5-%E4%BD%BF%E7%94%A8.html"/>
+   <updated>2012-04-16T04:29:56+08:00</updated>
+   <id>http://julianyap.com/2012/04/16/git初步-使用</id>
+   <content type="html">&lt;h1&gt;git 使用&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://rogerdudler.github.com/git-guide/index.zh.html&quot;&gt;参考这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;安装&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://code.google.com/p/git-osx-installer/downloads/list?can=3&quot;&gt;&lt;em&gt;git osx 版本&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://code.google.com/p/msysgit/downloads/list?can=3&quot;&gt;git windows 版本&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://book.git-scm.com/2_installing_git.html&quot;&gt;git linux版本&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;创建新仓库&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;1.创建新文件夹
+2.进入执行 git init
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;复制仓库&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;复制本地仓库&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;pre&gt;&lt;code&gt; git clone /path/to/repository
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt; /path/to/repository 是本地的仓库地址&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;复制网络上的仓库&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;pre&gt;&lt;code&gt; git clone username@host:/path/to/repository
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt; username@host:/path/to/repository 在github上面  是https://github.com/xiyoulaoyuanjia/AboutWeb.git 表示其走http协议 如果是git@github.com:xiyoulaoyuanjia/AboutWeb.git 表示走 ssh协议  git://github.com/xiyoulaoyuanjia/AboutWeb.git  则表示走的时git协议&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;工作流&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;git在本地维护着3棵树 。分别是工作目录(实际的文件)、缓冲区(保存最近的更改)、最后是HEAD(指向最近提交的内容)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://rogerdudler.github.com/git-guide/img/trees.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;添加与提交&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;把修改的东西添加到缓冲区&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git add file
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际提交使用如下命令提交到 HEAD 处&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git commit -m &quot;代码提交信息&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是这样没有提交到远程服务器中&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;推送改动&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;将本地的改动推送到远程的仓库上的命令&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git push origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;master 表示远程的分支(主分支与其它的分支)&lt;/p&gt;
+
+&lt;p&gt;如果没有克隆远程的仓库。只是向将现有的仓库增加到远程的仓库里可以使用如下命令&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git remote add origin server(例如git@github.com:xiyoulaoyuanjia/AboutWeb.git)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;分支&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;分支是用来将特性开发绝缘的。新建仓库的时候 master是默认的主仓库、可以在其它仓库上面开发、待开发完成之后再将它们合并到主分区上面去。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://rogerdudler.github.com/git-guide/img/branches.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;创建分支可以使用 git checkout 命令  例如 创建一个feature_x分支并切换过去&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git checkout -b feature_x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;切换回主分区&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git checkout master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;删除新建的分支&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git branch -d feature_x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;更新与合并&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;更新本地仓库&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;1.更新远程仓库到本地仓库&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; git pull
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2.更新其它分支到主分支(例如master)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; git merge &amp;lt;branch&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;合并冲突&lt;/p&gt;
+
+&lt;p&gt;这个对于复杂的问题需要手动合并冲去。当然 少不了一些常用的工具 git diff A B&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;在软件发布的时候创建标签是被推荐的。。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git tag 1.0.0 1b2e1d63ff
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1b2e1d63ff 是commit的提交ID 当然可以少 只要是唯一的就行。。 查看ID 使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git log
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;替换本地改动&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;回到之前的改动。。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git checkout -- &amp;lt;filename&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此命令会使用 HEAD 中的最新内容替换掉你的工作目录中的文件。已添加到缓存区的改动，以及新文件，都不受影响&lt;/p&gt;
+
+&lt;p&gt;另外如果想修改本地的所有改动。去服务器下载最新版本 然后把本地主分区指向它就行 相应的命令为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git fetch origin
+git reset --hard origin/master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;有用的东西&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;内建的图形化 git&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gitk
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>linux 使用记录</title>
+   <link href="http://julianyap.com/2012/04/14/linux%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95.html"/>
+   <updated>2012-04-14T16:05:45+08:00</updated>
+   <id>http://julianyap.com/2012/04/14/linux使用记录</id>
+   <content type="html">&lt;h1&gt;linux使用记录&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;fedora 17 kde&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;关于konsole光标前面空格的问题&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;出现这种问题的原因是之前更高字体造成的 删除~/.fonts 下的字体即可&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Fedora 17 安装 Cinnamon 桌面环境&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;cinnamon桌面环境是linux Mint 下的桌面环境 当然fedora 17 下也是可以安装的&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo curl http://repos.fedorapeople.org/repos/leigh123linux/cinnamon/fedora-cinnamon.repo -o /etc/yum.repos.d/fedora-cinnamon.repo
+sudo yum install cinnamon
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注销后登陆选择 cinnamon即可&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;&lt;a href=&quot;http://forums.fedoraforum.org/showthread.php?t=276286&quot;&gt;Fedora 17 使用MATE桌面&lt;/a&gt;&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;MATE 是传统gnome2的一个分支。代码维护在github上&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install https://dl.dropbox.com/u/49862637/Mate-desktop/fedora_17/mate-desktop-fedora-updates/noarch/mate-desktop-release-17-4.fc17.noarch.rpm
+yum groupinstall MATE-Desktop
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;yum groupinstall&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;一般而言 yum 可以使用 intall 与 groupinstall 安装软件。install安装单个软件以及单个软件的依赖。而groupinstall 可以理解为打包安装许多软件以及这些软件的依赖&lt;/p&gt;
+
+&lt;p&gt;例如安装mysql&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install mysql
+yum groupinstall &quot;MySQL Database&quot;
+
+Group: MySQL Database
+ Description: This package group contains packages useful for use with MySQL.
+ Mandatory Packages:
+ mysql
+ Default Packages:
+ unixODBC
+ mysql-server
+ MySQL-python
+ mysql-connector-odbc
+ libdbi-dbd-mysql
+ perl-DBD-MySQL
+ Optional Packages:
+ mod_auth_mysql
+ mysql-devel
+ qt-MySQL
+ mysql-bench
+ php-mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由上面可以看出yum groupinstall 这种安装方式 会安装多个软件。以及自动解决安装包的依赖问题&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;alsa-lib-1.0.26-1.fc17.i686 与 alsa-lib-1.0.25-3.fc17.x86_64 冲突&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;今天在安装teamview时，官方在redhat系里面没有给出64位对应的安装包.其安装版本依赖许多32位的包，上面就是其中一个。无奈不能正常安装&lt;/p&gt;
+
+&lt;p&gt;这里使用先删除x64的包，然后在安装alsa-lib-1.0.26-1.fc17.i686 经验证成功安装&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;centos 常见的3个第三方源&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;EPEL RPMForge RPMFusion&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;linux ～用来表示 home目录&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;原因是80(1970s)年代 ,Lear-Siegler 生产的 ADM-3A 终端所用的键盘把～与home键在一起&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://upload.wikimedia.org/wikipedia/commons/a/a0/KB_Terminal_ADM3A.svg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.stack.imgur.com/L3esv.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;shell脚本罗列出所有名称中含有中文的文件和目录，并统计一下总数&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;find . -type f | grep -P -r &quot;[\x80-\xFF]&quot; | cat | wc -l&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Waiting for network configuration--ubuntu 11.10 解决方案&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;打开本机 进入11.04 系统(后升级到11.10)&lt;/p&gt;
+
+&lt;p&gt;首先是提示 waiting for the network configuration&lt;/p&gt;
+
+&lt;p&gt;然后是 Waiting for 60 seconds more for network configuration&lt;/p&gt;
+
+&lt;p&gt;最后是 booting system without full network configuration...&lt;/p&gt;
+
+&lt;p&gt;很是郁闷 最后 sudo vim /etc/network/interface 进入 修改配置文件 为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;auto lo
+iface lo inet loopback
+#auto eth0
+#iface eth0 inet dhcp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也就是注释掉 eth0 的网卡配置  开机速度飞快。。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;操作含有---- 名的文件&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;--是标准的去掉-特殊含义的方式。比如说touch -- ----就可以创建一个文件名为----的文件
+例如删掉----名的文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rm -- ----
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;top里面可以只列出某个名字的进程&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;top  -p 后根需要列出得到pid的值&lt;/p&gt;
+
+&lt;p&gt;top -p $(pgrep -d',' http)这个分为1.寻找含有http字符的进程名称的pid(注意pgrep的用法 -d表示结果用逗号区分)&quot;$()&quot;这种用法把结果直接拿来用需要学习&lt;/p&gt;
+
+&lt;p&gt;下面还有一个小例子&lt;/p&gt;
+
+&lt;p&gt;例：mysqld的信息&lt;/p&gt;
+
+&lt;p&gt;(1)得到mysqld进程的pid&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@6 ~]# pidof mysqld
+21538
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(2)top指定查看PID&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@6 ~]# top -p 21538
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;ACPI: [Package] has zero elements&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;华硕k52d 本本 上装得 fedora 17  64位  每一次启动都会出现
+ACPI: [Package] has zero elements
+然后有时可以顺利的进入系统有时停在此处 不知怎么解决。。&lt;/p&gt;
+
+&lt;p&gt;解决办法:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;*1.在 /etc/default/grub 修改如下
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR=&quot;Fedora&quot;
+GRUB_DEFAULT=saved
+GRUB_CMDLINE_LINUX=&quot; nomodeset rd.md=0 rd.lvm=0 rd.dm=0 SYSFONT=True  KEYTABLE=us rd.luks=0 LANG=en_US.UTF-8 rhgb quiet acpi=off&quot;&lt;/p&gt;
+
+&lt;p&gt;*2.grub2-mkconfig -o /boot/grub2/grub.cfg&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;em&gt;这里需要注意acpi必须为小写。之前一直大写搞了半天。。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;cannot open font file ture&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;fedora 17 上的错误修改如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vi /etc/default/grub 
+SYSFONT=True改掉就好 SYSFONT=latarcyrheb-sun16
+grub2-mkconfig -o /boot/grub2/grub.cfg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;查看安装软件的信息 包括时间包、依赖的包等信息&lt;/em&gt;**&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum history list
+yum history info 123
+yum history undo 123
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;linux系统剪贴板&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;linux 系统存在两个剪贴板  一个叫做选择缓冲区(X11 selection buffer)   另一个叫做剪切板(clipboard)&lt;/p&gt;
+
+&lt;p&gt;选择缓冲区是实时的，当使用鼠标选择内容时。即将内容复制到了选择缓冲区中。 剪贴板同 windows下的剪贴版。。&lt;/p&gt;
+
+&lt;p&gt;另外需要xterm复制用的是&lt;strong&gt;选择缓冲区&lt;/strong&gt; 当然现在还用这个的实在比较少了。。 鼠标中间的按钮一般是选择缓冲区或者shift+Insert&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Fedora中的kmod与akmod&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;由于许可证或使用规模等原因，一些硬件的驱动无法进入kernel，只能通过内核模块的形式来加载使用。在Fedora中如果你启用了rpmfusion-nonfree源，你会看到大量kmod-打头的软件包，大多都是rpmfusion帮我们编译、打包好的各类私有驱动（比如nvidia、ati的显卡驱动，broadcom的网卡驱动等等）&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Fedora中的kmod与akmod区别&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;akmod&lt;strong&gt;没有子包，而kmod&lt;/strong&gt;则有大量的子包akmod替代kmod是大势所趋&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;每次开机都会出现 Enter password for default keyring to unlock?    然后要求输入密码？甚是烦躁。。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;解决办法。。 Right-click on the NetworkManager icon on your panel and select edit connections. Click the Wireless tab and select your network. Click Edit and tick the checkbox on the bottom that says &quot;Available to all users&quot;. Click apply.   也就是链接的这个无限要求输入密码。。。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;fedora 17 开机 都会出现  error: file '/boot/grub2/locale/en.mo.gz' not found&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;解决办法。   sudo cp /boot/grub2/locale/uk.mo /boot/grub2/locale/en.mo&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;markdown 语法中 向这种&amp;lt;decoded_as&gt; 的不能现实呀。？？？ 怎么办？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;一般来说 markdown 对特殊语法 前加入&quot;\&quot;  即可转议，但是这个却不行，目前解决办法 是在 &quot;&amp;lt;&quot; 之后加入空格&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;如何保障 linux的临时文件目录  一般为/var/temp  或者 /temp &lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;由于没有另外分区 导致其分区选项与/ 相同 这样 不能更小的粒度。最好 的是 另外一个分区 然后 修改挂在这个分区的选项&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;PS1 是用来设置命令提示符的环境变量 修改的是 yuanjia@yuanjia-K52Dr:~$ 的格式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ls --color=auto 用来显示ls展示的目录 文本 具有的颜色&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;可以在 terminal 上使用  control-v 粘帖的一段代码。。这个很好用奥。。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Make Control-v paste, if in X and if xclip available - Josh Triplett
+if [ -n &quot;$DISPLAY&quot; ] &amp;amp;&amp;amp; [ -x /usr/bin/xclip ] ; then
+    # Work around a bash bug: \C-@ does not work in a key binding
+    bind '&quot;\C-x\C-m&quot;: set-mark'
+    # The '#' characters ensure that kill commands have text to work on; if
+    # not, this binding would malfunction at the start or end of a line.
+    bind 'Control-v: &quot;#\C-b\C-k#\C-x\C-?\&quot;$(xclip -o -selection c)\&quot;\e\C-e\C-x\C-m\C-a\C-y\C-?\C-e\C-y\ey\C-x\C-x\C-d&quot;'
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;alias 命令使用&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;若仅输入alias，则可列出目前所有的别名设置。　alias的效力仅及于该次登入的操作。若要每次登入是即自动设好别名，可在/etc/profile或自己的~/.bashrc中设定指令的别名。
+ 例如  alias httpserver='python -m SimpleHTTPServer&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ubuntu 目录太深？ 向fedora 那样只显示当前目录？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;打开 /etc/bash.rc  找到  PS1='${debian&lt;em&gt; chroot:+($debian&lt;/em&gt; chroot)}\u@\h:\w\$ '  更改为  小写w改为大写W&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;What's the command to open a file in GUI?&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xdg-open filepath
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;关于环境变量。(以下来自larmbr zhan 网友)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;LC&lt;em&gt;*形环境变量的优先级是：LC_ALL &gt; LC&lt;/em&gt;* &gt; LANG.&lt;/p&gt;
+
+&lt;p&gt;具体地说，&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;&lt;em&gt;1.就是如果定义了LC_ALL ，则它覆盖了所有LC_&lt;/em&gt;变量的定义，所有规则都遵从LC_ALL的
+定义。 （注意，这个变量不要设定，它的存在价值可能仅在于定义了一个新locale后，作测试用)&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;2. 如果LC_ALL没设定(合理的方法是应该一直这么做)。则由LC_&lt;/em&gt;细粒度地定义了各个方面，
+如关于字符集LC_CTYPE. 关于货币符号LC_MONETARY，关于提示信息LC_MESSAGES等。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;  所以本例中，你应该设定这个变量. 对于GNU家族的工具集，
+  那么如果LC_MESSAGES， 则LANGUAGE值起到和它一样的作用，如你所设。&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;&lt;em&gt;3. 如果LC_ALL, 及LC_&lt;/em&gt;都没设定，那么会读取 LANG 的设定。&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;about 缓冲区？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;windows 的缓冲区只有一个 全局的缓冲区（Clipboard，剪贴板）&lt;/p&gt;
+
+&lt;p&gt;*nix (The X server)里面貌似有 4个？(主（Primary）选择，一种是剪贴板（Clipboard）选择。其实还有一个副（Secondary）选择 貌似还有一个 剪切缓冲区 CUT_BUFFER0 在这四个缓冲区中  貌似其中的 副 选择 和  CUT_BUFFER0 已经不太用了。。)  但是 VNC 还是使用的 CUT_BUFFER0  这个缓冲区传递数据。所以这里牵扯了一些同步的问题。。。好多VNC 使用 autocutsel(http://www.nongnu.org/autocutsel/) 来同步 缓冲区。。。。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;shell 脚本传递变量&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/bin/shell
+#file test.sh
+if [ -z ${PARAM1} ]; then
+    PARAM1=test1
+fi
+echo ${PARAM1}
+
+PARAM1=hello sh test.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;关于wget伪装成浏览器的行为 更改user-agent&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;今天在拔 http://mahua.jser.me/  网站的css时候遇到了一个问题.. 刚开始使用 wget 下载 js 还可以 然后就不行了..&lt;/p&gt;
+
+&lt;p&gt;但是浏览器是可以打开的 这时候 使用&lt;/p&gt;
+
+&lt;p&gt;wget --user-agent=&quot;Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 (.NET CLR 3.5.30729)&quot; http://mahua.jser.me/ace/keybinding-vim.js&lt;/p&gt;
+
+&lt;p&gt;成功下载 看来对方使用验证 UA的小计量了......&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于github 项目的语言标签的问题&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;今天上传了 &lt;a href=&quot;&quot;&gt;flaskapp&lt;/a&gt; 项目时 发现github检测到的项目为javascript(应该为python 更贴切点吧) 于是查了些资料
+&lt;a href=&quot;http://stackoverflow.com/questions/5318580/how-does-github-figure-out-a-projects-language&quot;&gt;问题看这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;检测算法项目&lt;a href=&quot;https://github.com/github/linguist&quot;&gt;在这里&lt;/a&gt;  有时间看看它的这个算法是怎么搞得..不过貌似没有读内容就是查看了后缀?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;linux 下图像格式转换&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;convert xiyoulaoyuanjia.png  xiyoulaoyuanjia.gif&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;把 xiyoulaoyuanjia.png 格式转换为  xiyoulaoyuanjia.gif   注意此时 xiyoulaoyuanjia.png 图片格式不变&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;convert  -resize 16x16! xiyoulaoyuanjia.gif  flaskWeb.gif&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;把  xiyoulaoyuanjia.gif  图片缩小为 16x16 像素的  注意后面的叹号(!)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;bash 脚本的几个问题&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;今天再看 ossec 中的 ossec-control 脚本时遇到的几个问题,这里记录下.&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&quot;sudo cat   /var/ossec/var/run/ossec-logcollect&lt;em&gt;.pid &quot; 与 su &amp;amp;&amp;amp; cat   /var/ossec/var/run/ossec-logcollect&lt;/em&gt;.pid 的区别?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;当然如果你想着一样那么就错了...至于原因who knows?&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;脚本中有一段 kill -0 process 干什么呢?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/questions/11012527/what-does-kill-0-pid-in-a-shell-script-do&quot;&gt;看这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;ol&gt;
+&lt;li&gt;查看进程十分running?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;ol&gt;
+&lt;li&gt;查看进程能否接受信号&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;3 &quot;.&quot; 在shell 中的应用 用来引入环境变量  例如  . 文件名 A  在 A中写 LIANX=&quot;fff&quot;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;看 ossec 如何使用？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;. ./src/init/update.sh
+    # Is this an update?
+    if [ &quot;`isUpdate`&quot; = &quot;${TRUE}&quot; -a &quot;x${USER_CLEANINSTALL}&quot; = &quot;x&quot; ]; then
+        echo &quot;&quot;
+        ct=&quot;1&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;isUpdate 在 update.sh 中定义为 一个函数 . 或者 source 之后直接就 可以当作
+命令使用了&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;gcc include 查找路径&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这里忽略复杂的问题.. /var/include 与 /var/local/include&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;输入法的问题&lt;/strong&gt;*&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;安装 google 输入法&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;添加源：
+sudo add-apt-repository ppa:fcitx-team/nightly
+sudo apt-get update&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;安装Fcitx、Fcitx-googlepinyin&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;sudo apt-get install fcitx fcitx-googlepinyin&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;安装 搜狗输入法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;sudo apt-get install  fcitx-sogoupinyin&lt;/p&gt;
+
+&lt;p&gt;貌似在ubuntu的12.10 中有错误。。&lt;/p&gt;
+
+&lt;p&gt;im-switch 转换输入法&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;blkid 有用的一个命令&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;/dev/sda1: LABEL=&quot;window 7&quot; UUID=&quot;D058935E58934260&quot; TYPE=&quot;ntfs&quot;
+/dev/sda10: LABEL=&quot;M-eM-(M-1M-dM-9M-^P&quot; UUID=&quot;0006E42B000753BB&quot; TYPE=&quot;ntfs&quot;
+/dev/sda5: LABEL=&quot;M-hM-=M-/M-dM-;M-6&quot; UUID=&quot;0007165D000660F4&quot; TYPE=&quot;ntfs&quot;
+/dev/sda7: LABEL=&quot;_Fedora-17-x86_6&quot; UUID=&quot;3b9eea35-98aa-4c24-b255-4f40585079b7&quot; TYPE=&quot;ext4&quot;
+/dev/sda8: LABEL=&quot;M-fM-^VM-^GM-fM-!M-#&quot; UUID=&quot;000A0C6100003D53&quot; TYPE=&quot;ntfs&quot;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;安装 Ubuntu restricted extras软件包 包含常用的一些 受限软件 安装完系统之后第一时间可以安装这个&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;删除除××之外的文件&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;rm 没有 exclude 选项 考虑使用 管道方式组合使用命令&lt;/p&gt;
+
+&lt;p&gt;例如 sudo rm  -f &lt;code&gt;ls | grep -v partial&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;history 命令 &lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;之前一直没有使用过这个命令 最近在 &lt;a href=&quot;http://cloudbbs.org/forum.php?mod=viewthread&amp;amp;tid=13726&quot;&gt;这里&lt;/a&gt;
+看到了 感觉挺好用的 这里做一个小总结。。就当作备忘了。&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;history 可以显示 之前执行的命令 但是默认没有时间显示。。如果需要修改此格式可以
+通过设置 HISTTIMEFORMAT 变量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;export HISTTIMEFORMAT='%F %T '
+# history | more
+1 2008-08-05 19:02:39 service network restart
+2 2008-08-05 19:02:39 exit
+3 2008-08-05 19:02:39 id
+4 2008-08-05 19:02:39 cat /etc/redhat-release
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;ctrl+r 命令的使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个命令是在consol 里面搜索 之前执行过的命令，找到之后可以直接按 回车键执行。修改 可以按
+左或者右方向键。。
+&lt;img src=&quot;http://openapi.vdisk.me/?m=file&amp;amp;a=download_share_file&amp;amp;ss=e803E8HsauaVMaQlToyhWYrTrqMF6bEnkbs--2FdsDHgMPsC9el8v0x6XAL--2BGktC22--2BT7O--2Fs4a--2Fsi7Hx8rxCNfmrRvzleRe&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;快速执行上一条命令&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这里列出了 4条方案&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;使用上方向键，并回车执行。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;!! 并回车&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;!-1 并回车&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;按 Ctrl+P 并回车执行&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;通过序号执行一个指定的命令&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;# !4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;使用 HISTSIZE 控制历史命令记录的总行数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;默认是 500&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;更改默认历史命令记录文本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;默认情况下，命令历史存储在 ~/.bashhistory 文件中
+更改HISTFILE&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# vi ~/.bash_profile
+HISTFILE=/root/.lianxi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;使用 HISTCONTROL 从命令历史中剔除连续重复的条目&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;export HISTCONTROL=ignoredups&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;清除所有的命令历史&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;history -c
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;使用 HISTSIZE 禁用 history&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;export HISTSIZE=0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;使用 HISTIGNORE 忽略历史中的特定命令&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt; export HISTIGNORE=&quot;pwd:ls:ls -ltr:&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;关于浮点数的小理解&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;原因，简单的说是因为一些十进制有限小数在2进制中是无限小数。
+解决方法，搜索 decimal&lt;/p&gt;
+
+&lt;p&gt;可以看看python 中的解释。
+http://docs.python.org/2/tutorial/floatingpoint.html&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Apt-get GPG Error: Public Key Not Available&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;看到一篇十分好的&lt;a href=&quot;http://www.rebelzero.com/fixes/apt-get-gpg-error-public-key-not-available/88&quot;&gt;文章&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;解决这种方法的思路&lt;/p&gt;
+
+&lt;p&gt;wget -q &quot;http://keyserver.ubuntu.com:11371/pks/lookup?op=get&amp;amp;search=0x4874D3686E80C6B7&quot; -O- | sudo apt-key add -&lt;/p&gt;
+
+&lt;p&gt;4874D3686E80C6B7 为 错误id&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;在shell 中如何判断 一个变量被赋值没有？ 看 ossec 如何实现的？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# If user language is not set
+    if [ &quot;X${USER_LANGUAGE}&quot; = &quot;X&quot; ]; then 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好吧。我承认这也是一种方法。。。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;shell 中if 的逻辑表达式 &lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;* 逻辑非 ! 
+    if [ ! 表达式 ]
+&amp;gt;* 逻辑与 –a  
+    if [ 表达式1  –a  表达式2 ]
+&amp;gt;* 逻辑或 -o
+    if [ 表达式1  –o 表达式2 ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看ossec中如何使用的&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Choosing the language.
+    while [ 1 ]; do
+    echo &quot;&quot;
+    for i in `ls ${TEMPLATE}`; do
+        # ignore CVS (should not be there anyways and config)
+        if [ &quot;$i&quot; = &quot;CVS&quot; -o &quot;$i&quot; = &quot;config&quot; ]; then continue; fi
+        cat &quot;${TEMPLATE}/$i/language.txt&quot;
+        if [ ! &quot;$i&quot; = &quot;en&quot; ]; then
+            LG=&quot;${LG}/$i&quot;
+        fi
+    done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;在终端下使用vim的命令  注意终端下只有 插入与命令模式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;开启 默认是在插入模式下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; set -o vim 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;切换到 命令模式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ESc 键
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;bash 的 cmd  &amp;lt;(subcmd)特殊用法&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这是bash的一个特殊构造： cmd  &amp;lt;(subcmd) 表示将subcmd输出的管道作为文件传递 给cmd作为参数&lt;/p&gt;
+
+&lt;p&gt;例如
+diff &amp;lt;(echo {1..10})  &amp;lt;(echo {2..10})&lt;/p&gt;
+
+&lt;p&gt;再比如
+ls -l &amp;lt;(echo {1..10})&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;443 端口是 https 默认采用的端口&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;gcc -Wall   ssl-demo.c -lssl -o ssl-demo 与 gcc -Wall    -lssl ssl-demo.c  -o ssl-demo
+的 区别 &lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;今天在测试一段 ssl的代码时发现 gcc -Wall   ssl-demo.c -lssl -o ssl-demo 会执行错误
+调整了 -lssl  的顺序之后 正常 。。很是诡异。。。
+测试代码如下：
+https://gist.github.com/xiyoulaoyuanjia/cd2bb25e394d06b92403&lt;/p&gt;
+
+&lt;p&gt;这里顺便回忆下动态库的加载顺序&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;编译目标代码时指定的动态库搜索路径；&lt;/li&gt;
+&lt;li&gt;环境变量LD_LIBRARY_PATH指定的动态库搜索路径；&lt;/li&gt;
+&lt;li&gt;配置文件/etc/ld.so.conf中指定的动态库搜索路径；&lt;/li&gt;
+&lt;li&gt;默认的动态库搜索路径/lib；&lt;/li&gt;
+&lt;li&gt;默认的动态库搜索路径/usr/lib。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>理解python中的元类</title>
+   <link href="http://julianyap.com/2012/02/15/%E7%90%86%E8%A7%A3python%E4%B8%AD%E7%9A%84%E5%85%83%E7%B1%BB.html"/>
+   <updated>2012-02-15T23:24:52+08:00</updated>
+   <id>http://julianyap.com/2012/02/15/理解python中的元类</id>
+   <content type="html">&lt;h1&gt;理解python中的元类&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.jobbole.com/21351/&quot;&gt;note:参考这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;类也是对象&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;一般而言类是描述如何生成对象的代码断。但是python中的类还远不止此,只有使用new关键字。python就生成了对象&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; class ObjectCreator(object):
+…       pass
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;则此时在内存中创建了一个对象.这个对象的名称为ObjectCreator。也就是说它拥有对象的特征。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;可以将它赋值给变量&lt;/li&gt;
+&lt;li&gt;可以拷贝它&lt;/li&gt;
+&lt;li&gt;可以增加属性&lt;/li&gt;
+&lt;li&gt;可以作为参数传递&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;&lt;strong&gt;动态地创建类&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这里注意因为类是对象,所以可以在运行的时候动态的创建&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; def choose_class(name):
+…       if name == 'foo':
+…           class Foo(object):
+…               pass
+…           return Foo     # 返回的是类，不是类的实例
+…       else:
+…           class Bar(object):
+…               pass
+…           return Bar
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;type 在动态生成对象的使用。可以接受一个类的描述返回一个类。使用格式为&lt;/p&gt;
+
+&lt;p&gt;type(类名, 父类的元组（针对继承的情况，可以为空），包含属性的字典（名称和值）)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; MyShinyClass = type('MyShinyClass', (), {})  # 返回一个类对象
+&amp;gt;&amp;gt;&amp;gt; print MyShinyClass
+&amp;lt;class '__main__.MyShinyClass'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; print MyShinyClass()  #  创建一个该类的实例
+&amp;lt;__main__.MyShinyClass object at 0x8997cec&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里需要重点知道动态的为类增加方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; def echo_bar(self):
+…       print self.bar
+…
+&amp;gt;&amp;gt;&amp;gt; FooChild = type('FooChild', (Foo,), {'echo_bar': echo_bar})
+&amp;gt;&amp;gt;&amp;gt; hasattr(Foo, 'echo_bar')
+False
+&amp;gt;&amp;gt;&amp;gt; hasattr(FooChild, 'echo_bar')
+True
+&amp;gt;&amp;gt;&amp;gt; my_foo = FooChild()
+&amp;gt;&amp;gt;&amp;gt; my_foo.echo_bar()
+True
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从上面可以看出可以动态的创建类.当然上面其实是new关键字幕后所作的事情&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;什么是元类&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;元类是用来创建类的东西。元类就是类的类&lt;/p&gt;
+
+&lt;p&gt;注意 所有东西（整型，字符串、函数、类）都是对象&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; age = 35
+&amp;gt;&amp;gt;&amp;gt; age.__class__
+&amp;lt;type 'int'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; name = 'bob'
+&amp;gt;&amp;gt;&amp;gt; name.__class__
+&amp;lt;type 'str'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; def foo(): pass
+&amp;gt;&amp;gt;&amp;gt;foo.__class__
+&amp;lt;type 'function'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; class Bar(object): pass
+&amp;gt;&amp;gt;&amp;gt; b = Bar()
+&amp;gt;&amp;gt;&amp;gt; b.__class__
+&amp;lt;class '__main__.Bar'&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然这里有一个很有意思的问题&lt;strong&gt;class&lt;/strong&gt;的&lt;strong&gt;class&lt;/strong&gt;是什么呢？&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a.__class__.__class__
+&amp;lt;type 'type'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; age.__class__.__class__
+&amp;lt;type 'type'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; foo.__class__.__class__
+&amp;lt;type 'type'&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; b.__class__.__class__
+&amp;lt;type 'type'&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所以元类就是用来创建类这种东西的类了&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class Foo(Bar):
+    pass
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;python分析的步骤为&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Foo中有&lt;strong&gt;metaclass&lt;/strong&gt;这个属性吗？如果是，Python会在内存中通过&lt;strong&gt;metaclass&lt;/strong&gt;创建一个名字为Foo的类对象（我说的是类对象，请紧跟我的思路）。如果Python没有找到&lt;strong&gt;metaclass&lt;/strong&gt;，它会继续在Bar（父类）中寻找&lt;strong&gt;metaclass&lt;/strong&gt;属性，并尝试做和前面同样的操作。如果Python在任何父类中都找不到&lt;strong&gt;metaclass&lt;/strong&gt;，它就会在模块层次中去寻找&lt;strong&gt;metaclass&lt;/strong&gt;，并尝试做同样的操作。&lt;/li&gt;
+&lt;li&gt;如果还是找不到&lt;strong&gt;metaclass&lt;/strong&gt;,Python就会用内置的type来创建这个类对象。&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;自定义元类&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 元类会自动将你通常传给‘type’的参数作为自己的参数传入
+def upper_attr(future_class_name, future_class_parents, future_class_attr):
+    '''返回一个类对象，将属性都转为大写形式'''
+    #  选择所有不以'__'开头的属性
+    attrs = ((name, value) for name, value in future_class_attr.items() if not name.startswith('__'))
+ # 将它们转为大写形式
+    uppercase_attr = dict((name.upper(), value) for name, value in attrs)
+
+    # 通过'type'来做类对象的创建
+    return type(future_class_name, future_class_parents, uppercase_attr)
+
+__metaclass__ = upper_attr  #  这会作用到这个模块中的所有类
+
+class Foo(object):
+    # 我们也可以只在这里定义__metaclass__，这样就只会作用于这个类中
+    bar = 'bip'
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面很重要的一点是&lt;em&gt;作用范围&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;结语&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;python中一切都是实例。要么是类的实例。要么是元类的实例.当然除了type。当然一般修改类还是使用以下两种方法&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;ul&gt;
+&lt;li&gt;Monkey patching&lt;/li&gt;
+&lt;li&gt;class decorators&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;ps &lt;a href=&quot;http://stackoverflow.com/questions/100003/what-is-a-metaclass-in-python&quot;&gt;参考这里&lt;/a&gt;&lt;/p&gt;
+</content>
  </entry>
  
  

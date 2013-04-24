@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>gnome 下的几种 Box message</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>gnome 下的几种 Box message</h1>
+
+<div id="post">
+<h1>gnome popup Box message </h1>
+
+<p>之前写一些要用的脚本的时候.苦于没有找到方便的可视化消息通知方法
+之前的做法是是使用pyqt 写一些简单的message box 可以见<a href="https://github.com/xiyoulaoyuanjia/GetVdiskLink">这里</a></p>
+
+<p>后来在<a href="http://smashingweb.info/send-messages-over-network-gnome-popup-box-message/">这里</a>
+发现了gnome下的一些常用的Box message  方法。感觉用着很舒服。。这里推荐给大家</p>
+
+<p><strong>zenity:It will display a default ok box on the screen</strong></p>
+
+<blockquote><ul>
+<li>display  GTK+ dialogs</li>
+<li>输出 ”message here“ 信息</li>
+</ul>
+</blockquote>
+
+<pre><code>zenity --info --text "message here"
+</code></pre>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=db92UKpsF8HUcwp1UHTtfeyhW4kyX9gebYU8Z6gBVkTRHTr5FmY1xPoZZzZ--2F--2BMl3xWWiO--2Bg5cTo8--2FZ82RvckEBeOIbMc" alt="" /></p>
+
+<blockquote><ul>
+<li>输出gtk标准日历</li>
+</ul>
+</blockquote>
+
+<pre><code>zenity  --calendar
+</code></pre>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=8da6YLsDYCnzz97bD0p--2BVWTJipB7Jap6KF26CUT1YajYJzjhxdnrOfZBWffhFyqMKbf5ifKL0yS1O946ClbAobf--2Fw7FD" alt="" /></p>
+
+<p>更详细的用法参见 man zenity</p>
+
+<p>这里有一篇<a href="http://en.wikipedia.org/wiki/Zenity">wikipedia 的介绍</a></p>
+
+<p><strong>notify-send:系统提示托盘</strong></p>
+
+<blockquote><ul>
+<li><p>notify-send ["title"] "message"</p></li>
+<li><p>notify-send ["title"] "message" -t 500</p></li>
+</ul>
+</blockquote>
+
+<p>这里 -t 表示显示时间</p>
+
+<p>我在我的连接校园网的程序中也应用了这个。。。感觉比自己写好看多了</p>
+
+<p><a href="https://github.com/xiyoulaoyuanjia/blog/blob/master/%E5%85%B3%E4%BA%8E%E5%8C%97%E9%82%AE%E6%A0%A1%E5%9B%AD%E7%BD%91%E7%99%BB%E5%BD%95%E7%A8%8B%E5%BA%8F.md">这里</a></p>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=b3d344--2FxLktIPmUVQn6KtbjbBClvLBx2AMZ3tC--2Blw2c--2Fhq2bVDo7GgYdp7fLKwJNg7K2wEOGfPqP9dHVWL0WzujDdvEZ" alt="" /></p>
+
+<p><strong>xmessage</strong></p>
+
+<p>这个程序主要依赖 x libary 产生消息框的程序</p>
+
+<p>这个可以用来做一些shell层的选在框</p>
+
+<pre><code>xmessage  "Are you sure you want to shutdown? " -buttons yes,no
+echo $?
+</code></pre>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=b8a4QzDUEFUpVNIH7B328--2FGiSJcaTHjF--2FvosYrlkt2pjU--2F8DS2rNs--2Fa--2BQOOojpsXbMsledIcUzBfmtol--2BJVoHyq--2B--2BS0R" alt="" /></p>
+
+<p>或者</p>
+
+<pre><code>answer=$(xmessage  "Are you sure you want to shutdown? " -buttons yes,no -print)
+echo $answer
+</code></pre>
+
+<p>常用的一些选项</p>
+
+<pre><code>-center – the message at center   
+-nearmouse – the message near mouse
+-timeout secs – will close after some seconds.
+</code></pre>
+
+<p>更多的可以 man xmessage 查看</p>
+
+<p><strong>Over SSH</strong></p>
+
+<pre><code>DISPLAY=:0; XAUTHORITY=~owner_of:0/.Xauthority; export DISPLAY XAUTHORITY
+</code></pre>
+
+<p>这个没有实践不多说....</p>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container">16 AUGUST 2012 @ 04:29AM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">21 Apr 2013</span> &raquo; <a href="/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html">使用ajax上传文档</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html">python 中 sqlite3 的使用</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

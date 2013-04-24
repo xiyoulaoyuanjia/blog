@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>python 中 sqlite3 的使用</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>python 中 sqlite3 的使用</h1>
+
+<div id="post">
+<h1>python 中 sqlite3 的使用</h1>
+
+<p><strong>优点使用方便但是功能相比较其它大型数据库有所差距</strong></p>
+
+<p><strong>python的数据库模块有统一的接口，操作基本有统一的模式</strong></p>
+
+<p>假设数据库模块名称为 sqlite3</p>
+
+<blockquote><ul>
+<li>创建数据库连接 sqlite3.connect,返回连接对象为com</li>
+<li>如果不需要返回结果可以直接com.execute 查询。有时需要使用 com.commit 提交事务</li>
+<li><p>如果需要查询返回结果。则需要使用游标 com.cursor 创建游标对象 cur.. 通过cur.execute 查询数据库
+用 cur.fetchall/cur.fetchone/cur.fetchmany 获取查询结果. 这里根据事物级别不同有时需要
+cur.commit</p></li>
+<li><p>关闭 cur 与 com</p></li>
+</ul>
+</blockquote>
+
+<p><strong>python 实例</strong></p>
+
+<blockquote><ul>
+<li>导入模块</li>
+</ul>
+</blockquote>
+
+<pre><code>import sqlite3
+</code></pre>
+
+<blockquote><ul>
+<li>创建打开数据库 (存在则打开不存在则创建)</li>
+</ul>
+</blockquote>
+
+<pre><code>com=sqlite3.connect("sql.db")
+</code></pre>
+
+<blockquote><ul>
+<li>返回的 com 是一个数据库连接对象 它有如下的操作</li>
+</ul>
+
+
+<blockquote><ul>
+<li>commit()   提交事务</li>
+<li>rollback()  事务回滚</li>
+<li>close()    关闭数据库连接</li>
+<li>cursor()    创建游标</li>
+</ul>
+</blockquote>
+
+<ul>
+<li>python  sqlite3 游标的使用</li>
+</ul>
+
+
+<blockquote><ul>
+<li>游标提供了一种从表中检索数据的简单方法</li>
+<li>游标本质上是一种可以从多个结果集中取出一条记录的机制</li>
+<li>游标是由<strong>结果集</strong>以及指定特定位置的<strong>游标位置</strong></li>
+<li><p>可以把游标比喻为文件句柄</p></li>
+<li><p>创建游标对象</p></li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cur=com.cursor
+</code></pre>
+
+<p>游标对象 cur 常用操作</p>
+
+<blockquote><blockquote><blockquote><ul>
+<li>execute()  执行sql 语句</li>
+<li>executemany  执行多条sql语句</li>
+<li>close()    关闭游标</li>
+<li>fetchone()  从结果中取出一条记录 并把游标指向下一个</li>
+<li>fetchmany()  从结果中取出多条记录。并移动游标</li>
+<li>fetchall()   从结果中取出所有记录</li>
+<li>scroll()  滚动游标</li>
+</ul>
+</blockquote>
+
+<ul>
+<li>建表</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute('create table catalog (id integer primary key,pid integer,name varchar(10) UNIQUE）') 
+</code></pre>
+
+<p>建立 表 catalog  主键为 id</p>
+
+<blockquote><blockquote><ul>
+<li>插入数据库</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("insert into catalog values(0, 0, 'name1')")  
+cu.execute("insert into catalog values(1, 0, 'hello')")
+</code></pre>
+
+<p><strong>注意:这样子插入需要自己做特殊字符的转义</strong></p>
+
+<p>sqlite3 中的处理方法</p>
+
+<pre><code>  executeTemplate="insert into  blog_entries(href,title,text) values (?,?,?)" 
+  com.execute(executeTemplate,(globalName[key]['href'],globalName[key]['title'],globalName[key]['content']))
+</code></pre>
+
+<p>mysql 中的处理方法</p>
+
+<pre><code>  import MySQLdb
+  s = """test!42''354542"""
+  print MySQLdb.escape_string(s)
+</code></pre>
+
+<p>这里需要注意需要使用连接对象提交 com.commit 才能生效</p>
+
+<blockquote><blockquote><ul>
+<li>查询</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("select * from catalog")
+print cu.fetchall()  打印所有结果
+</code></pre>
+
+<blockquote><blockquote><ul>
+<li>修改</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("update catalog set name='name2' where id = 0") 
+cx.commit() 注意,修改数据以后提交
+</code></pre>
+
+<blockquote><blockquote><ul>
+<li>删除</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("delete from catalog where id = 1")  
+cx.commit()
+</code></pre>
+
+<p><strong>note:可以通过修改 conn.isolation_level = None 避免每次都需要commit的麻烦</strong></p>
+
+<p><a href="https://gist.github.com/xiyoulaoyuanjia/31bb4783c900123cc7e3">完整示例</a></p>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container">16 APRIL 2013 @ 04:29AM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">21 Apr 2013</span> &raquo; <a href="/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html">使用ajax上传文档</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/cookies-and-%E7%BC%93%E5%AD%98.html">cookies and 缓存</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

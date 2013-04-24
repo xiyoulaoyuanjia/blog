@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   
+   <title>关于北邮校园网登录程序</title>
+   
+   <meta name="author" content="xiyoulaoyuanjia" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
+   <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
+   <link rel="shortcut icon" href="/favicon.ico" />
+
+   <!-- syntax highlighting CSS -->
+   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+
+   <!-- Homepage CSS -->
+   <!--
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <div class="sixteen columns title">
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
+  </div>
+  
+  <div class="eleven columns">
+  
+<h1>关于北邮校园网登录程序</h1>
+
+<div id="post">
+<p><strong>关于北邮校园网登录程序</strong></p>
+
+<blockquote><ul>
+<li>这个不是破解认证。仅仅是自动认证。。</li>
+<li>目前支持的热点。。 学十宿舍网  bupt2校内网</li>
+<li>环境为 ubuntu 12.10</li>
+<li>程序在<a href="https://gist.github.com/xiyoulaoyuanjia/2d63e1b41ec711f8d5e1">这里</a></li>
+</ul>
+</blockquote>
+
+<p><strong>关于 自动登录</strong></p>
+
+<p>这个使用了 request 相对而言比较简单。。仅仅是把密码 进行了 md5 的加密转换成16进制输出</p>
+
+<p>例如如果想计算自己密码的 加密之后的密文可以按如下操作</p>
+
+<pre><code>&gt;&gt;&gt; import hashlib
+&gt;&gt;&gt; hashlib.md5("124").hexdigest()
+'c8ffe9a587b126f152ed3d89a146b445'
+&gt;&gt;&gt; 
+</code></pre>
+
+<p><strong>如何做到每次热点接入后自动认证呢？</strong></p>
+
+<p>之前考虑 直接调用 NetworkManager Api <a href="http://projects.gnome.org/NetworkManager/">这里</a>  操作
+当然这样可以做的事情就比较多了。。而且还看了 python 的<a href="http://cgit.freedesktop.org/NetworkManager/NetworkManager/tree/examples/python">demo</a>
+感激非常的棒</p>
+
+<p>后来 在网上看到 这个<a href="http://t.du9l.com/post/40">资料</a> 觉得不错。。 这里感谢这个作者
+后来就直接拿过来用了。。至少现在可以满足我的要求。</p>
+
+<blockquote><ul>
+<li>下载下来放到 /etc/NetworkManager/dispatcher.d/ 中</li>
+<li>注意修改可执行文件</li>
+</ul>
+</blockquote>
+
+<p><strong>关于登录成功的窗口通知</strong></p>
+
+<p>本想着这个可能十分简单的事情。。谁知道 确实花费时间最多的。。</p>
+
+<p>“问题是我需要执行的脚本会执行 。。但是里面的 zenity弹出框怎么也不出来。。
+为了排除是python的脚本问题。。我直接把命令放在了shell里面。也还是没有结果。。。。
+我已经查看了 networking 的日志</p>
+
+<p>nm-dispatcher.action: Script  exited with error status 1”`</p>
+
+<p>后来在以为邮件列表中的网友的帮助下。。</p>
+
+<p>修改了之前的程序。。
+方法如下:</p>
+
+<blockquote><ul>
+<li>增加环境变量</li>
+</ul>
+</blockquote>
+
+<pre><code>export DISPLAY=:0 
+</code></pre>
+
+<blockquote><ul>
+<li>增加 对 x的访问权限</li>
+</ul>
+</blockquote>
+
+<pre><code>xhost local: 1&gt;/dev/null
+</code></pre>
+
+<p>这里参考了一些资料</p>
+
+<p><a href="http://www.leidinger.net/X/xhost.html">xhost</a></p>
+
+<p><a href="http://promberger.info/linux/2009/01/02/running-x-apps-like-zenity-from-crontab-solving-cannot-open-display-problem/">cannot-open-display-problem</a></p>
+
+<p>算是解决了吧。。如下图</p>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=b3d344--2FxLktIPmUVQn6KtbjbBClvLBx2AMZ3tC--2Blw2c--2Fhq2bVDo7GgYdp7fLKwJNg7K2wEOGfPqP9dHVWL0WzujDdvEZ" alt="" /></p>
+
+<p>对于 第二个有一个小问题。。现在是把上述命令放在了 startup application(ubuntu) 中 每次开机都需要运行上述命令。。
+这个不能记录更改操作吗？  好吧。。这个先留着。。。</p>
+
+<p><strong>关于bupt2校内网</strong></p>
+
+<p>这个是最简单的。但也是花费我时间最长的一个。。</p>
+
+<p>之前一直是用 python的requests 库做的。。</p>
+
+<p>测试requests 如下:</p>
+
+<pre><code>&gt;&gt;&gt; requests.post(url,data={"PtUser":111,"PtPwd":33})
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "/usr/local/lib/python2.7/dist-packages/requests/api.py", line 88, in post
+    return request('post', url, data=data, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 354, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 460, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/adapters.py", line 246, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='10.8.128.1', port=80): Max retries exceeded with url: /portal/logon.cgi (Caused by &lt;class 'httplib.BadStatusLine'&gt;: '')
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>于是顺着 Caused by <class 'httplib.BadStatusLine'>: 错误</p>
+
+<pre><code>exception httplib.BadStatusLine
+A subclass of HTTPException. Raised if a server responds with a HTTP status code that we don’t understand.
+</code></pre>
+
+<p>以为是服务器发送了不认识的状态吗 的思路考虑 以为是服务器block 爬虫..后来各种header 各种 UA 尝试均不成功</p>
+
+<p>不行，后来用 wget测试如下</p>
+
+<pre><code>wget --post-data "PtUser=111&amp;PtPwd=33" --header="User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31" --header="Referer: http://10.8.128.1/portal/logon.cgi?userip=10.8.160.134&amp;userurl=687474703a2f2f31302e332e382e323131" --header="Cookie: LPTSRVID=1202120206; lang=0" --header="Origin: http://10.8.128.1" --header="Host: 10.8.128.1"   http://10.8.128.1/portal/logon.cgi 
+
+
+Connecting to 10.8.128.1:80... connected. 
+HTTP request sent, awaiting response... No data received. 
+Retrying. 
+
+--2013-04-19 10:21:44--  (try: 2)  http://10.8.128.1/portal/logon.cgi 
+Connecting to 10.8.128.1:80... connected. 
+HTTP request sent, awaiting response... No data received. 
+Retrying. 
+</code></pre>
+
+<p>才发现是服务器端没有回应。。。</p>
+
+<p>于是从新从chrome 看post 数据。。终于。。发现 post 少传了一个参数 PtButton 导致。。。唉。。。</p>
+
+<p>修改之后终于完美got it</p>
+
+</div>
+
+<div>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="jyap" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+
+<div align="right" class="date-container">10 APRIL 2013 @ 04:10AM</div>
+
+<div id="related">
+  <h1>Related Posts</h1>
+  <ul class="posts">
+    
+      <li><span class="post_date">21 Apr 2013</span> &raquo; <a href="/2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html">使用ajax上传文档</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html">python 编码问题</a></li>
+    
+      <li><span class="post_date">16 Apr 2013</span> &raquo; <a href="/2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html">python 中 sqlite3 的使用</a></li>
+    
+  </ul>
+</div>
+
+
+  </div>
+  <div class="four columns offset-by-one">
+  <h1>Pages</h1>
+  <ul class="posts">
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/archives.html">Archives</a></li>
+    <li><a href="/pages/projects.html">Projects</a></li>
+  </ul>
+  <!-- AddThis Button BEGIN -->
+  <h1>Follow Me</h1>
+  <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
+  <!-- AddThis Button END -->
+  </div>
+
+  <div class="sixteen columns footer">
+    <div class="contact">
+      <p>
+        Copyright © xiyoulaoyuanjia now
+      </p>
+    </div>
+    <div>
+      <p>
+      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Analytics -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www2.julianyap.com/stats/" : "http://www2.julianyap.com/stats/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://www2.julianyap.com/stats/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+
+
+</body>
+</html>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    
-   <title>Julian Yap</title>
+   <title>xiyoulaoyuanjia</title>
    
-   <meta name="author" content="Julian Yap" />
+   <meta name="author" content="xiyoulaoyuanjia" />
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" />
+   <!--   <link href="http://feeds.julianyap.com/julianyap" rel="alternate" title="Julian Yap" type="application/rss+xml" /> -->
    <link href="https://plus.google.com/111539417571342089192" rel="publisher" />
    <link rel="shortcut icon" href="/favicon.ico" />
 
@@ -19,11 +19,14 @@
    <link rel="stylesheet" type="text/css" href="/css/base.css">
    <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
    <link rel="stylesheet" type="text/css" href="/css/layout.css">
-   <link rel="stylesheet" href="css/syntax.css" type="text/css" />  -->
+   -->
+   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
    <!-- Homepage CSS -->
-   <link rel="stylesheet" type="text/css" href="css/base.css">
-   <link rel="stylesheet" type="text/css" href="css/skeleton.css">
-   <link rel="stylesheet" type="text/css" href="css/layout.css">
+   <link rel="stylesheet" type="text/css" href="/css/base.css">
+   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="/css/layout.css">
 
 
 </head>
@@ -31,7 +34,7 @@
 
 <div class="container">
   <div class="sixteen columns title">
-    <a href="/" title="Julian Yap: Home">Julian Yap</a>
+    <a href="/" title="xiyoulaoyuanjia: Home">xiyoulaoyuanjia</a>
   </div>
   
   <div class="eleven columns">
@@ -42,29 +45,1594 @@
       <div class="front">
       
       
-        <div align="right" class="date-container">WEDNESDAY, 10 AUGUST 2011</div>
+        <div align="right" class="date-container">SUNDAY, 21 APRIL 2013</div>
       
       
         
-        <h1><a href="http://lists.centos.org/pipermail/centos-announce/2011-July/017660.html" title="External link">CentOS1111 6 minimal install CD - You may not want to bother with it</a> <a class="glyph-permalink" href="2011/08/10/centos-6-minimal-install-cd-you-may-not-want-to-bother-with-it.html" title="Permanent link to: 'CentOS1111 6 minimal install CD - You may not want to bother with it'">&diams;</a></h1>
+        <h1>使用ajax上传文档 <a class="glyph-permalink" href="2013/04/21/%E4%BD%BF%E7%94%A8ajax%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3.html" title="Permanent link to: '使用ajax上传文档'">&diams;</a></h1>
         
-        <p><strong>视图与url配置</strong></p>
+        <h1>使用ajax上传文档</h1>
 
-<p>一个视图就是一个python的函数,并且必须满足两个条件</p>
+<p><strong>note:<a href="http://net.tutsplus.com/tutorials/javascript-ajax/uploading-files-with-ajax">E文</a></strong></p>
 
-<blockquote>
-<ul>
-<li>函数的第一个类型必须是HttpRequest</li>
+<p><strong><a href="http://nettuts.s3.amazonaws.com/1020_ajaxupload/demo.zip">代码</a></strong></p>
+
+<p><strong>为什么不在最后告诉你这个不好的消息呢?这个并不是在每一个浏览器中都适用的</strong></p>
+
+<p>我们项目用到的主要的3个组建</p>
+
+<blockquote><ul>
+<li>"&lt;"input> 中的  multiple 属性(这个支持多个文件)</li>
+<li>文件操作的API 中的 FileReader 对象</li>
+<li>在 XMLHttpRequest2 中的  FormData 对象</li>
 </ul>
 </blockquote>
 
-<blockquote>
-<ul>
-<li>它返回一个HttpResponse实例</li>
+<p>我们使用 multiple 属性允许我们读取多个文件内容(即使 FileReader 对象不可用.这个依然可以正常使用) 当然,FileReader对象可以使用们在上传的时候看到图片的缩略图.</p>
+
+<p>上述3个特性均不能在IE9中正常的工作.所以 IE用户可能不能正常使用.在最新的 Safari (5.1)版本中没有FileReader 对象 所以用户不能得到正常的图片缩略图 但是可以使用AJAX正常上传图片并获得上传成功的消息.,Opera 10.50 版本支持FileReader 对象 对象但是不支持 FormData 对象所以可以获得缩略图但是不能正确的上传图片.</p>
+
+<p>先抛开那些问题,开始看代码吧.</p>
+
+<p><strong>标签与样式</strong></p>
+
+<p>让我们从基本的标签与样式开始吧..当然这些不是本文档的主要部分..就向我不会把你们当成初学者一样..</p>
+
+<p><strong>html部分</strong></p>
+
+<p>&lt;!DOCTYPE html>
+<html lang="en">
+<head></p>
+
+<pre><code>&lt;meta charset="UTF-8" /&gt;
+&lt;title&gt;HTML5 File API&lt;/title&gt;
+&lt;link rel="stylesheet" href="style.css" /&gt;
+</code></pre>
+
+<p></head>
+<body></p>
+
+<pre><code>&lt;div id="main"&gt;
+    &lt;h1&gt;Upload Your Images&lt;/h1&gt;
+    &lt;form method="post" enctype="multipart/form-data"  action="upload.php"&gt;
+        &lt;input type="file" name="images" id="images" multiple /&gt;
+        &lt;button type="submit" id="btn"&gt;Upload Files!&lt;/button&gt;
+    &lt;/form&gt;
+
+    &lt;div id="response"&gt;&lt;/div&gt;
+    &lt;ul id="image-list"&gt;
+
+    &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="upload.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p></body>
+</html></p>
+
+<p>上面的代码很基本吧..有一个form表格.并且post到 upload.php (这个文件等会会看到),然后还有一个input组建允许我们选择多个需要上传的文件,当然这个是 multiple 属性 起作用的.</p>
+
+<p>继续吧..</p>
+
+<p>body {</p>
+
+<pre><code>font: 14px/1.5 helvetica-neue, helvetica, arial, san-serif;
+padding:10px;
+</code></pre>
+
+<p>}</p>
+
+<p>h1 {</p>
+
+<pre><code>margin-top:0;
+</code></pre>
+
+<p>}</p>
+
+<h1>main {</h1>
+
+<pre><code>width: 300px;
+margin:auto;
+background: #ececec;
+padding: 20px;
+border: 1px solid #ccc;
+</code></pre>
+
+<p>}</p>
+
+<h1>image-list {</h1>
+
+<pre><code>list-style:none;
+margin:0;
+padding:0;
+</code></pre>
+
+<p>}</p>
+
+<h1>image-list li {</h1>
+
+<pre><code>background: #fff;
+border: 1px solid #ccc;
+text-align:center;
+padding:20px;
+margin-bottom:19px;
+</code></pre>
+
+<p>}</p>
+
+<h1>image-list li img {</h1>
+
+<pre><code>width: 258px;
+vertical-align: middle;
+border:1px solid #474747;
+</code></pre>
+
+<p>}</p>
+
+<p>完全的css文件没有什么要说的...</p>
+
+<p><strong>php文档</strong></p>
+
+<p>对于前台提出的请求是在这里进行处理的.可以在下面的代码中看出来</p>
+
+<p>&lt;?php</p>
+
+<p>foreach ($_FILES["images"]["error"] as $key => $error) {</p>
+
+<pre><code>if ($error == UPLOAD_ERR_OK) {
+    $name = $_FILES["images"]["name"][$key];
+    move_uploaded_file( $_FILES["images"]["tmp_name"][$key], "uploads/" . $_FILES['images']['name'][$key]);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>echo "<h2>Successfully Uploaded Images</h2>";</p>
+
+<p>请记住这个是我进一年来首次使用php语言.(我是一个rubyer),当然你需要确保安全性..这些可以使用内置的move_uploaded_file 移动到需要上传的文件夹内.不要忘记文件夹是可写的..</p>
+
+<p>现在我们有一个前台的form表单.后台的php文件.可以开始做了,选择需要上传的图片并且点击上传按钮..然后你会看到”Successfully Uploaded Images “ 的消息</p>
+
+<p>我们的mini的项目看起来是如下的样子的</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/61a076160605e23f51aec89840c3994c296f6007?ip=1364455236,219.142.5.234&amp;ssig=km%2FAauDVmp&amp;Expires=1364454036&amp;KID=sae,l30zoo1wmz&amp;fn=form.png" alt="" /></p>
+
+<p>但是请记住.现在是2011,我们想做的肯定不止这些..聪明的人已经看到我们引入了 upload.js 和 jQuery 文件  那我们就开始吧</p>
+
+<p><strong>javascript 文件</strong></p>
+
+<p>不要浪费时间了直接开始吧..</p>
+
+<p>(function () {</p>
+
+<pre><code>var input = document.getElementById("images"),
+    formdata = false;
+
+if (window.FormData) {
+    formdata = new FormData();
+    document.getElementById("btn").style.display = "none";
+}
+</code></pre>
+
+<p>}();</p>
+
+<p>从上面代码开始吧..这里我们创造了两个变量.input是我们的 id为 images的 <input>对象.
+formadata用来从前台向后台传递数据的对象当然这个需要浏览器的支持.当然如果浏览器支持这个我们也不需要 “Upload image ” 按钮了(选择需要上传的图片之后自动上传)..所以在后面我们隐藏了它..</p>
+
+<p>剩下的代码会在 匿名的  self-invoking 函数内 (<a href="http://stackoverflow.com/questions/3259496/jquery-document-ready-vs-self-calling-anonymous-function">关于self-invoking 与document.ready的区别 见里</a>) 下面我先写了一个当选择文件确定是在界面的需要展示..</p>
+
+<p>function showUploadedItem (source) {</p>
+
+<pre><code>var list = document.getElementById("image-list"),
+    li   = document.createElement("li"),
+    img  = document.createElement("img");
+img.src = source;
+li.appendChild(img);
+list.appendChild(li);
+</code></pre>
+
+<p>}
+该函数只有一个参数 图像的源地址.(底下我们可以知道这个是如何得到的) 我们创建了图片项,添加了图像的来源,并把它添加到list(dom结构中去)中去.</p>
+
+<p>下来我们选择需要上传的文档.并且由于onchange函数触发.把它显示到Dom结构中去.并且上传图片数据给后端服务器.</p>
+
+<p>if (input.addEventListener) {</p>
+
+<pre><code>input.addEventListener("change", function (evt) {
+    var i = 0, len = this.files.length, img, reader, file;
+
+    document.getElementById("response").innerHTML = "Uploading . . ."
+
+    for ( ; i &lt; len; i++ ) {
+        file = this.files[i];
+
+        if (!!file.type.match(/image.*/)) {
+
+        }   
+    }
+
+}, false);
+</code></pre>
+
+<p>}</p>
+
+<p>并且 我们不需要担心其它的问题 因为 iE 9 也支持 addEventListener 监听函数.
+那么当用户选择时我们最关心什么 ?第一我们创建了几个变量..下来 对于 LEN = this.files.length 这句话也很重要.因为我们需要通过LEN 的长度来循环获得所选的每一个文件.. 下来所要做的就是在循环的里面了..这需要对于每一个文件复制给变量这样有助于简化处理.. 下来使用了正则表达式来确定上传的是图像文件 ...</p>
+
+<p>好吧.如果我们已经有一个图像文件在手上.那么我们下一步该怎么做呢?</p>
+
+<p>if ( window.FileReader ) {</p>
+
+<pre><code>reader = new FileReader();
+reader.onloadend = function (e) { 
+    showUploadedItem(e.target.result);
+};
+reader.readAsDataURL(file);
+</code></pre>
+
+<p>}
+if (formdata) {</p>
+
+<pre><code>formdata.append("images[]", file);
+</code></pre>
+
+<p>}</p>
+
+<p>首先我们检查 浏览器是否支持 创建一个 FileReader 对象.如果支持我们就创建一个这样的对象..</p>
+
+<p>下来当然是如何使用 FileReader 对象的问题了..通过把 file 传递给 文件对象reader.readAsDataURL 方法.. 当然这个方法可能并不想你想象的那样工作.它的url并没有通过函数返回,想法它是它是一url data 的方式读数据并变成对象的一部分...关于这部分参考<a href="http://m.csdn.net/article/2012-12-17/2812911"></a></p>
+
+<p>考虑到 这一点我们需要在 FileReader 对象上面注册一个 onload 事件 在 成功通过 readAsDataURL 读取图片的 内容时可以通过 e.target.result 读取到的数据内容传递给之前建立的 showUploadedItem 函数去显示..</p>
+
+<p>接下来 检查 formdata 对象 如果 浏览器支持 formdata对象 则 formdata 就是一个对象的值 反之则为空.所以当有一个 formdata 对象时可以去 使用  append 方法添加 一个key 与 values 当然 对于多个文件,相同的key值要保证不会覆盖.</p>
+
+<p>在我们的多个文件循环里面 我们把每一个图片对象添加到 list中展示给用户并且都添加到了formdata 对象里面.在循环外面我们使用了 ajax去 做post请求.</p>
+
+<p>if (formdata) {</p>
+
+<pre><code>$.ajax({
+    url: "upload.php",
+    type: "POST",
+    data: formdata,
+    processData: false,
+    contentType: false,
+    success: function (res) {
+        document.getElementById("response").innerHTML = res; 
+    }
+});
+</code></pre>
+
+<p>}</p>
+
+<p>当然在这里我们还是检查了浏览器是否支持  formdata 格式 如果不支持可以考虑点击上传按钮来完成一般的文件上传.当然如果浏览器支持 那我们通过ajax 的post方法完成上传的效果..</p>
+
+<p>你应该已经对jquery的 $.ajax 方法很熟悉了吧...通过给它传递一个包含一系列选项的对象.包括.url,type success 函数(执行成功是调用的函数)  数据属性是 formdata 并且 特别需要注意 processData 与  contentType , 在一般的Jqury文档里面都可以看到 processData 默认为 true 依次来保证传递的在字串传里面(?A=afa&amp;b=??),但是这里当然不需要这样子的.所所以把它设置为false . 我们仍然把 contentType 设置为false 以保证数据正确从客户端到服务器传送</p>
+
+<p>至此我们看看前面的效果....当你开始打开网页时效果如下:</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/795a51fddb2a97f8581dc20949a16eda30657a9a?ip=1364454872,219.142.5.234&amp;ssig=EADiu8C0vE&amp;Expires=1364453672&amp;KID=sae,l30zoo1wmz&amp;fn=ajax-start.png" alt="" /></p>
+
+<p>当用户选择上传图片之后 如下图</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/14d9c86e85ccdcdd923c6bb057e1565789b6b61b?ip=1364454948,219.142.5.234&amp;ssig=BVqZ3J058p&amp;Expires=1364453748&amp;KID=sae,l30zoo1wmz&amp;fn=ajax-upload.png" alt="" /></p>
+
+<p>上传结果</p>
+
+<p><img src="http://image.data.vdisk.me/55890007/8deea1016570cc1b446660c3bbb36d9acc6ae695?ip=1364454968,219.142.5.234&amp;ssig=sdhbVbsqmG&amp;Expires=1364453768&amp;KID=sae,l30zoo1wmz&amp;fn=ajax-finder.png" alt="" /></p>
+
+<p><strong>总结</strong></p>
+
+<p>通过ajax上传图片这是意见很cool的事情..掌握它只需要一些常用的新支持而不需要很复杂的hack 很高兴你可以阅读它...再见.~~</p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">TUESDAY, 16 APRIL 2013</div>
+      
+      
+        
+        <h1>python 编码问题 <a class="glyph-permalink" href="2013/04/16/python-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98.html" title="Permanent link to: 'python 编码问题'">&diams;</a></h1>
+        
+        <blockquote><ul>
+<li>python 安装时默认的编码方式 为 ascii方式</li>
 </ul>
 </blockquote>
 
-<p><strong>urlconf</strong></p>
+<pre><code>&gt;&gt;&gt; print sys.getdefaultencoding()
+ascii
+</code></pre>
+
+<blockquote><ul>
+<li>修改默认编码方式
+  reload(sys)
+  sys.setdefaultencoding('utf8')</li>
+</ul>
+</blockquote>
+
+<p>注意这里的 reload(sys) 的问题  详细见<a href="https://groups.google.com/forum/?fromgroups=#!topic/comp.lang.python/hUsco3ZvR2s">这里</a></p>
+
+<blockquote><ul>
+<li>常见的两种编码方式</li>
+</ul>
+</blockquote>
+
+<pre><code>&gt;&gt;&gt; "汉字".__class__
+&lt;type 'str'&gt;
+&gt;&gt;&gt; 
+&gt;&gt;&gt; u"汉字".__class__
+&lt;type 'unicode'&gt;
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>str 与 unicode 有什么区别呢？?</p>
+
+<blockquote><ul>
+<li>"你好".encode("utf8") 错误的分析</li>
+</ul>
+
+
+<blockquote><blockquote><p>"你好".encode("utf8")</p></blockquote></blockquote></blockquote>
+
+<pre><code>Traceback (most recent call last):
+File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe4 in position 0: ordinal not in range(128)
+</code></pre>
+
+<p>更完整的关于这个的错误解释见<a href="http://stackoverflow.com/questions/9644099/python-ascii-codec-cant-decode-byte">这里</a></p>
+
+<blockquote><ul>
+<li>关于 decode 方法 的使用</li>
+</ul>
+</blockquote>
+
+<pre><code>&gt;&gt;&gt; "汉字".decode()
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe6 in position 0: ordinal not in range(128)
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>decode 默认会把 "汉字" 转化为 系统编码(因为默认为ascii所以上述会出错)，验证可以更改系统
+编码之后在测试上面的</p>
+
+<pre><code>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; sys.getdefaultencoding()
+'ascii'
+&gt;&gt;&gt; 
+&gt;&gt;&gt; reload(sys)
+&lt;module 'sys' (built-in)&gt;
+&gt;&gt;&gt; sys.setdefaultencoding('utf8') 
+&gt;&gt;&gt; "汉字".decode()
+u'\u6c49\u5b57'
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>如果不想这样子可以直接 "汉字".decode("utf8") 这样子编码</p>
+
+<blockquote><ul>
+<li>关于编码转换</li>
+</ul>
+</blockquote>
+
+<p>一般转换思路为 A编码--》系统编码(Asci或者unicode)--》B编码</p>
+
+<p>因为系统默认编码方式一般是 Ascii所以 对于A编码能不能转化为 ASCII 为关键。而我们知道
+编码问题的大多数错误都是在这里出粗了</p>
+
+<p>例如  "你好".encode("utf8")</p>
+
+<p>按上述转换思路可以看出 "你好".decode().encode("utf8")</p>
+
+<p>"你好" 的编码有外部文本环境决定 例如 # -<em>- coding: utf-8 -</em>-  则 编码为 utf8
+而此时系统编码为 默认的ASCii  所以第一步 utf8--》 ASii 编码 肯定会错误的。。</p>
+
+<p>这里写了一个通用的转换代码</p>
+
+<pre><code>#!/usr/bin/env python 
+#coding=utf-8 
+s="中文" 
+if isinstance(s, unicode):  
+print s.encode('gb2312') 
+else: 
+print s.decode('utf-8').encode('gb2312')
+</code></pre>
+
+<p>这里编码已gb2321 为例子</p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+      
+        
+        <h1>python 中 sqlite3 的使用 <a class="glyph-permalink" href="2013/04/16/python-%E4%B8%AD-sqlite3-%E7%9A%84%E4%BD%BF%E7%94%A8.html" title="Permanent link to: 'python 中 sqlite3 的使用'">&diams;</a></h1>
+        
+        <h1>python 中 sqlite3 的使用</h1>
+
+<p><strong>优点使用方便但是功能相比较其它大型数据库有所差距</strong></p>
+
+<p><strong>python的数据库模块有统一的接口，操作基本有统一的模式</strong></p>
+
+<p>假设数据库模块名称为 sqlite3</p>
+
+<blockquote><ul>
+<li>创建数据库连接 sqlite3.connect,返回连接对象为com</li>
+<li>如果不需要返回结果可以直接com.execute 查询。有时需要使用 com.commit 提交事务</li>
+<li><p>如果需要查询返回结果。则需要使用游标 com.cursor 创建游标对象 cur.. 通过cur.execute 查询数据库
+用 cur.fetchall/cur.fetchone/cur.fetchmany 获取查询结果. 这里根据事物级别不同有时需要
+cur.commit</p></li>
+<li><p>关闭 cur 与 com</p></li>
+</ul>
+</blockquote>
+
+<p><strong>python 实例</strong></p>
+
+<blockquote><ul>
+<li>导入模块</li>
+</ul>
+</blockquote>
+
+<pre><code>import sqlite3
+</code></pre>
+
+<blockquote><ul>
+<li>创建打开数据库 (存在则打开不存在则创建)</li>
+</ul>
+</blockquote>
+
+<pre><code>com=sqlite3.connect("sql.db")
+</code></pre>
+
+<blockquote><ul>
+<li>返回的 com 是一个数据库连接对象 它有如下的操作</li>
+</ul>
+
+
+<blockquote><ul>
+<li>commit()   提交事务</li>
+<li>rollback()  事务回滚</li>
+<li>close()    关闭数据库连接</li>
+<li>cursor()    创建游标</li>
+</ul>
+</blockquote>
+
+<ul>
+<li>python  sqlite3 游标的使用</li>
+</ul>
+
+
+<blockquote><ul>
+<li>游标提供了一种从表中检索数据的简单方法</li>
+<li>游标本质上是一种可以从多个结果集中取出一条记录的机制</li>
+<li>游标是由<strong>结果集</strong>以及指定特定位置的<strong>游标位置</strong></li>
+<li><p>可以把游标比喻为文件句柄</p></li>
+<li><p>创建游标对象</p></li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cur=com.cursor
+</code></pre>
+
+<p>游标对象 cur 常用操作</p>
+
+<blockquote><blockquote><blockquote><ul>
+<li>execute()  执行sql 语句</li>
+<li>executemany  执行多条sql语句</li>
+<li>close()    关闭游标</li>
+<li>fetchone()  从结果中取出一条记录 并把游标指向下一个</li>
+<li>fetchmany()  从结果中取出多条记录。并移动游标</li>
+<li>fetchall()   从结果中取出所有记录</li>
+<li>scroll()  滚动游标</li>
+</ul>
+</blockquote>
+
+<ul>
+<li>建表</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute('create table catalog (id integer primary key,pid integer,name varchar(10) UNIQUE）') 
+</code></pre>
+
+<p>建立 表 catalog  主键为 id</p>
+
+<blockquote><blockquote><ul>
+<li>插入数据库</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("insert into catalog values(0, 0, 'name1')")  
+cu.execute("insert into catalog values(1, 0, 'hello')")
+</code></pre>
+
+<p><strong>注意:这样子插入需要自己做特殊字符的转义</strong></p>
+
+<p>sqlite3 中的处理方法</p>
+
+<pre><code>  executeTemplate="insert into  blog_entries(href,title,text) values (?,?,?)" 
+  com.execute(executeTemplate,(globalName[key]['href'],globalName[key]['title'],globalName[key]['content']))
+</code></pre>
+
+<p>mysql 中的处理方法</p>
+
+<pre><code>  import MySQLdb
+  s = """test!42''354542"""
+  print MySQLdb.escape_string(s)
+</code></pre>
+
+<p>这里需要注意需要使用连接对象提交 com.commit 才能生效</p>
+
+<blockquote><blockquote><ul>
+<li>查询</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("select * from catalog")
+print cu.fetchall()  打印所有结果
+</code></pre>
+
+<blockquote><blockquote><ul>
+<li>修改</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("update catalog set name='name2' where id = 0") 
+cx.commit() 注意,修改数据以后提交
+</code></pre>
+
+<blockquote><blockquote><ul>
+<li>删除</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>cu.execute("delete from catalog where id = 1")  
+cx.commit()
+</code></pre>
+
+<p><strong>note:可以通过修改 conn.isolation_level = None 避免每次都需要commit的麻烦</strong></p>
+
+<p><a href="https://gist.github.com/xiyoulaoyuanjia/31bb4783c900123cc7e3">完整示例</a></p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+      
+        
+        <h1>cookies and 缓存 <a class="glyph-permalink" href="2013/04/16/cookies-and-%E7%BC%93%E5%AD%98.html" title="Permanent link to: 'cookies and 缓存'">&diams;</a></h1>
+        
+        <p><strong>cookie 的分类</strong></p>
+
+<blockquote><ul>
+<li>会话cookies</li>
+</ul>
+</blockquote>
+
+<p>是一种临时cookies。记录用户登录网站的设置与偏好信息。。关闭浏览器就清除了</p>
+
+<blockquote><ul>
+<li>持久cookies</li>
+</ul>
+</blockquote>
+
+<p>持久icookies 存在硬盘中。。有过期时间</p>
+
+<p><strong>为什么需要cookies</strong></p>
+
+<p>这是因为http协议是无状态的。。对于一个浏览器发出的多次请求，WEB服务器无法区分 是不是来源于同一个浏览器
+所以浏览器需要额外的信息维持会话。。</p>
+
+<p><strong>cookies 的限制</strong>
+一些浏览器支持最大 4096字节的cookies。另一些支持最多20个cookies 超过的旧的就会陪删除</p>
+
+<p><strong>cookie 存放</strong></p>
+
+<blockquote><ul>
+<li>不同的浏览器会存放在不同的地方</li>
+<li>不同的网站会有不同的cookie文件</li>
+</ul>
+</blockquote>
+
+<p>windows 下的ie 是 存放在临时文件夹下面的
+<img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=b8d8XgiPVdBwl--2FE1cDVwvaVmWbbRE4XCNtT--2FlY1xJjdPDtpaWU6suLNJo37weV1zBE7cBBfg8R--2BmMF3BS67BH0ciHlhz" alt="" /></p>
+
+<p>linux 下的 chrome 是存放在 sqllite3 数据库中的
+<img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=6c17G8HyRRw8uUSDMtgmnCv6jYSnXXMsZICNspz5lUjWr735mfcbR4qBay5Sv9c6BiUoE8L4PYSiY8BSE8OyCQd--2BDKBb" alt="" /></p>
+
+<p><strong>cookies 在 http中的使用</strong></p>
+
+<p>浏览器把 cookies 在 http 的 Request 中 Cookie: header 发送</p>
+
+<p>Web服务器通过HTTP Response中的"Set-Cookie: header"把cookie发送给浏览器</p>
+
+<p><strong>cookies 与文件缓存的区别</strong></p>
+
+<p>这两个是不一样的东西。。。在ie中可能存放在同一个文件夹下。。但一般在设置浏览器时
+都可以选择分别设置cookies 与 缓存的</p>
+
+<p><strong>http协议之缓存</strong></p>
+
+<blockquote><ul>
+<li>http 中具有浏览器缓存。缓存代理服务器</li>
+<li>http 缓存是指当web 请求到达缓存时可以考虑从本地提取缓存而不用在次从服务器发请求</li>
+<li><p>缓存的好处</p>
+
+<blockquote><ul>
+<li>减少了服务器的压力</li>
+<li>加快了浏览器的加载速度</li>
+</ul>
+</blockquote></li>
+<li><p>与缓存有关的header</p>
+
+<blockquote><ul>
+<li>Request</li>
+</ul>
+</blockquote></li>
+</ul>
+</blockquote>
+
+<pre><code>Cache-Control: max-age=0    以秒为单位
+If-Modified-Since: Mon, 19 Nov 2012 08:38:01 GMT  缓存文件的最后修改时间。
+If-None-Match: "0693f67a67cc1:0"    缓存文件的Etag值
+Cache-Control: no-cache            不使用缓存
+Pragma: no-cache               不使用缓存
+</code></pre>
+
+<blockquote><blockquote><ul>
+<li>Response</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>Cache-Control: public    响应被缓存，并且在多用户间共享，  （公有缓存和私有缓存的区别，请看另一节）
+Cache-Control: private  响应只能作为私有缓存，不能在用户之间共享
+Cache-Control:no-cache  提醒浏览器要从服务器提取文档进行验证
+Cache-Control:no-store  绝对禁止缓存（用于机密，敏感文件）
+Cache-Control: max-age=60   60秒之后缓存过期（相对时间）
+Date: Mon, 19 Nov 2012 08:39:00 GMT 当前response发送的时间
+Expires: Mon, 19 Nov 2012 08:40:01 GMT  缓存过期的时间（绝对时间）
+Last-Modified: Mon, 19 Nov 2012 08:38:01 GMT    服务器端文件的最后修改时间
+ETag: "20b1add7ec1cd1:0"    服务器端文件的Etag值
+</code></pre>
+
+<blockquote><ul>
+<li>如何判断缓存的新鲜度
+这里的新鲜度指文件是否修改。提出了两种方法</li>
+</ul>
+
+
+<blockquote><ul>
+<li>文件的最后修改时间  在head 中通过  "If-Modified-Since" 字段标识</li>
+</ul>
+
+
+<blockquote><ul>
+<li>服务器发送状态吗 304 来标识没有修改</li>
+<li>如图</li>
+</ul>
+</blockquote></blockquote></blockquote>
+
+<p>文件没有修改
+<img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=bf087nR3bMs2UgOEyuNZuISV4xmw--2FkKe--2FmShGj5LGoXwDVPJq9A03u1fRJ6tni1T44fP3fvUkSUZBbP1Wr4v8EnN--2F8TH" alt="" /></p>
+
+<p>文件已经修改
+<img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=dff4kSeiBh2mSmlqcoMfJaPVtIydvVU8QQKxTys3yv1v0Px--2BS0DzkwiN1z3Ie--2BDG0ogkpYiskEKNkbNWYQ9MvyBPompQ" alt="" /></p>
+
+<blockquote><blockquote><ul>
+<li>文件的hash 签名 Etag 在head 中通过  "If-None-Match" 字段来标识  Etag 是可以看成是对 最后修改时间的一种补充
+
+<blockquote><ul>
+<li>有些服务器没有办法获得文件的最后修改时间</li>
+<li>If-Modified-Since 是精确到秒的 对于 秒以下的文件修改则没有办法</li>
+<li>一些文件最后修改时间变了。内容却没有改变</li>
+</ul>
+</blockquote></li>
+</ul>
+</blockquote>
+
+<ul>
+<li>直接使用缓存不去服务器验证
+这里 说一个例子
+按F5刷新浏览器和在地址栏里输入网址然后回车。 这两个行为是不一样的。</li>
+</ul>
+
+
+<blockquote><ul>
+<li>在浏览器里输入网址 然后按回车 会直接使用缓存 不去服务器验证的。。。</li>
+<li>F5刷新 需要验证</li>
+</ul>
+</blockquote></blockquote>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">MONDAY, 15 APRIL 2013</div>
+      
+      
+        
+        <h1>linux 下的几种IO 分析 <a class="glyph-permalink" href="2013/04/15/linux%E4%B8%8B%E7%9A%84%E5%90%8C%E6%AD%A5-%E5%BC%82%E6%AD%A5-%E9%98%BB%E5%A1%9E-%E9%9D%9E%E9%98%BB%E5%A1%9E.html" title="Permanent link to: 'linux 下的几种IO 分析'">&diams;</a></h1>
+        
+        <p><strong>linux 下io</strong></p>
+
+<p><strong>关于IO的同步,异步,阻塞,非阻塞</strong></p>
+
+<blockquote><ul>
+<li>一般典型的I/O(同步阻塞I/O)</li>
+</ul>
+</blockquote>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=31c1hG--2BjT5ElCtDaALqfKn9qSG--2BqBjwn04OpwtcpHXw0DfOftJ3aCSIzIRjtOMHZZMlDdbF1we93BIiocvrux--2Fc1MMDF" alt="" />
+从应用程序的角度来说，read 调用可能会延续很长时间。实际上，在内核执行读操作和其他工作时，
+应用程序的确会被阻塞，也就是说应用程序不能做其它事情了。</p>
+
+<blockquote><ul>
+<li>同步 非阻塞I/O</li>
+</ul>
+</blockquote>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=ebeaxXjA1nZEFKwGAs37VvtBC--2FGhezl6s--2FR0rvGQyo148Zon--2FC72obcuzkmmxIAu59WfYW8TQzFE71Ggvkg3sf01zc3y" alt="" />
+实际上，该方式需要应用程序以一种轮询的方式来实现数据读取，多次无谓的系统调用会加大系统开销，影响应整个系统的吞吐量。
+这种需要多次的用户进程与内核进程切换。。</p>
+
+<blockquote><ul>
+<li>select poll epoll 方式。。。</li>
+</ul>
+</blockquote>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=5058fbW0GZLrCrSYaNzUD3WskgKhdXdp--2BvE--2Fnz0we3yMhADI0g9vbkpgZskP48--2BJJ1BhhhJFvRMKvuQlRPRy6--2BZ5b6--2FO" alt="" /></p>
+
+<p>该方式中，select(或poll)的调用仍然会阻塞进程，与一般典型的I/O不一样的它是等待事件通知。但是它引入了超时机制，可以让应用程序有权力避免过长时间等待；
+另一方面，如果应用程序需要读写多个文件，该方式可以一显身手。</p>
+
+<blockquote><ul>
+<li>异步I/O</li>
+</ul>
+</blockquote>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=4e24TKQcgbivcZpbg9ps1chscTB6UsW--2F2kHR4oJd2Svw--2BLqjE3h1JqgU83sx0Ealw3f4LLKPYt1RnodFeiIhCD4u69Em" alt="" /></p>
+
+<p><strong>IO 常见的几种模型</strong></p>
+
+<blockquote><ul>
+<li>阻塞型 IO(blocking I/O)</li>
+<li>非阻塞性IO(nonblocking I/O)</li>
+<li>IO多路复用(I/O multiplexing)</li>
+<li>信号驱动IO(signal driven I/O)</li>
+<li>异步IO(asynchronous I/O)</li>
+</ul>
+</blockquote>
+
+<p><strong>IO 操作可以分为两个阶段</strong></p>
+
+<blockquote><ul>
+<li>等待数据准备好</li>
+<li>将数据从内核缓冲区复制到用户进程缓冲区</li>
+</ul>
+</blockquote>
+
+<p><strong>同步与异步的区别</strong></p>
+
+<blockquote><ul>
+<li>同步IO，需要用户进程主动将存放在内核缓冲区中的数据拷贝到用户进程中。</li>
+<li><p>异步IO，内核会自动将数据从内核缓冲区拷贝到用户缓冲区，然后再通知用户。</p></li>
+<li><p>io 多路复用</p></li>
+</ul>
+</blockquote>
+
+<p>当对多路复用IO进行调用时，比如使用poll。需注意的是，poll是系统调用，当调用poll的时候，其实已经是陷入了内核，是内核线程在跑了。因此对于调用poll的用户进程来讲，此时是阻塞的。
+因为poll的底层实现，是去扫描每个文件描述符(fd)，而如果要对感兴趣的fd进行扫描，那么只能将每个描述符设置成非阻塞的形式(对于用户进程来讲，设置fd是阻塞还是非阻塞，可以使用系统调用fcntl)，这样才有可能进行扫描。如果扫描当中，发现有可读(如果可读是用户感兴趣的)的fd，那么select就在用户进程层面就会返回，并且告知用户进程哪些fd是可读的。
+这时候，用户进程仍然需要使用read的系统调用，将fd的数据，从内核缓冲区拷贝到用户进程缓冲区(这也是poll为同步IO的原因)。
+那么此时的read是阻塞还是非阻塞呢？这就要看fd的状态了，如果fd被设置成了非阻塞，那么此时的read就是非阻塞的；如果fd被设置成了阻塞，那么此时的read就是阻塞的。
+不过程序已经执行到了这时候，不管fd是阻塞还是非阻塞，都没有任何区别，因为之前的poll，就是知道有数据准备好了才返回的，也就是说内核缓冲区已经有了数据，此时进行read，是肯定能够将数据拷贝到用户进程缓冲区的。</p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">THURSDAY, 11 APRIL 2013</div>
+      
+      
+        
+        <h1>oauth 解释 以及新浪微薄OAuth python实现 <a class="glyph-permalink" href="2013/04/11/oauth-%E8%A7%A3%E9%87%8A-%E4%BB%A5%E5%8F%8A%E6%96%B0%E6%B5%AA%E5%BE%AE%E8%96%84OAuth+python%E5%AE%9E%E7%8E%B0.html" title="Permanent link to: 'oauth 解释 以及新浪微薄OAuth python实现'">&diams;</a></h1>
+        
+        <h1>oauth 解释 以及新浪微薄OAuth python实现</h1>
+
+<p><strong>什么是oauth？</strong></p>
+
+<p>oauth是一套认证标准 。最早出现在 <a href="http://oauth.net/">这里</a> 当然这样的标准分为 oauth1 与 oauth2</p>
+
+<p>oauth 是一套三方委托认证模式</p>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=3c88e8YvGlxZlSzVbXuW--2FHUw--2BHMmrugkTc68SkQ--2BacY22bGyS5OA5HfZV9azQr21LGRXwmgx--2BcGQRdLXLSFja3OM--2B3jz" alt="" /></p>
+
+<p>ZYS 向SINA 发出请求 获得YQ的信息,SINA询问YQ是否同意？ YQ返回同意。然后SINA返回ZYS请求的信息 "here you are"</p>
+
+<p>可以概括起来就是</p>
+
+<blockquote><ul>
+<li>request</li>
+<li>argee?</li>
+<li>Yes</li>
+<li>Here you are</li>
+</ul>
+</blockquote>
+
+<p>上面的3个对应于新浪的3个认证URL 最后一个 "Here you are" 可以看成具体的应用API调用</p>
+
+<blockquote><ul>
+<li><p>http://api.t.sina.com.cn/oauth/request_token</p></li>
+<li><p>http://api.t.sina.com.cn/oauth/authorize</p></li>
+<li><p>http://api.t.sina.com.cn/oauth/access_token</p></li>
+</ul>
+</blockquote>
+
+<p>这其中牵扯的一些参数</p>
+
+<blockquote><ul>
+<li><p>APP_KEY, APP_SECRET</p></li>
+<li><p>request_token, request_secret</p></li>
+<li><p>verifier</p></li>
+</ul>
+</blockquote>
+
+<p>URL 编码 参考<a href="http://www.ruanyifeng.com/blog/2010/02/url_encoding.html">这里</a></p>
+
+<blockquote><ul>
+<li>access_secret, access_secret</li>
+</ul>
+</blockquote>
+
+<p>这个认证步骤可以看成</p>
+
+<p>ZYS YQ SINA</p>
+
+<blockquote><ul>
+<li><p>ZYS 找到SINA 说等会 YQ过来我要拿YQ的粉丝数据。然后通过参数的传递 从SINA处获得<strong>request_token</strong> 和 <strong>request_secret</strong></p></li>
+<li><p>YQ 找到SNA说是否ZYS要我的粉丝数据?并且把ZYS私下给YQ的<strong>request_token</strong>和 <strong>request_secret</strong> 给SINA看，并同意ZYS拿它的数据。这时SNA把<strong>verifier</strong>给 YQ。YQ把<strong>verifier</strong> 给了
+ZYS</p></li>
+<li><p>ZYS 拿着 request_token ， request_secret ， verifier 这三样东西，找到 SINA，说明他已经取得了 YQ 的授权。此时， SINA 给了 ZYS 一对 access_token 和 access_secret 。之后，凭着这对东西， ZYS 就可以从 SINA 那里取得 YQ 的粉丝数据了。</p></li>
+</ul>
+</blockquote>
+
+<p><em>以后ZYS就可以使用access_token从SINA处直接获得数据了(对外API)</em></p>
+
+<p>实战参考<a href="http://zouyesheng.com/oauth-sina.html#toc1">这里</a></p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+      
+        
+        <h1>dns 安全 for GFW <a class="glyph-permalink" href="2013/04/11/dns-%E5%AE%89%E5%85%A8.html" title="Permanent link to: 'dns 安全 for GFW'">&diams;</a></h1>
+        
+        <p>2012 春节期间 github 受到dns污染的干扰 访问github的网站 都会返回一个59.24.3.173的ip地址。</p>
+
+<p><strong>dns 污染</strong></p>
+
+<p>一般而言 dns使用udp协议。在dns服务器查询期间发现你访问的是基于某一个网站则在，然后造一个假的回应包并在真正的包返回之前给你就行了，然后假的包里面只要把实际的 IP
+改成另外一个 IP 就行。</p>
+
+<p>运行dig @8.8.8.8 twitter.com 并使用wireshark 抓包 如图可得</p>
+
+<p><img src="https://mail-attachment.googleusercontent.com/attachment/u/0/?ui=2&amp;ik=429fe34bc2&amp;view=att&amp;th=13c5d593b7a78fb7&amp;attid=0.1&amp;disp=inline&amp;realattid=f_hc7nowqc0&amp;safe=1&amp;zw&amp;saduie=AG9B_P_yefQZTkL1e79QyVqUxjWo&amp;sadet=1361360033407&amp;sads=3q3QrYvd1A7D8v-RpoXm83rH7qs" alt="dns污染" /></p>
+
+<p>一般而言有一个伪造ip列表
+8.7.198.45
+37.61.54.158
+46.82.174.68
+59.24.3.173
+78.16.49.15
+93.46.8.89
+159.106.121.75
+203.98.7.65
+243.185.187.39
+或者没有answer。</p>
+
+<p><strong>几种解决方案</strong></p>
+
+<p><em>把本机的53端口的包重定向要vps的非知名端口，然后在vps的非知名端口上开一个dns server,然后解析完了扔回来</em></p>
+
+<p><em>通过dnscrypt 解决dns 污染...</em></p>
+
+<p><em>drop 掉上面的那些列表的方案</em></p>
+
+<p><em>dnsmasq 方案</em></p>
+
+<p>_note dnsmasq 一般用作三种用途 1.提供dns服务 2. 优先使用本地自定义的dns 3.提供dhcp服务 关于其它使用参考 http://www.aslibra.com/blog/post/dnsmasq.php 文档</p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">WEDNESDAY, 10 APRIL 2013</div>
+      
+      
+        
+        <h1>关于北邮校园网登录程序 <a class="glyph-permalink" href="2013/04/10/%E5%85%B3%E4%BA%8E%E5%8C%97%E9%82%AE%E6%A0%A1%E5%9B%AD%E7%BD%91%E7%99%BB%E5%BD%95%E7%A8%8B%E5%BA%8F.html" title="Permanent link to: '关于北邮校园网登录程序'">&diams;</a></h1>
+        
+        <p><strong>关于北邮校园网登录程序</strong></p>
+
+<blockquote><ul>
+<li>这个不是破解认证。仅仅是自动认证。。</li>
+<li>目前支持的热点。。 学十宿舍网  bupt2校内网</li>
+<li>环境为 ubuntu 12.10</li>
+<li>程序在<a href="https://gist.github.com/xiyoulaoyuanjia/2d63e1b41ec711f8d5e1">这里</a></li>
+</ul>
+</blockquote>
+
+<p><strong>关于 自动登录</strong></p>
+
+<p>这个使用了 request 相对而言比较简单。。仅仅是把密码 进行了 md5 的加密转换成16进制输出</p>
+
+<p>例如如果想计算自己密码的 加密之后的密文可以按如下操作</p>
+
+<pre><code>&gt;&gt;&gt; import hashlib
+&gt;&gt;&gt; hashlib.md5("124").hexdigest()
+'c8ffe9a587b126f152ed3d89a146b445'
+&gt;&gt;&gt; 
+</code></pre>
+
+<p><strong>如何做到每次热点接入后自动认证呢？</strong></p>
+
+<p>之前考虑 直接调用 NetworkManager Api <a href="http://projects.gnome.org/NetworkManager/">这里</a>  操作
+当然这样可以做的事情就比较多了。。而且还看了 python 的<a href="http://cgit.freedesktop.org/NetworkManager/NetworkManager/tree/examples/python">demo</a>
+感激非常的棒</p>
+
+<p>后来 在网上看到 这个<a href="http://t.du9l.com/post/40">资料</a> 觉得不错。。 这里感谢这个作者
+后来就直接拿过来用了。。至少现在可以满足我的要求。</p>
+
+<blockquote><ul>
+<li>下载下来放到 /etc/NetworkManager/dispatcher.d/ 中</li>
+<li>注意修改可执行文件</li>
+</ul>
+</blockquote>
+
+<p><strong>关于登录成功的窗口通知</strong></p>
+
+<p>本想着这个可能十分简单的事情。。谁知道 确实花费时间最多的。。</p>
+
+<p>“问题是我需要执行的脚本会执行 。。但是里面的 zenity弹出框怎么也不出来。。
+为了排除是python的脚本问题。。我直接把命令放在了shell里面。也还是没有结果。。。。
+我已经查看了 networking 的日志</p>
+
+<p>nm-dispatcher.action: Script  exited with error status 1”`</p>
+
+<p>后来在以为邮件列表中的网友的帮助下。。</p>
+
+<p>修改了之前的程序。。
+方法如下:</p>
+
+<blockquote><ul>
+<li>增加环境变量</li>
+</ul>
+</blockquote>
+
+<pre><code>export DISPLAY=:0 
+</code></pre>
+
+<blockquote><ul>
+<li>增加 对 x的访问权限</li>
+</ul>
+</blockquote>
+
+<pre><code>xhost local: 1&gt;/dev/null
+</code></pre>
+
+<p>这里参考了一些资料</p>
+
+<p><a href="http://www.leidinger.net/X/xhost.html">xhost</a></p>
+
+<p><a href="http://promberger.info/linux/2009/01/02/running-x-apps-like-zenity-from-crontab-solving-cannot-open-display-problem/">cannot-open-display-problem</a></p>
+
+<p>算是解决了吧。。如下图</p>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=b3d344--2FxLktIPmUVQn6KtbjbBClvLBx2AMZ3tC--2Blw2c--2Fhq2bVDo7GgYdp7fLKwJNg7K2wEOGfPqP9dHVWL0WzujDdvEZ" alt="" /></p>
+
+<p>对于 第二个有一个小问题。。现在是把上述命令放在了 startup application(ubuntu) 中 每次开机都需要运行上述命令。。
+这个不能记录更改操作吗？  好吧。。这个先留着。。。</p>
+
+<p><strong>关于bupt2校内网</strong></p>
+
+<p>这个是最简单的。但也是花费我时间最长的一个。。</p>
+
+<p>之前一直是用 python的requests 库做的。。</p>
+
+<p>测试requests 如下:</p>
+
+<pre><code>&gt;&gt;&gt; requests.post(url,data={"PtUser":111,"PtPwd":33})
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "/usr/local/lib/python2.7/dist-packages/requests/api.py", line 88, in post
+    return request('post', url, data=data, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 354, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/sessions.py", line 460, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/requests/adapters.py", line 246, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='10.8.128.1', port=80): Max retries exceeded with url: /portal/logon.cgi (Caused by &lt;class 'httplib.BadStatusLine'&gt;: '')
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>于是顺着 Caused by <class 'httplib.BadStatusLine'>: 错误</p>
+
+<pre><code>exception httplib.BadStatusLine
+A subclass of HTTPException. Raised if a server responds with a HTTP status code that we don’t understand.
+</code></pre>
+
+<p>以为是服务器发送了不认识的状态吗 的思路考虑 以为是服务器block 爬虫..后来各种header 各种 UA 尝试均不成功</p>
+
+<p>不行，后来用 wget测试如下</p>
+
+<pre><code>wget --post-data "PtUser=111&amp;PtPwd=33" --header="User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31" --header="Referer: http://10.8.128.1/portal/logon.cgi?userip=10.8.160.134&amp;userurl=687474703a2f2f31302e332e382e323131" --header="Cookie: LPTSRVID=1202120206; lang=0" --header="Origin: http://10.8.128.1" --header="Host: 10.8.128.1"   http://10.8.128.1/portal/logon.cgi 
+
+
+Connecting to 10.8.128.1:80... connected. 
+HTTP request sent, awaiting response... No data received. 
+Retrying. 
+
+--2013-04-19 10:21:44--  (try: 2)  http://10.8.128.1/portal/logon.cgi 
+Connecting to 10.8.128.1:80... connected. 
+HTTP request sent, awaiting response... No data received. 
+Retrying. 
+</code></pre>
+
+<p>才发现是服务器端没有回应。。。</p>
+
+<p>于是从新从chrome 看post 数据。。终于。。发现 post 少传了一个参数 PtButton 导致。。。唉。。。</p>
+
+<p>修改之后终于完美got it</p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">SUNDAY, 24 MARCH 2013</div>
+      
+      
+        
+        <h1>python 装饰器 <a class="glyph-permalink" href="2013/03/24/python_%E8%A3%85%E9%A5%B0%E5%99%A8.html" title="Permanent link to: 'python 装饰器'">&diams;</a></h1>
+        
+        <h1>python 装饰器</h1>
+
+<p>概括来讲..装饰器就是为已经存在的对象添加额外的一些功能</p>
+
+<blockquote><ul>
+<li>装饰器入门</li>
+</ul>
+
+
+<blockquote><ul>
+<li>需求是怎么来的?</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>def foo():
+    print 'in foo()'     
+foo()
+</code></pre>
+
+<p>现在需要计算机foo 函数用的时间. 一般来说这可能想到了使用 如下代码</p>
+
+<pre><code>import time
+def foo():
+    start = time.clock()
+    print 'in foo()'
+    end = time.clock()
+    print 'used:', end - start
+
+foo()
+</code></pre>
+
+<p>如果其他函数也有这个需求呢? 复制? 很可笑....</p>
+
+<blockquote><blockquote><ul>
+<li>以不变应万变</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>import time
+ 
+def foo():
+    print 'in foo()'
+ 
+def timeit(func):
+    start = time.clock()
+    func()
+    end =time.clock()
+    print 'used:', end - start
+ 
+timeit(foo)
+</code></pre>
+
+<p>这样子的一个问题是更改了调用接口.本来是  timeit 方法调用.现在换成了 timeit(foo) 调用方法
+如果其它地方也有这个就需要修改其它地方了...</p>
+
+<blockquote><blockquote><ul>
+<li>最大限度地少改动！</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>#-*- coding: UTF-8 -*-
+import time
+ 
+def foo():
+    print 'in foo()'
+ 
+# 定义一个计时器，传入一个，并返回另一个附加了计时功能的方法
+def timeit(func):
+     
+    # 定义一个内嵌的包装函数，给传入的函数加上计时功能的包装
+    def wrapper():
+        start = time.clock()
+        func()
+        end =time.clock()
+        print 'used:', end - start
+     
+    # 将包装后的函数返回
+    return wrapper
+ 
+foo = timeit(foo)
+foo()
+</code></pre>
+
+<p>上面的最后两行代码也就是体现了装饰器的思想</p>
+
+<blockquote><ul>
+<li>python 的 额外支持</li>
+</ul>
+
+
+<blockquote><ul>
+<li>语法 @</li>
+</ul>
+</blockquote></blockquote>
+
+<pre><code>@timeit
+def foo():
+    print 'in foo()'
+</code></pre>
+
+<blockquote><blockquote><ul>
+<li>内置的装饰器</li>
+</ul>
+</blockquote></blockquote>
+
+<p>内置的装饰器有三个，分别是staticmethod、classmethod和property，作用分别是把类中定义的实例方法变成静态方法、类方法和类属性。</p>
+
+<p>这里，静态方法，虽然是一个方法，但是a.static_foo只是一个没有绑定任何参数的完好的函数。static_foo需要1个参数，同样a.static_foo也只需要一个参数。</p>
+
+<p>这里有一个很好的链接的关于上面的....
+http://www.zeuux.com/blog/content/3030/</p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">SATURDAY, 16 MARCH 2013</div>
+      
+      
+        
+        <h1>sso <a class="glyph-permalink" href="2013/03/16/sso.html" title="Permanent link to: 'sso'">&diams;</a></h1>
+        
+        <p><strong>http://fm.qq.com如何检测到本地qq登陆的？</strong></p>
+
+<p>这个问题分为两个部分</p>
+
+<blockquote><ul>
+<li><p>如何检测到本地客户端qq登陆的?</p></li>
+<li><p>如何检测到webqq登陆的?</p></li>
+</ul>
+</blockquote>
+
+<p>这个问题也就是<strong><em>sso</em></strong>技术Single Sign On</p>
+
+<p>sso技术是在多个应用系统中用户只需一次登录就可以登陆多个信任的系统中。</p>
+
+<p>webqq是共用一个sso的domain做session验证啦。。。都有一个qq.com域名含有相同的session所有的cookie都有一个范围，叫domain，如“.sun.com”。这个范围规定了只有在访问相同domain的时候，浏览器才会将此cookie带上</p>
+
+<p>所以对于webqq检测比较简单。。</p>
+
+<hr />
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">SUNDAY,  3 MARCH 2013</div>
+      
+      
+        
+        <h1>gcc 使用总结 <a class="glyph-permalink" href="2013/03/03/gcc.html" title="Permanent link to: 'gcc 使用总结'">&diams;</a></h1>
+        
+        <p>gcc 4.6 加了两个warning</p>
+
+<p>当程序中出现已经赋值的但并未使用过的变量时，GCC会触发 -Wunused-but-set-variable 的警告；当程序中某个函数参数没有在函数中使用过时，GCC会触发 -Wunused-but-set-parameter 警告。这两个警告可以用 -Wall 和 -Wextra 触发。</p>
+
+<p>有时候开发者需要在调试过程中定义一些虽已赋值，但并不使用的变量，或者定义一些在后续版本中要使用到的函数参数。可又不能不用 -Wall -Wextra 这两个选项来编译</p>
+
+<p>使用 <strong>attribute</strong> ((unused)) 避免上述<strong>attribute</strong> ((unused)) a</p>
+
+<p>例如   <strong>attribute</strong> ((unused)) a  则a 可以定义但是不使用 或者 参数但是不使用</p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">WEDNESDAY, 23 JANUARY 2013</div>
+      
+      
+        
+        <h1>python 描述符 <a class="glyph-permalink" href="2013/01/23/python-%E6%8F%8F%E8%BF%B0%E7%AC%A6.html" title="Permanent link to: 'python 描述符'">&diams;</a></h1>
+        
+        <h1>python 描述符</h1>
+
+<p>访问一个属性的优先级顺序</p>
+
+<blockquote><ul>
+<li>类属性</li>
+<li>数据描述符</li>
+<li>实例属性</li>
+<li>非数据描述符</li>
+<li><strong>getattr</strong>方法</li>
+</ul>
+</blockquote>
+
+<p><strong>关于数据描述符的定义</strong></p>
+
+<p>实现了 _<em>get__  _</em>set<strong>  __del</strong>  方法的类属性</p>
+
+<p><strong>关于非数据描述符的定义</strong></p>
+
+<p>所有的类数据函数都是非数据描述符</p>
+
+<pre><code>__get__(self,obj,type=None)
+__set__(self,obj,val)
+__del__(self,obj)
+</code></pre>
+
+<p>其中 self 是调用它的实例,访问属性的方法。</p>
+
+<p>对于给定的类X和实例x</p>
+
+<p>X.foo 等价于</p>
+
+<pre><code>type(x).__dict__["foo"].__get__(None,type(x))
+</code></pre>
+
+<p>x.foo 等价于</p>
+
+<pre><code>type(x).__dict__["foo"].__get__(x,type(x))
+</code></pre>
+
+<p><strong>先看类属性</strong></p>
+
+<pre><code>&gt;&gt;&gt; class A(object):
+...     foo=1.2
+... 
+&gt;&gt;&gt; A.__dict__
+dict_proxy({'__dict__': &lt;attribute '__dict__' of 'A' objects&gt;, '__module__': '__main__', 'foo': 1.2, '__weakref__': &lt;attribute '__weakref__' of 'A' objects&gt;, '__doc__': None})
+</code></pre>
+
+<p>可以看到在类的dict属性里</p>
+
+<p><strong>实例属性</strong></p>
+
+<p><strong>数据描述符</strong></p>
+
+<pre><code>class simpleDescriptor(object):
+   def __get__(self,obj,type=None) :
+       pass;
+   def __set__(self,obj,val):
+       pass;
+   def __del__(self,obj):
+       pass
+class A(object):
+    foo=simpleDescriptor();
+
+&gt;&gt;&gt; a=A();
+&gt;&gt;&gt; print a.foo;
+None
+&gt;&gt;&gt; a.foo=13;
+&gt;&gt;&gt; print a.foo;
+None
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>原因在于 get 与set 方法都没有实体方法</p>
+
+<p><strong>note:Python在实在找不到方法的时候，就会求助于__getattr__方法</strong></p>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">FRIDAY, 11 JANUARY 2013</div>
+      
+      
+        
+        <h1>在线markdown编辑器的说明文档 <a class="glyph-permalink" href="2013/01/11/%E5%9C%A8%E7%BA%BFmarkdown%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.html" title="Permanent link to: '在线markdown编辑器的说明文档'">&diams;</a></h1>
+        
+        <h1>在线markdown编辑器的说明文档</h1>
+
+<p><strong>关于布局</strong></p>
+
+<p>分为左右两个div 左边是一个ace的编辑器的类型 右边是一个idiv 里面有一个iframe 结构</p>
+
+<p><strong>关于ace</strong></p>
+
+<p>详细见 <a href="http://ace.ajax.org/">这里</a></p>
+
+<p><strong>关于左边的样式</strong></p>
+
+<p>向  var editor = ace.edit("editor"); 这样id为editor的div 就变成一个ace的对象了..修改主题与提取values就变得
+十分的简单了</p>
+
+<p><strong>关于右边的iframe 结构</strong></p>
+
+<p>这里之所以选择iframe结构的原因是右边的内容是一个动态变化的过程(局部刷新),通过更改 iframe 的 src 的值就可以
+使右边从新加载内容</p>
+
+<p><strong>如何捕获左边div的变化(内容更改与复制动作)</strong></p>
+
+<p>这里还是使用了 ace 对象的 getSession().on('change', function(e) 方法 刚开始使用onchange 监听事件后来发现
+onchange 只能监听写的动作对于复制动作不能捕获到</p>
+
+<p><strong>获得了内容之后如何把markdown转化为html?</strong></p>
+
+<p>这里使用了js 库 它的家在<a href="https://github.com/evilstreak/markdown-js">这里</a></p>
+
+<p><strong>获得html源码之后如何显示到右边呢?</strong></p>
+
+<p>因为需要更改ifram的src 路径</p>
+
+<p>这里想了几个方案..</p>
+
+<blockquote><ul>
+<li>反映到文本中 加载之后在删除?</li>
+<li>src 请求ajax请求并把html 源码传递到 后台.后台返回来? 这样子倒是可以但是服务器交互太多.</li>
+<li>不经过 修改src 路径的方案直接修改DOM的内容..尝试了几中方案都不行</li>
+</ul>
+</blockquote>
+
+<p>难道src不能直接加载html 源码吗?</p>
+
+<p>最后终于在<a href="http://stackoverflow.com/questions/8240101/set-content-of-iframe">这里</a>找到了答案</p>
+
+<pre><code>var locals = "content";
+
+document.getElementById('output_iframe1').src = "data:text/html;charset=utf-8," + escape(LocalS);
+</code></pre>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">THURSDAY,  3 JANUARY 2013</div>
+      
+      
+        
+        <h1>JSON 学习 <a class="glyph-permalink" href="2013/01/03/json.html" title="Permanent link to: 'JSON 学习'">&diams;</a></h1>
+        
+        <h1>JSON</h1>
+
+<p><strong>note</strong>:参考<a href="http://json.org/json-zh.html">json官网</a></p>
+
+<p><strong>json常用的两种结构:</strong></p>
+
+<blockquote><ul>
+<li><p>名称/值”对的集合（A collection of name/value pairs）。不同的语言中，它被理解为对象（object），纪录（record），结构（struct），字典（dictionary），哈希表（hash table），有键列表（keyed list），或者关联数组 （associative array）。</p></li>
+<li><p>值的有序列表（An ordered list of values）。在大部分语言中，它被理解为数组（array）。</p></li>
+</ul>
+</blockquote>
+
+<hr />
+
+<p><strong>json常用数据格式</strong></p>
+
+<blockquote><ul>
+<li>对象:</li>
+</ul>
+
+
+<p>对象是一个无序的“‘名称/值’对”集合。一个对象以“{”（左括号）开始，“}”（右括号）结束。每个“名称”后跟一个“:”（冒号）；“‘名称/值’ 对”之间使用“,”（逗号）分隔。</p></blockquote>
+
+<p><img src="http://json.org/object.gif" alt="object" /></p>
+
+<blockquote><ul>
+<li>数组:</li>
+</ul>
+
+
+<p>数组是值（value）的有序集合。一个数组以“[”（左中括号）开始，“]”（右中括号）结束。值之间使用“,”（逗号）分隔。</p></blockquote>
+
+<p><img src="http://json.org/array.gif" alt="array" /></p>
+
+<blockquote><ul>
+<li>值:
+值（value）可以是双引号括起来的字符串（string）、数值(number)、true、false、 null、对象（object）或者数组（array）。这些结构可以嵌套。</li>
+</ul>
+</blockquote>
+
+<p><img src="http://json.org/value.gif" alt="value" /></p>
+
+<blockquote><ul>
+<li>字符串:</li>
+</ul>
+
+
+<p>字符串（string）是由双引号包围的任意数量Unicode字符的集合，使用反斜线转义。一个字符（character）即一个单独的字符串（character string）。</p></blockquote>
+
+<p><img src="http://json.org/string.gif" alt="string" /></p>
+
+<hr />
+
+<p><strong>python对json的处理</strong></p>
+
+<blockquote><ul>
+<li>对简单数据类型的encoding 和 decoding：使用json的dumps方法对python的数据进行编码.也就是把python的数据类型转换成json的数据类型</li>
+</ul>
+</blockquote>
+
+<pre><code>import json
+obj = [[1,2,3],123,123.123,'abc',{'key1':(1,2,3),'key2':(4,5,6)}]
+encodedjson = json.dumps(obj)
+print repr(obj)
+print encodedjson
+</code></pre>
+
+<p><em>note</em>  repr函数与str的区别</p>
+
+<p>以上的输出结果为</p>
+
+<pre><code>[[1, 2, 3], 123, 123.123, 'abc', {'key2': (4, 5, 6), 'key1': (1, 2, 3)}] 
+[[1, 2, 3], 123, 123.123, "abc", {"key2": [4, 5, 6], "key1": [1, 2, 3]}]
+</code></pre>
+
+<p>在python的编码过程中会从原始结构向json的结构转化
+<img src="http://images.cnblogs.com/cnblogs_com/coser/201112/201112141621136287.png" alt="" /></p>
+
+<p>相反的处理过程使用json.loads()函数</p>
+
+<p><img src="http://images.cnblogs.com/cnblogs_com/coser/201112/201112141621146178.png" alt="" /></p>
+
+<p><strong>json对自定义对象的操作</strong></p>
+
+<blockquote><p>python 数据结构到JSON的转换可以看出 必须把把python的对象转化成可以转化到python的数据格式.当然这里有两种方法可以考虑 一种继承，一种自己定义转化函数
+<a href="http://huacnlee.com/blog/convert-python-object-to-jason/">参考这里</a></p></blockquote>
+
+<pre><code>def obj2dict(obj):
+"""
+summary:
+    将object转换成dict类型
+"""
+memberlist = [m for m in dir(obj)]
+_dict = {}
+for m in memberlist:
+    if m[0] != "_" and not callable(m):
+        _dict[m] = getattr(obj,m)
+
+return _dict
+return simplejson.encode(str(obj2dict(self)))
+</code></pre>
+
+      </div>
+      
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">FRIDAY, 16 NOVEMBER 2012</div>
+      
+      
+        
+        <h1>HTMLParser解析HTML文件 <a class="glyph-permalink" href="2012/11/16/python-%E8%A7%A3%E6%9E%90HTML%E6%96%87%E4%BB%B6.html" title="Permanent link to: 'HTMLParser解析HTML文件'">&diams;</a></h1>
+        
+        <h1> HTMLParser解析HTML文件</h1>
+
+<p><a href="http://docs.python.org/2/library/htmlparser.html">python doc 文档</a></p>
+
+<p>HTMLParser采用的是一种事件驱动的模式(必须覆写如下列出的几种函数)，当HTMLParser找到一个特定的标记时，它会去调用一个用户定义的函数，以此来通知程序处理</p>
+
+<p>主要的用户回调函数都是已 handler_ 开头的函数 这里列出以下常用的几种</p>
+
+<blockquote><ul>
+<li>handle_startendtag 处理开始标签和结束标签 &lt;tag.../></li>
+<li>handle_starttag 处理开始标签，比如 <code>&lt;xx&gt;</code></li>
+<li>handle_endtag 处理结束标签，比如 <code>&lt;/xx&gt;</code></li>
+<li>handle_comment 处理注释
+详细的可以查看 文档</li>
+</ul>
+</blockquote>
+
       </div>
       
     
@@ -95,7 +1663,7 @@
   <div class="sixteen columns footer">
     <div class="contact">
       <p>
-        Copyright © Julian Yap now
+        Copyright © xiyoulaoyuanjia now
       </p>
     </div>
     <div>
