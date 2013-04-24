@@ -12,22 +12,20 @@
    <link rel="shortcut icon" href="/favicon.ico" />
 
    <!-- syntax highlighting CSS -->
-   <!--   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" /> 
 
    <!-- Homepage CSS -->
-   <!--
+ <!--
    <link rel="stylesheet" type="text/css" href="/css/base.css">
    <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
    <link rel="stylesheet" type="text/css" href="/css/layout.css">
    -->
-   <!--这里去掉 site.baseurl 的原因是当 github page 是 gh-pages 时这里会体现差异 -->
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />  
-   <!-- Homepage CSS -->
-   <link rel="stylesheet" type="text/css" href="/css/base.css">
-   <link rel="stylesheet" type="text/css" href="/css/skeleton.css">
-   <link rel="stylesheet" type="text/css" href="/css/layout.css">
+   <link rel="stylesheet" href="../css/syntax.css" type="text/css" /> 
 
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" type="text/css" href="../css/base.css">
+   <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+   <link rel="stylesheet" type="text/css" href="../css/layout.css">
 
 </head>
 <body>
@@ -762,95 +760,6 @@ ETag: "20b1add7ec1cd1:0"    服务器端文件的Etag值
 <li>F5刷新 需要验证</li>
 </ul>
 </blockquote></blockquote>
-
-      </div>
-      
-      </br>
-      <hr class="front">
-      </br>
-      
-    
-      <div class="front">
-      
-      
-        <div align="right" class="date-container">MONDAY, 15 APRIL 2013</div>
-      
-      
-        
-        <h1>linux 下的几种IO 分析 <a class="glyph-permalink" href="2013/04/15/linux%E4%B8%8B%E7%9A%84%E5%90%8C%E6%AD%A5-%E5%BC%82%E6%AD%A5-%E9%98%BB%E5%A1%9E-%E9%9D%9E%E9%98%BB%E5%A1%9E.html" title="Permanent link to: 'linux 下的几种IO 分析'">&diams;</a></h1>
-        
-        <p><strong>linux 下io</strong></p>
-
-<p><strong>关于IO的同步,异步,阻塞,非阻塞</strong></p>
-
-<blockquote><ul>
-<li>一般典型的I/O(同步阻塞I/O)</li>
-</ul>
-</blockquote>
-
-<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=31c1hG--2BjT5ElCtDaALqfKn9qSG--2BqBjwn04OpwtcpHXw0DfOftJ3aCSIzIRjtOMHZZMlDdbF1we93BIiocvrux--2Fc1MMDF" alt="" />
-从应用程序的角度来说，read 调用可能会延续很长时间。实际上，在内核执行读操作和其他工作时，
-应用程序的确会被阻塞，也就是说应用程序不能做其它事情了。</p>
-
-<blockquote><ul>
-<li>同步 非阻塞I/O</li>
-</ul>
-</blockquote>
-
-<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=ebeaxXjA1nZEFKwGAs37VvtBC--2FGhezl6s--2FR0rvGQyo148Zon--2FC72obcuzkmmxIAu59WfYW8TQzFE71Ggvkg3sf01zc3y" alt="" />
-实际上，该方式需要应用程序以一种轮询的方式来实现数据读取，多次无谓的系统调用会加大系统开销，影响应整个系统的吞吐量。
-这种需要多次的用户进程与内核进程切换。。</p>
-
-<blockquote><ul>
-<li>select poll epoll 方式。。。</li>
-</ul>
-</blockquote>
-
-<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=5058fbW0GZLrCrSYaNzUD3WskgKhdXdp--2BvE--2Fnz0we3yMhADI0g9vbkpgZskP48--2BJJ1BhhhJFvRMKvuQlRPRy6--2BZ5b6--2FO" alt="" /></p>
-
-<p>该方式中，select(或poll)的调用仍然会阻塞进程，与一般典型的I/O不一样的它是等待事件通知。但是它引入了超时机制，可以让应用程序有权力避免过长时间等待；
-另一方面，如果应用程序需要读写多个文件，该方式可以一显身手。</p>
-
-<blockquote><ul>
-<li>异步I/O</li>
-</ul>
-</blockquote>
-
-<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=4e24TKQcgbivcZpbg9ps1chscTB6UsW--2F2kHR4oJd2Svw--2BLqjE3h1JqgU83sx0Ealw3f4LLKPYt1RnodFeiIhCD4u69Em" alt="" /></p>
-
-<p><strong>IO 常见的几种模型</strong></p>
-
-<blockquote><ul>
-<li>阻塞型 IO(blocking I/O)</li>
-<li>非阻塞性IO(nonblocking I/O)</li>
-<li>IO多路复用(I/O multiplexing)</li>
-<li>信号驱动IO(signal driven I/O)</li>
-<li>异步IO(asynchronous I/O)</li>
-</ul>
-</blockquote>
-
-<p><strong>IO 操作可以分为两个阶段</strong></p>
-
-<blockquote><ul>
-<li>等待数据准备好</li>
-<li>将数据从内核缓冲区复制到用户进程缓冲区</li>
-</ul>
-</blockquote>
-
-<p><strong>同步与异步的区别</strong></p>
-
-<blockquote><ul>
-<li>同步IO，需要用户进程主动将存放在内核缓冲区中的数据拷贝到用户进程中。</li>
-<li><p>异步IO，内核会自动将数据从内核缓冲区拷贝到用户缓冲区，然后再通知用户。</p></li>
-<li><p>io 多路复用</p></li>
-</ul>
-</blockquote>
-
-<p>当对多路复用IO进行调用时，比如使用poll。需注意的是，poll是系统调用，当调用poll的时候，其实已经是陷入了内核，是内核线程在跑了。因此对于调用poll的用户进程来讲，此时是阻塞的。
-因为poll的底层实现，是去扫描每个文件描述符(fd)，而如果要对感兴趣的fd进行扫描，那么只能将每个描述符设置成非阻塞的形式(对于用户进程来讲，设置fd是阻塞还是非阻塞，可以使用系统调用fcntl)，这样才有可能进行扫描。如果扫描当中，发现有可读(如果可读是用户感兴趣的)的fd，那么select就在用户进程层面就会返回，并且告知用户进程哪些fd是可读的。
-这时候，用户进程仍然需要使用read的系统调用，将fd的数据，从内核缓冲区拷贝到用户进程缓冲区(这也是poll为同步IO的原因)。
-那么此时的read是阻塞还是非阻塞呢？这就要看fd的状态了，如果fd被设置成了非阻塞，那么此时的read就是非阻塞的；如果fd被设置成了阻塞，那么此时的read就是阻塞的。
-不过程序已经执行到了这时候，不管fd是阻塞还是非阻塞，都没有任何区别，因为之前的poll，就是知道有数据准备好了才返回的，也就是说内核缓冲区已经有了数据，此时进行read，是肯定能够将数据拷贝到用户进程缓冲区的。</p>
 
       </div>
       
@@ -1635,6 +1544,89 @@ return simplejson.encode(str(obj2dict(self)))
 
       </div>
       
+      </br>
+      <hr class="front">
+      </br>
+      
+    
+      <div class="front">
+      
+      
+        <div align="right" class="date-container">TUESDAY, 16 OCTOBER 2012</div>
+      
+      
+        
+        <h1>github 上建立其它仓库的镜像 <a class="glyph-permalink" href="2012/10/16/github-%E4%B8%8A%E5%BB%BA%E7%AB%8B%E5%85%B6%E5%AE%83%E4%BB%93%E5%BA%93%E7%9A%84%E9%95%9C%E5%83%8F.html" title="Permanent link to: 'github 上建立其它仓库的镜像'">&diams;</a></h1>
+        
+        <h1>github 上建立其它仓库的镜像</h1>
+
+<p><strong>github 上面建立Mercurial 仓库代码</strong></p>
+
+<p><strong>使用 <a href="https://github.com/schacon/hg-git">hg-git</a> 工具</strong></p>
+
+<p>Hg-Git是Mercurial(Hg)的扩展插件,主要功能是 本地hg版本管理git代码pull(push) 到
+git 服务器管理代码</p>
+
+<p>上面已经说了hg-git 是hg的一个扩展插件(其实就是一些python脚本)。。那安装hg-git的方式
+就与安装hg其它的插件一样。。</p>
+
+<pre><code>[extensions]
+hggit = /path/to/hg-git
+</code></pre>
+
+<p>/path/to/hg-git 一定要指示到下载的 hg-git 的python脚本目录 例如我的脚本目录为</p>
+
+<pre><code>[extensions]
+hggit = ～/Destop/hg-git/hggit/
+</code></pre>
+
+<p>另外关于 hg-git 可以参考<a href="http://hgtip.com/tips/advanced/2009-11-09-create-a-git-mirror/">这里</a></p>
+
+<blockquote><ul>
+<li>建立一个github 的新的项目</li>
+<li>从mercurial 仓库中下载需要同步到github上的仓库的代码</li>
+<li>hg pull 到github中项目地址</li>
+</ul>
+</blockquote>
+
+<p>具体代码</p>
+
+<pre><code>$ cd hg-git # (a Mercurial repository)
+$ hg bookmark -r default master # make a bookmark of master for default, so a ref gets created
+$ hg push git+ssh://git@github.com/schacon/hg-git.git
+$ hg push
+</code></pre>
+
+<p><img src="http://openapi.vdisk.me/?m=file&amp;a=download_share_file&amp;ss=6ecaUlt--2FuR4BMUMZlGcJ4zu84PNwbqOZrYPn3cthLlMxb--2B--2FSxWlfiS84Iq2dGUVbg--2B83nlX--2BHmhe--2B2w4cCtDjr581EOH" alt="" /></p>
+
+<p><strong>这里需要特别注意 hg-git 的目的是 服务器是git 方式管理代码。客户端是hg 方式管理代码</strong></p>
+
+<p><strong>另外这里有一篇在hg-git 上设计的hook 可以方便的pull hd 与git 写的也相当有意思</strong></p>
+
+<p><a href="http://morgangoose.com/blog/2010/09/29/github-and-bitbucket-hooks/">Github and Bitbucket hooks</a></p>
+
+<p><strong>使用<a href="https://github.com/cosmin/git-hg">git-hg</a>插件</strong></p>
+
+<p>这个项目与上面说的git-hg 正好相反。 这个是服务器是git 管理 客户端 是git-hg(依赖于hg) 当然客户端也可以
+是 git 管理代码</p>
+
+<pre><code> git-hg clone http://some/random/hg/repo [local-git-repo-name]
+ git-hg pull # same as git-hg-fetch &amp;&amp; git merge hg/branch_name
+</code></pre>
+
+<p>具体可以参考上面给的链接。 其中我在做ossec 的mirror时也就是使用了这种方法一次性把
+hg 的代码转换成了git的标签同时推送到github中的 在<a href="https://github.com/xiyoulaoyuanjia/sAoccec/tree/mirror">这里</a></p>
+
+<p><strong>在GitHub上建立一个SVN仓库的镜像</strong></p>
+
+<p>这个的目的主要是 同步google code(svn) 到github 中的</p>
+
+<p>这个可以参考 <a href="http://blog.yesmeck.com/archives/create-svn-mirror-on-github/">这里</a></p>
+
+<p>这里需要先安装git-svn</p>
+
+      </div>
+      
     
   </ul>
 
@@ -1652,9 +1644,9 @@ return simplejson.encode(str(obj2dict(self)))
   <!-- AddThis Button BEGIN -->
   <h1>Follow Me</h1>
   <div class="addthis_toolbox addthis_32x32_style addthis_vertical_style">
-  <a class="addthis_button_twitter_follow" addthis:userid="jyap"></a>
-  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192"></a>
-  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap"></a>
+  <a class="addthis_button_twitter_follow" addthis:userid="jyap_no"></a>
+  <a class="addthis_button_google_follow" addthis:userid="111539417571342089192_no"></a>
+  <a class="addthis_button_rss_follow" addthis:url="http://feeds.julianyap.com/julianyap_no"></a>
   </div>
   <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f30f5735bbf9458"></script>
   <!-- AddThis Button END -->
@@ -1663,12 +1655,12 @@ return simplejson.encode(str(obj2dict(self)))
   <div class="sixteen columns footer">
     <div class="contact">
       <p>
-        Copyright © xiyoulaoyuanjia now
+        Copyright © xiyoulaoyuanjia1 now
       </p>
     </div>
     <div>
       <p>
-      Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>
+	   Follow Julian: <a href="http://twitter.com/jyap">Twitter</a> / <a href="https://plus.google.com/111539417571342089192/" rel="author">Google+</a> / <a href="http://feeds.julianyap.com/julianyap">RSS</a>  
       </p>
     </div>
   </div>
