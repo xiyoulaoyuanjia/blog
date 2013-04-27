@@ -513,8 +513,43 @@ https://gist.github.com/xiyoulaoyuanjia/cd2bb25e394d06b92403
 >* 默认的动态库搜索路径/usr/lib。
 
 
+**What's the difference between /sbin/nologin and /bin/false**
+
+When /sbin/nologin is set as the shell, if user with that shell logs in, they'll get a polite message saying 'This account is currently not available.'. This message can be changed with the file /etc/nologin.txt.
+
+/bin/false is just a binary that immediately exits, returning false, when its called, so when someone who has false as shell logs in, they're immediately logged out when false exits. Setting the shell to /bin/true has the same affect of not allowing someone to log in but false is probably used as a convention over true since its much better at conveying the concept that person doesn't have a shell.
+
+Looking at nologin's man page, it says it was created in 4.4 BSD (early 1990s) so it came long after false was created. The use of false as a shell is probably just a convention carried over from the early days of UNIX.
+
+nologin is the more user friendly option, with a customizable message given to the user trying to login, so you would theoretically want to use that but both nologin and false will have the same end result of someone not having a shell and not being able to ssh in.
+
+[orignal link](http://unix.stackexchange.com/questions/10852/whats-the-difference-between-sbin-nologin-and-bin-false)
+
+**Get UUID of specific connection?**
+
+>* find the UUID of the current connection
+>
+        nmcli con status
 
 
+>* list all configured connections
+>
+        nmcli con list
+
+**ubuntu debian 下使用 jekyll**
+
+>* sudo apt-get install ruby1.9.1-dev
+>* gem install jekyll
+
+
+**Chrome扩展程序开发：Ajax XmlHttpRequest**
+
+>* 在插件中使用ajax不受跨域(cross-origin)的限制。
+>* ajax网络请求需要在manifest.json得到相应域名的permissions.
+
+**修改左边的unity2d 使它不会自动隐藏?**
+
+之前一直在考虑使用 脚本更改设置，今天无意中发现  appearance-》behavior-》auto-hide the launcher 直接更改。而且下面还可以修改灵敏度。。囧。。
 
 
 
