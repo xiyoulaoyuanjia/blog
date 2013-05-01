@@ -551,7 +551,19 @@ nologin is the more user friendly option, with a customizable message given to t
 
 之前一直在考虑使用 脚本更改设置，今天无意中发现  appearance-》behavior-》auto-hide the launcher 直接更改。而且下面还可以修改灵敏度。。囧。。
 
+**应用程序的用户配置文件夹放在~/.config文件夹的原则**
 
+之前一直就发现应用程序的配置文件一般都存放在 ~/.config文件夹 下的情况。今天才知道这个原来是 XDG的 标准。是给linux 图形桌面的配置文件的推荐做法。。 更多关于标准的细节可以看[这里](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)
+
+早就知道这个XDG (例如XDG-open) 但是还真不知道这个和 linux 桌面有什么关系。今天就查了查原来
+
+XDG stands for X Development Group, which was the old name of FreeDesktop.org:
+
+回到上面。那么这个统一的存放目的有什么用呢？
+
+比如如果你用C实现一个应用程序，GLib有这样的一个函数 g_get_user_config_dir () ：https://developer.gnome.org/glib/2.34/glib-Miscellaneous-Utility-Functions.html#g-get-user-config-dir  用它会直接返回~/.config （如果默认配置是这个的话）。
+
+但是命令行(非桌面) 一般就不按这个标准 例如 git 它的配置文件就直接是 ~/.gitconfig
 
 
 
