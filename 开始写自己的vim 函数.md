@@ -113,4 +113,5 @@ vim 向perl 一样 它的类型是由它所在的上下文决定的。。
 >>* :help script-local to hide functions in scripts
 >>*  Vim WikiBook about scripting
 
+[原文](http://vim.wikia.com/wiki/Write_your_own_Vim_function#How_to_reference_function_parameters)
 
