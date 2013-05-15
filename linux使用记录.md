@@ -574,22 +574,6 @@ Ctrl+E：将光标移动到命行令的结尾处。
 
 上面两个还是很有用的。。
 
-**看了许多bash脚本发现都会有 set -e 这一行,查了发现还挺有用的.**
-
--e      Exit immediately if a pipeline (which may consist of a single simple command),  a subshell command enclosed in parentheses, or one of the commands executed as part of a command list enclosed by braces (see  SHELL  GRAMMAR above) exits with a non-zero status.
-
-就是对于 pipeline subshell commands 有非0的返回值则脚本直接推出
-
-__The current script's pid is $$, the pid of the last background process is $!__ 
-
-**Create an animated GIF on linux**
-
- Type "convert -delay X -loop 0 images*.gif animation.gif", where X is the delay in miliseconds and images*.gif is the name your images have in common, followed by the wildcard character *. This will allow the program to follow through the sequences of images.
-
-    convert -delay X -loop 0 images*.gif animation.gif 
-
-[other tools](http://www.ehow.com/how_7211144_make-gif-animation-linux.html)
-
 
 
 
