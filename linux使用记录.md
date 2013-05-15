@@ -594,4 +594,4 @@ __The current script's pid is $$, the pid of the last background process is $!__
 [other tools](http://www.ehow.com/how_7211144_make-gif-animation-linux.html)
 
 
-测试
+测试 fff
