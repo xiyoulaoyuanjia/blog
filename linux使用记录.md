@@ -428,38 +428,4 @@ export HISTCONTROL=ignoredups
 
 
 
-**关于浮点数的小理解**
-
-原因，简单的说是因为一些十进制有限小数在2进制中是无限小数。
-解决方法，搜索 decimal
-
-可以看看python 中的解释。
-http://docs.python.org/2/tutorial/floatingpoint.html
-
-**Apt-get GPG Error: Public Key Not Available**
-
-看到一篇十分好的[文章](http://www.rebelzero.com/fixes/apt-get-gpg-error-public-key-not-available/88)
-
-解决这种方法的思路 
-
-wget -q "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x4874D3686E80C6B7" -O- | sudo apt-key add -
-
-4874D3686E80C6B7 为 错误id
-
-**在shell 中如何判断 一个变量被赋值没有？ 看 ossec 如何实现的？**
-
-    # If user language is not set
-        if [ "X${USER_LANGUAGE}" = "X" ]; then 
-
-好吧。我承认这也是一种方法。。。
-
-
-**shell 中if 的逻辑表达式 **
-
-    >* 逻辑非 ! 
-        if [ ! 表达式 ]
-    >* 逻辑与 –a  
-        if [ 表达式1  –a  表达式2 ]
-    >* 逻辑或 -o
-        if [ 表达式1  –o 表达式2 ]
 
