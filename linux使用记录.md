@@ -548,3 +548,49 @@ nologin is the more user friendly option, with a customizable message given to t
 >* ajax网络请求需要在manifest.json得到相应域名的permissions.
 
 **修改左边的unity2d 使它不会自动隐藏?**
+
+
+之前一直在考虑使用 脚本更改设置，今天无意中发现  appearance-》behavior-》auto-hide the launcher 直接更改。而且下面还可以修改灵敏度。。囧。。
+
+**应用程序的用户配置文件夹放在~/.config文件夹的原则**
+
+之前一直就发现应用程序的配置文件一般都存放在 ~/.config文件夹 下的情况。今天才知道这个原来是 XDG的 标准。是给linux 图形桌面的配置文件的推荐做法。。 更多关于标准的细节可以看[这里](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)
+
+早就知道这个XDG (例如XDG-open) 但是还真不知道这个和 linux 桌面有什么关系。今天就查了查原来
+
+XDG stands for X Development Group, which was the old name of FreeDesktop.org:
+
+回到上面。那么这个统一的存放目的有什么用呢？
+
+比如如果你用C实现一个应用程序，GLib有这样的一个函数 g_get_user_config_dir () ：https://developer.gnome.org/glib/2.34/glib-Miscellaneous-Utility-Functions.html#g-get-user-config-dir  用它会直接返回~/.config （如果默认配置是这个的话）。
+
+但是命令行(非桌面) 一般就不按这个标准 例如 git 它的配置文件就直接是 ~/.gitconfig
+
+
+**linux terminal 光标到命令开始处 与 结尾处**
+
+Ctrl+A：将光标移动到命令行的开始处。
+
+Ctrl+E：将光标移动到命行令的结尾处。
+
+上面两个还是很有用的。。
+
+
+
+**看了许多bash脚本发现都会有 set -e 这一行,查了发现还挺有用的.**
+
+-e      Exit immediately if a pipeline (which may consist of a single simple command),  a subshell command enclosed in parentheses, or one of the commands executed as part of a command list enclosed by braces (see  SHELL  GRAMMAR above) exits with a non-zero status.
+
+就是对于 pipeline subshell commands 有非0的返回值则脚本直接推出
+
+__The current script's pid is $$, the pid of the last background process is $!__ 
+
+**Create an animated GIF on linux**
+
+ Type "convert -delay X -loop 0 images*.gif animation.gif", where X is the delay in miliseconds and images*.gif is the name your images have in common, followed by the wildcard character *. This will allow the program to follow through the sequences of images.
+
+    convert -delay X -loop 0 images*.gif animation.gif 
+
+[other tools](http://www.ehow.com/how_7211144_make-gif-animation-linux.html)
+
+
