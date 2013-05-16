@@ -42,6 +42,9 @@ __note:pathogen的补全功能是默认打开的 当然可以手动打开与关�
     cntrl-space — autocomplete partially type function/class and see args
     shift-k — use pydoc to find function/class documentation
 
+
+![](http://xiyoulaoyuanjia-sendtosaepic.stor.sinaapp.com/Screenshot%20from%202013-05-16%2017:06:00.png)
+
 __全文完__
 
 
