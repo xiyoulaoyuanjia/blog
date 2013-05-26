@@ -605,5 +605,43 @@ __The current script's pid is $$, the pid of the last background process is $!__
 [other tools](http://www.ehow.com/how_7211144_make-gif-animation-linux.html)
 
 
+**恢复删除的文件**
+
+git checkout file-path(删除了某一个文件不用pull的,可以通过checkout 来恢复文件...这个真心好用)
+
+**When a job is suspended it can be moved back to the foreground with `fg` and placed in the background (where it will continue to execute) with `bg`.**
+
+这个命令配合 vim 使用异常牛叉...有时间上图片 能绑定快捷键就更好了..???
+
+**Getting “System program problem detected” pops up like below**
+
+![](http://xiyoulaoyuanjia-sendtosaepic.stor.sinaapp.com/Screenshot%20from%202013-05-19%2011:50:14.png)
+
+Can you try this:
+
+sudo rm /var/crash/*
+
+**python 中对付编码终极大招... **
+
+直接使用 
+>* vim -b test.py  
+>* %!xxd  (直接以十六进制查看文件的编码方式,这在某些情况下是十分有用的)
+
+ps 现在网上大多数的 转utf-8 编码 都是 unicode编码...这个弱爆了.... 还有搜狗输入法+云 真是无比强大呀...
+
+
+**svn add 默认情况下是把一个目录文件夹下面的所有目录 加入到版本控制中去,今天偶然在使用的时候发现了一个问题当目录中部分在版本控制中部分不在版本控制中的时候会发生如下问题..**
+
+    svn: warning: W150002: '/home/yuanjia/simpleBlog/templates' is already under version control
+    svn: E200009: Could not add all targets because some targets are already versioned
+    svn: E200009: Illegal target for the requested operation
+
+可以十分容易的改正了 只需要加一个参数 -r 也就是 改成 svn add -r
+
+
+
+```安装 youcompleteme 之后 vim(手动编译vim最新版本)的"control+[" tags 不好使用了... 后来尝试使用"g+control+[" 这样子用..
+但是感觉还是很不爽..而且 control+T 返回也不太好用...```
+
 
 
