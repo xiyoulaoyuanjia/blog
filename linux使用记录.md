@@ -643,5 +643,35 @@ ps 现在网上大多数的 转utf-8 编码 都是 unicode编码...这个弱爆�
 **安装 youcompleteme 之后 vim(手动编译vim最新版本)的"control+[" tags 不好使用了... 后来尝试使用"g+control+[" 这样子用..
 但是感觉还是很不爽..而且 control+T 返回也不太好用...**
 
+**vim 识别gbk编码**
+
+由于在windows下默认是gb编码，而我的vim默认是utf-8（gedit默认也是utf-8），所以打开会成乱码。修改了一下配置文件，使vim支持gb编码就好了。
+
+$vim ~/.vimrc
+
+let &termencoding=&encoding
+set fileencodings=utf-8,gbk
+
+
+
+**存在3个变量**
+encoding—-该选项使用于缓冲的文本(你正在编辑的文件)，寄存器，Vim 脚本文件等等。你可以把 ‘encoding’ 选项当作是对 Vim 内部运行机制的设定。
+fileencoding—-该选项是vim写入文件时采用的编码类型。
+termencoding—-该选项代表输出到客户终端（Term）采用的编码类型。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
