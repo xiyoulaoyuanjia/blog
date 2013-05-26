@@ -640,8 +640,8 @@ ps 现在网上大多数的 转utf-8 编码 都是 unicode编码...这个弱爆�
 
 
 
-```安装 youcompleteme 之后 vim(手动编译vim最新版本)的"control+[" tags 不好使用了... 后来尝试使用"g+control+[" 这样子用..
-但是感觉还是很不爽..而且 control+T 返回也不太好用...```
+**安装 youcompleteme 之后 vim(手动编译vim最新版本)的"control+[" tags 不好使用了... 后来尝试使用"g+control+[" 这样子用..
+但是感觉还是很不爽..而且 control+T 返回也不太好用...**
 
 
 
