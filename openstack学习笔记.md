@@ -5,4 +5,4 @@
     apt-get install gettext
     set DJANGO_SETTINGS_MODULE=settings.py
     cd /opt/stack/horizon/openstack_dashboard
-    django_admin.py makemessages
+    django-admin.py compilemessages
