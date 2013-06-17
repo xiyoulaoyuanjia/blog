@@ -714,7 +714,7 @@ sudo apt-get install build-essential linux-headers-`uname -r`
 restart 即可
 
 
-** System Program Problem Detected **
+**System Program Problem Detected**
 
 
 gksudo gedit /etc/default/apport
