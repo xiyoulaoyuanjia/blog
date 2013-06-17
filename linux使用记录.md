@@ -661,15 +661,66 @@ termencoding—-该选项代表输出到客户终端（Term）采用的编码类
 
 
 
+**在ubuntu 12.10 中使用Ctrl+Shift+Alt+方向键将当前的窗口移动到其他工作区**
 
 
+**command > filename 2>&1 把把标准输出和标准错误一起重定向到一个文件中**
+
+**sudo: cd: command not found**
+
+On most systems, cd isn't a program, it's a shell command, so you can't use sudo to run it. The child 
+process simply cannot change the working directory of its parent shell process.
 
 
+**查找局域网中存活的主机**   
+
+之前想的最简单的方法是 写一段脚本 例如  
+
+for i in `seq a b`;doping -c 2 192.168.140.{$i};done 
+
+后来看到 这个 ping -b 192.168.140.255 才发现 上面那个弱爆了.. 给局域网发广播.. 
 
 
+**修改物理地址** 
+
+之所以会有这个需求是 很多网管会通过物理地址来认证的...
+
+而我所在的公司没有linux下的客户端认证.之前只能 
+
+想到在windows下认证之后在切换到linux下 现在想到了为什么不能直接在linux下 
+
+通过 修改 以后的 mac地址达到翻墙的作用呢? 
+
+>* 获得已经认证的mac地址      ping -b 192.168.140.255      arp 命令查看 mac地址列表 
+>* 修改 mac 地址      
+
+sudo ifconfig eth0 down      
+sudo ifconfig eth0 hw ether AA:BB:CC:DD:EE:FF      
+sudo ifconfig eth0 up over了...... 
 
 
+**使用两种方法修改 mysql 数据库 root 密码**
+ 
+>* 1. sudo mysqld_safe --skip-grant-tables 
+>* 2. 在 /etc/mysql/  中有一个 debian_ 的文件 里面有默认的用户名与密码(直接明文存放的) 
 
+
+**安装虚拟机遇到的一个问题!**
+
+![](http://xiyoulaoyuanjia-sendtosaepic.stor.sinaapp.com/shotVirtualBox.png)
+
+sudo apt-get install build-essential linux-headers-`uname -r`
+
+restart 即可
+
+
+** System Program Problem Detected **
+
+
+gksudo gedit /etc/default/apport
+
+
+*************************************
 
 
 
