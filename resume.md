@@ -68,8 +68,8 @@ xiyoulaoyuanjia
     
     一键将图片上传到新浪微盘并获得图片的链接地址．支持　gnome 桌面环境　Nautilus．
 
-＊ 个人blog (2013.4)
-
+＊ 个人blog  (2013.4)
+    
     使用flask 框架开发,后台定时抓取github中的md文档．部署在sae上
     
 *  简易markdown 编辑器　
