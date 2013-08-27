@@ -56,10 +56,16 @@ xiyoulaoyuanjia
 
 * 熟悉Linux操作系统的使用，并使用Linux做为日常工作的操作系统
 
+* 熟练使用vim git jira 等敏捷开发工具, 有敏捷开发的实际经验
+
 * 熟练应用常用算法、数据结构
 
 ### 个人项目经验
 
+*  简易markdown编辑器 (2012.4)　
+
+    简易的markdown编辑器, 可以实时渲染markdown 文档．
+    
 * 北邮网关登录工具 （2012.10）
     
     python-request 实现，并使用python-qt 编写简易的提示界面，后更改为系统提示．
@@ -72,9 +78,6 @@ xiyoulaoyuanjia
     
     使用flask 框架开发,后台定时抓取github中的md文档．部署在sae上
     
-*  简易markdown 编辑器　
-
-    简易的markdown 编辑器, 可以实时渲染markdown 文档．
 
 ### My Github
 
