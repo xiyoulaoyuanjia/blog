@@ -21,7 +21,7 @@ xiyoulaoyuanjia
 * 2013.4 – 至今
 
     北京微科思创实习openstack开发工程师 ，为openstack增加操作消息与监控模块
-
+    
     主要使用Python, vim, git ,jira等进行敏捷开发
 
 * 2011.9 - 2013.3
@@ -64,11 +64,11 @@ xiyoulaoyuanjia
     
     python-request 实现，并使用python-qt 编写简易的提示界面，后更改为系统提示．
     
-＊ 图片上传工具　(2012.12)
+* 图片上传工具　(2012.12)
     
     一键将图片上传到新浪微盘并获得图片的链接地址．支持　gnome 桌面环境　Nautilus．
 
-＊ 个人blog  (2013.4)
+* 个人blog  (2013.4)
     
     使用flask 框架开发,后台定时抓取github中的md文档．部署在sae上
     
