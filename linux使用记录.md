@@ -720,7 +720,19 @@ restart 即可
 gksudo gedit /etc/default/apport
 
 
+
+
+**sudo echo "127.0.0.1 yuanjia-K52Dr"   >> /etc/hosts**
+
+sudo 权限不可以通过管道传输
+上述命令需要更改为
+
+    echo "127.0.0.1 yuanjia-K52Dr " | sudo tee -a /etc/hosts
+
+
 *************************************
+
+
 
 
 
