@@ -730,7 +730,7 @@ sudo 权限不可以通过管道传输
     echo "127.0.0.1 yuanjia-K52Dr " | sudo tee -a /etc/hosts
 
 
-** 　关于ssh 免密码登陆不成功的原　**
+**关于ssh 免密码登陆不成功的原**
 
 这个有两点需要特别注意 
 
