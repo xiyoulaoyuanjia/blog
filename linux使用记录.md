@@ -730,7 +730,7 @@ sudo 权限不可以通过管道传输
     echo "127.0.0.1 yuanjia-K52Dr " | sudo tee -a /etc/hosts
 
 
-**关于ssh 免密码登陆不成功的原**
+**关于ssh 免密码登陆不成功的原因**
 
 这个有两点需要特别注意 
 
@@ -738,6 +738,11 @@ sudo 权限不可以通过管道传输
 最后是默认生成的不要修
 
 2. 当不同用户名的时候，权限也是不成功的重要原因，建议使用ssh-copy-id　方式
+
+3. 如何还不成功，可以查看系统ssh　登陆日志，ubuntu　下查看地址
+　　/var/log／auth.log　一般是.ssh 相关目录权限不对，这里对于.ssh路径下的目录，ｇ不能
+有ｗ的权限，所以说权限多了也并不是好事情．[参考](http://www.daveperrett.com/articles/2010/09/14/ssh-authentication-refused/)
+
 
 
 *************************************
