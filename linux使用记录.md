@@ -744,6 +744,14 @@ sudo 权限不可以通过管道传输
 有ｗ的权限，所以说权限多了也并不是好事情．[参考](http://www.daveperrett.com/articles/2010/09/14/ssh-authentication-refused/)
 
 
+**查看当前shell层级**
+
+```查看环境变量$SHLVL
+
+**永久更改使用的shell**
+
+```chsh -s /bin/zsh
+
 
 *************************************
 
