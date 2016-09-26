@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>批量地址</title>
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#l-map{height:100%;width:100%;}
+		#r-result{width:100%; font-size:14px;line-height:20px;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=G3Zo2lqYRr4McyTUKLV1qzDFd4gPhePK"></script>
+</head>
+<body>
+	<div id="l-map"></div>
+	<!--
+	<div id="r-result">
+		<input type="button" value="批量地址解析" onclick="bdGEO()" />
+		<div id="result"></div>
+	</div>
+	-->
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("l-map");
+	map.centerAndZoom(new BMap.Point(108.902163,34.215625), 17);
+	map.enableScrollWheelZoom(true);
+	var index = 0;
+	var myGeo = new BMap.Geocoder();
+	var adds = [
+	
+		/*
+			木塔寺周边
+		*/
+		"108.906259,34.204743, 金泰·假日花城",
+		"108.91118,34.216486, 建邦华庭",
+		"108.90169,34.21394, 紫薇公园时光",
+		"108.908479,34.212347, 坤元TIME",
+		"108.906383,34.216566, 香榭兰岛",
+		"108.914364,34.206956, 融侨馨苑",
+		"108.913174,34.205241, 裕昌太阳城",
+		"108.903725,34.220121, 天地源枫林绿洲",
+		"108.884724,34.253753, 枫林华府",
+		"108.901567,34.231901, 枫叶新家园",
+		"108.890714,34.238568, 枫叶新都市",
+		"108.888149,34.216239, 枫林意树",
+		"108.902456,34.224406, 天地源丹轩坊",
+		
+		
+		/*
+			锦业路
+		*/
+
+		"108.879485,34.202382, 绿地世纪城",
+		"108.870536,34.203278, 高科尚都",
+		"108.873212,34.20927, 中铁缤纷南郡",
+		"108.872093,34.212646, 金泰新理城",	
+		"108.856626,34.200408, 锦尚名城",
+		
+		/*
+			大寨路 科技路
+		*/
+		"108.882515,34.250349, 莱安逸辉",
+		"108.887983,34.247402, 国熙台",		
+		"108.891214,34.251841, 融侨城",
+		"108.888537,34.249593, 中建群贤汇",	
+		
+		
+		"108.856626,34.200408, 锦尚名城",
+		
+		
+	
+		
+	];
+	
+	bdGEO();
+	
+	
+	function bdGEO(){
+		var add = adds[index];
+		if(typeof add == "undefined"){
+			return;
+		}
+		geocodeSearch(add.split(','));
+		index++;
+	}
+	
+	
+	function geocodeSearch(add){
+		
+		
+		if(index < adds.length){
+			setTimeout(window.bdGEO,400);
+		} 
+		
+		
+	  var address = new BMap.Point(add[0],add[1]);
+		addMarker(address,new BMap.Label(add[2],{offset:new BMap.Size(20,-10)}));
+	
+	/*
+		myGeo.getPoint(add, function(point){
+			if (point) {
+				document.getElementById("result").innerHTML +=  index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+				var address = new BMap.Point(point.lng, point.lat);
+				//addMarker(address,new BMap.Label(index,{offset:new BMap.Size(20,-10)}));
+				addMarker(address,new BMap.Label("11",{offset:new BMap.Size(20,-10)}));
+			}
+		}, "西安市");
+		
+	*/
+	}
+	// 编写自定义函数,创建标注
+	function addMarker(point,label){
+		var marker = new BMap.Marker(point);
+		map.addOverlay(marker);
+		marker.setLabel(label);
+	}
+</script>
